@@ -1,0 +1,159 @@
+[gd_scene load_steps=7 format=3 uid="uid://c5ydksvhxjl5y"]
+
+[ext_resource type="Script" uid="uid://cn30khlrvfwhy" path="res://Main.gd" id="1_2ykne"]
+[ext_resource type="PackedScene" uid="uid://bvn2k3x8qaq1l" path="res://UI/PauseMenu.tscn" id="2_pause"]
+[ext_resource type="PackedScene" uid="uid://dwh7k3x8qaq1m" path="res://UI/GameOverMenu.tscn" id="3_gameover"]
+[ext_resource type="PackedScene" uid="uid://csong_complete_menu" path="res://UI/SongCompleteMenu.tscn" id="4_songcomplete"]
+[ext_resource type="FontFile" uid="uid://ddo7ybrfl5d2s" path="res://fonts/FUSION-PIXEL-12PX-MONOSPACED-ZH_HANS.OTF" id="4_font"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ChineseLyric"]
+bg_color = Color(0.1, 0.1, 0.15, 0.9)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.5, 0.5, 0.6, 1)
+corner_radius_top_left = 4
+corner_radius_top_right = 4
+corner_radius_bottom_right = 4
+corner_radius_bottom_left = 4
+
+[node name="Main" type="Node2D"]
+script = ExtResource("1_2ykne")
+
+[node name="UI" type="CanvasLayer" parent="."]
+
+[node name="ScoreLabel" type="Label" parent="UI"]
+offset_left = 540.0
+offset_top = 20.0
+offset_right = 780.0
+offset_bottom = 50.0
+theme_override_fonts/font = ExtResource("4_font")
+theme_override_font_sizes/font_size = 16
+text = "Score: 0"
+
+[node name="LinesLabel" type="Label" parent="UI"]
+offset_left = 540.0
+offset_top = 50.0
+offset_right = 780.0
+offset_bottom = 80.0
+theme_override_fonts/font = ExtResource("4_font")
+theme_override_font_sizes/font_size = 16
+text = "Lines: 0"
+
+[node name="NextLabel" type="Label" parent="UI"]
+offset_left = 540.0
+offset_top = 100.0
+offset_right = 780.0
+offset_bottom = 130.0
+theme_override_fonts/font = ExtResource("4_font")
+theme_override_font_sizes/font_size = 16
+text = "Next:"
+
+[node name="ComboLabel" type="Label" parent="UI"]
+offset_left = 540.0
+offset_top = 280.0
+offset_right = 780.0
+offset_bottom = 340.0
+theme_override_fonts/font = ExtResource("4_font")
+theme_override_font_sizes/font_size = 24
+theme_override_colors/font_color = Color(1, 0.8, 0.2, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 2
+text = ""
+horizontal_alignment = 1
+
+[node name="GameOverLabel" type="Label" parent="UI"]
+offset_left = 200.0
+offset_top = 250.0
+offset_right = 600.0
+offset_bottom = 320.0
+theme_override_fonts/font = ExtResource("4_font")
+theme_override_font_sizes/font_size = 24
+theme_override_colors/font_color = Color(1, 0.2, 0.2, 1)
+text = "Game Over!
+Press Enter to Restart"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="ControlsLabel" type="Label" parent="UI"]
+offset_left = 20.0
+offset_top = 20.0
+offset_right = 210.0
+offset_bottom = 150.0
+theme_override_fonts/font = ExtResource("4_font")
+theme_override_font_sizes/font_size = 14
+text = "控制:
+← → 移动
+↑ 旋转
+↓ 快速下降
+Enter 硬降落
+Esc 暂停游戏"
+vertical_alignment = 1
+
+[node name="ScoringLabel" type="Label" parent="UI"]
+offset_left = 20.0
+offset_top = 160.0
+offset_right = 210.0
+offset_bottom = 260.0
+theme_override_fonts/font = ExtResource("4_font")
+theme_override_font_sizes/font_size = 14
+text = "计分规则:
+1行 = 100分
+2行 = 300分
+3行 = 500分
+4行 = 800分"
+vertical_alignment = 1
+
+[node name="RiftMeterLabel" type="Label" parent="UI"]
+offset_left = 540.0
+offset_top = 340.0
+offset_right = 780.0
+offset_bottom = 375.0
+theme_override_fonts/font = ExtResource("4_font")
+theme_override_font_sizes/font_size = 16
+theme_override_colors/font_color = Color(0.3, 0.9, 1.0, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 1
+text = ""
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="BeatCalibratorLabel" type="Label" parent="UI"]
+offset_left = 540.0
+offset_top = 380.0
+offset_right = 780.0
+offset_bottom = 420.0
+theme_override_fonts/font = ExtResource("4_font")
+theme_override_font_sizes/font_size = 20
+theme_override_colors/font_color = Color(1.0, 0.85, 0.2, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 3
+text = ""
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="PauseMenu" parent="UI" instance=ExtResource("2_pause")]
+
+[node name="GameOverMenu" parent="UI" instance=ExtResource("3_gameover")]
+
+[node name="SongCompleteMenu" parent="UI" instance=ExtResource("4_songcomplete")]
+
+[node name="ChineseLyricLabel" type="Label" parent="UI"]
+offset_left = 540.0
+offset_top = 400.0
+offset_right = 780.0
+offset_bottom = 550.0
+theme_override_fonts/font = ExtResource("4_font")
+theme_override_font_sizes/font_size = 14
+theme_override_colors/font_color = Color(1, 1, 0.5, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 2
+theme_override_styles/normal = SubResource("StyleBoxFlat_ChineseLyric")
+text = ""
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="MusicPlayer" type="AudioStreamPlayer" parent="."]
+bus = &"Music"

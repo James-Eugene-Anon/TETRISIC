@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://bl64ovdstq63"
+path="res://.godot/imported/Neru&z'5 - ニヒルと水没都市 (feat. z'5).mp3-e20b3c3d00b6924c08489e5b62cd2335.mp3str"
+
+[deps]
+
+source_file="res://musics/Neru&z'5 - ニヒルと水没都市 (feat. z'5).mp3"
+dest_files=["res://.godot/imported/Neru&z'5 - ニヒルと水没都市 (feat. z'5).mp3-e20b3c3d00b6924c08489e5b62cd2335.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4

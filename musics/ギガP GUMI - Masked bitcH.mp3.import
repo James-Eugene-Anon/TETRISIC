@@ -1,0 +1,19 @@
+[remap]
+
+importer="mp3"
+type="AudioStreamMP3"
+uid="uid://coe7vkk227r28"
+path="res://.godot/imported/ギガP GUMI - Masked bitcH.mp3-0ca709eaca4fb6f6f23696c0461ef050.mp3str"
+
+[deps]
+
+source_file="res://musics/ギガP GUMI - Masked bitcH.mp3"
+dest_files=["res://.godot/imported/ギガP GUMI - Masked bitcH.mp3-0ca709eaca4fb6f6f23696c0461ef050.mp3str"]
+
+[params]
+
+loop=false
+loop_offset=0
+bpm=0
+beat_count=0
+bar_beats=4
