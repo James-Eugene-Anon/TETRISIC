@@ -1,0 +1,31 @@
+{
+  "narratives": [
+    {
+      "id": "rogue_intro",
+      "title": "冒险开始",
+      "title_en": "Run Begins",
+      "content": "你站在分岔路口前。前方是战斗、装备与抉择。\n\n只有不断强化自己，才能走到最后。",
+      "category": "main",
+      "order": 1,
+      "unlocked_by_default": true
+    },
+    {
+      "id": "rogue_campfire",
+      "title": "篝火余温",
+      "title_en": "Campfire Warmth",
+      "content": "短暂的休整让你重新稳住呼吸。\n\n下一场战斗会更激烈，但你也更强了。",
+      "category": "lore",
+      "order": 10,
+      "unlocked_by_default": false
+    },
+    {
+      "id": "rogue_victory",
+      "title": "通关记录",
+      "title_en": "Run Complete",
+      "content": "你击败了终点前的敌群。\n\n本次 Rogue 跑图完成，新的构筑思路也随之开启。",
+      "category": "main",
+      "order": 99,
+      "unlocked_by_default": false
+    }
+  ]
+}

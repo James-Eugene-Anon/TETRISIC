@@ -7,34 +7,86 @@ var game_mode: BaseGameModeController = null
 var renderer: GameRenderer = null
 var input_handler: InputHandler = null
 var music_visualizer: MusicVisualizer = null
+var ui_controller: MainUIController = null
+var mode_starter: GameModeStarter = null
 
-# UI节点
-@onready var score_label = $UI/ScoreLabel
-@onready var lines_label = $UI/LinesLabel
-@onready var next_label = $UI/NextLabel
-@onready var combo_label = $UI/ComboLabel
+var background_layer: CanvasLayer = null
+var background_rect: ColorRect = null
+
+# 窗口焦点状态缓存（用于后台音乐处理）
+var _last_window_focused: bool = true
+var _background_paused: bool = false
+const BASE_FRAME_SIZE := Vector2(800, 600)
+
+# UI节点 - HUD标签通过GameHUD子场景访问
+@onready var score_label = $UI/GameHUD/ScoreLabel
+@onready var lines_label = $UI/GameHUD/LinesLabel
+@onready var next_label = $UI/GameHUD/NextLabel
+@onready var combo_label = $UI/GameHUD/ComboLabel
 @onready var game_over_label = $UI/GameOverLabel
-@onready var controls_label = $UI/ControlsLabel
-@onready var scoring_label = $UI/ScoringLabel
+@onready var controls_label = $UI/GameHUD/ControlsLabel
+@onready var scoring_label = $UI/GameHUD/ScoringLabel
 @onready var pause_menu = $UI/PauseMenu
 @onready var game_over_menu = $UI/GameOverMenu
 @onready var song_complete_menu = $UI/SongCompleteMenu
-@onready var chinese_lyric_label = $UI/ChineseLyricLabel
-@onready var rift_meter_label = $UI/RiftMeterLabel
-@onready var beat_calibrator_label = $UI/BeatCalibratorLabel
+@onready var chinese_lyric_label = $UI/GameHUD/ChineseLyricLabel
+@onready var rift_meter_label = $UI/GameHUD/RiftMeterLabel
+@onready var beat_calibrator_label = $UI/GameHUD/BeatCalibratorLabel
+@onready var equipment_label = $UI/GameHUD/EquipmentLabel
 @onready var music_player = $MusicPlayer
+
+func _get_game_frame_offset() -> Vector2:
+	var viewport_size = get_viewport().get_visible_rect().size
+	return (viewport_size - BASE_FRAME_SIZE) * 0.5
+
+func _apply_centered_game_frame_layout() -> void:
+	var fo = _get_game_frame_offset()
+	# Node2D 渲染器跟随帧偏移
+	if renderer:
+		renderer.position = fo
+	# GameHUD 从全屏 anchor 切换为固定 800×600 块，子标签的绝对坐标就因此随帧偏移
+	var game_hud = get_node_or_null("UI/GameHUD")
+	if game_hud is Control:
+		game_hud.set_anchors_and_offsets_preset(Control.PRESET_TOP_LEFT, false)
+		game_hud.size = BASE_FRAME_SIZE
+		game_hud.position = fo
+	# GameOverLabel 是 CanvasLayer 直接子节点，需单独偏移
+	if game_over_label:
+		game_over_label.position = fo + Vector2(200.0, 250.0)
+	# PauseMenu/GameOverMenu/SongCompleteMenu 用屏幕 anchor 自行居中，不需移动
 
 func _ready():
 	# 初始化组件
 	setup_components()
+	ui_controller = MainUIController.new(self)
+	mode_starter = GameModeStarter.new(self)
 	setup_ui()
+	# 绑定音乐总线，确保音量设置影响所有模式
+	if music_player:
+		music_player.bus = "Music"
+		Global.set_music_volume(Global.music_volume)
+	
+	# 初始化窗口焦点状态
+	_last_window_focused = _is_window_focused()
 	
 	# 连接音乐播放器完成信号
 	music_player.finished.connect(_on_music_finished)
 	print("[初始化] 音乐播放器finished信号已连接到_on_music_finished")
+	_apply_centered_game_frame_layout()
+	# 监听视口尺寸变化，确保每次窗口缩放都重新居中
+	get_viewport().size_changed.connect(func():
+		call_deferred("_apply_centered_game_frame_layout")
+		call_deferred("_update_background_size")
+	)
 	
-	# 设置窗口大小
-	get_window().size = Global.resolutions[Global.current_resolution_index]
+	# 应用窗口模式与尺寸（保持用户当前窗口模式）
+	Global.set_window_mode(Global.window_mode_index)
+	
+	# 监听窗口焦点变化（用于后台暂停音乐）
+	var window = get_window()
+	if window:
+		window.focus_entered.connect(_on_window_focus_entered)
+		window.focus_exited.connect(_on_window_focus_exited)
 	
 	# 启动对应模式
 	if Global.lyric_mode_enabled:
@@ -43,7 +95,7 @@ func _ready():
 		start_classic_mode()
 
 func setup_components():
-	"""初始化核心组件"""
+	# 初始化核心组件
 	# 创建输入处理器
 	input_handler = InputHandler.new()
 	add_child(input_handler)
@@ -61,110 +113,16 @@ func setup_components():
 	input_handler.pause_toggle.connect(_on_pause_toggle)
 
 func setup_ui():
-	"""设置UI"""
-	game_over_label.hide()
-	pause_menu.hide()
-	game_over_menu.hide()
-	song_complete_menu.hide()
-	combo_label.text = ""  # 初始化连击标签
-	update_ui_texts()
-	
-	# 连接菜单信号
-	pause_menu.resume_game.connect(_on_resume_game)
-	pause_menu.restart_game.connect(_on_restart_game)
-	pause_menu.goto_options.connect(_on_goto_options)
-	pause_menu.goto_menu.connect(_on_goto_menu)
-	game_over_menu.restart_game.connect(_on_restart_game)
-	game_over_menu.goto_menu.connect(_on_goto_menu)
-	song_complete_menu.restart_game.connect(_on_restart_game)
-	song_complete_menu.select_song.connect(_on_select_song)
-	song_complete_menu.goto_menu.connect(_on_goto_menu)
+	if ui_controller:
+		ui_controller.setup_ui()
 
 func start_classic_mode():
-	"""启动经典模式"""
-	print("=== 进入经典模式 ===")
-	
-	game_mode = ClassicModeController.new()
-	add_child(game_mode)
-	game_mode.initialize()
-	
-	# 连接游戏模式信号
-	game_mode.game_over_signal.connect(_on_game_over)
-	game_mode.score_changed.connect(_on_score_changed)
-	game_mode.lines_changed.connect(_on_lines_changed)
-	game_mode.combo_changed.connect(_on_combo_changed)
-	game_mode.special_block_effect.connect(_on_special_block_effect)
-	game_mode.snake_mode_changed.connect(_on_snake_mode_changed)
-	
-	# 设置渲染器
-	renderer.set_lyric_mode(false)
-	
-	# UI设置
-	chinese_lyric_label.hide()
-	scoring_label.show()
-	
-	# 加载BGM
-	var bgm = load("res://musics/bgm/货郎8bit(Коробейники).mp3")
-	if bgm:
-		music_player.stream = bgm
-		music_player.volume_db = -8
-		music_player.play()
-		print("经典模式背景音乐已加载")
+	if mode_starter:
+		mode_starter.start_classic_mode()
 
 func start_lyric_mode():
-	"""启动歌词模式"""
-	print("=== 进入歌曲模式 ===")
-	
-	# 创建音乐可视化背景
-	_setup_music_visualizer()
-	
-	# 如果没有选择歌曲，使用默认歌曲
-	if Global.selected_song.is_empty():
-		Global.selected_song = {
-			"name": "Masked bitcH",
-			"artist": "ギガP feat. GUMI",
-			"music_file": "res://musics/ギガP GUMI - Masked bitcH.mp3",
-			"lyric_file": "res://musics/lyrics/Masked bitcH.lrc"
-		}
-	
-	game_mode = LyricModeController.new()
-	add_child(game_mode)
-	
-	# 加载歌曲
-	game_mode.load_song(Global.selected_song)
-	game_mode.start_song()
-	
-	# 连接游戏模式信号
-	game_mode.game_over_signal.connect(_on_game_over)
-	game_mode.score_changed.connect(_on_score_changed)
-	game_mode.lines_changed.connect(_on_lines_changed)
-	game_mode.combo_changed.connect(_on_combo_changed)
-	game_mode.lyric_changed.connect(_on_lyric_changed)
-	game_mode.all_blocks_placed.connect(_on_all_blocks_placed)
-	game_mode.beat_rating_changed.connect(_on_beat_rating_changed)
-	
-	# 设置渲染器
-	renderer.set_lyric_mode(true)
-	
-	# UI设置
-	scoring_label.show()  # 歌词模式也显示计分规则
-	chinese_lyric_label.show()
-	chinese_lyric_label.z_index = -1  # 确保在暂停菜单下方
-	# 加载歌词后根据是否中文歌曲更新标签
-	chinese_lyric_label.text = "中文歌词:\n准备开始..." if game_mode.is_chinese_song else "中文翻译:\n准备开始..."
-	
-	# 加载音乐
-	var music = load(Global.selected_song["music_file"])
-	if music:
-		music_player.stream = music
-		music_player.play()
-		# 设置歌曲时长到游戏模式
-		game_mode.song_duration = music_player.stream.get_length()
-		print("音乐加载成功: ", Global.selected_song["name"])
-		print("[音乐播放器] stream已设置，开始播放")
-		print("[音乐播放器] 音乐长度: ", game_mode.song_duration)
-	else:
-		print("[错误] 无法加载音乐: ", Global.selected_song["music_file"])
+	if mode_starter:
+		mode_starter.start_lyric_mode()
 
 func _process(delta):
 	if game_mode == null:
@@ -178,7 +136,8 @@ func _process(delta):
 		game_mode.equipment_system.update_rift_meter(delta)
 	
 	# 更新裂隙仪冷却显示（暂停时隐藏）
-	_update_rift_meter_display()
+	if ui_controller:
+		ui_controller.update_rift_meter_display()
 	
 	# 更新贪吃蛇（如果在贪吃蛇模式）
 	if game_mode is ClassicModeController and game_mode.is_snake_mode:
@@ -189,81 +148,34 @@ func _process(delta):
 		renderer.update_beat_timer(delta)
 	
 	# 更新节拍评价显示计时器
-	if beat_rating_display_timer > 0:
-		beat_rating_display_timer -= delta
+	if ui_controller:
+		ui_controller.update_beat_timers(delta)
 	
 	# 更新渲染器
 	update_renderer()
 	
 	# 更新节拍校对器显示
-	_update_beat_calibrator_display()
+	if ui_controller:
+		ui_controller.update_beat_calibrator_display()
+
+	# 轮询窗口焦点，保证后台音乐可靠暂停/恢复
+	_poll_focus_state()
 
 func _update_rift_meter_display():
-	"""更新裂隙仪冷却显示"""
-	if not rift_meter_label:
-		return
-	
-	# 暂停时隐藏裂隙仪显示
-	if game_mode and game_mode.paused:
-		rift_meter_label.text = ""
-		return
-	
-	# 只有装备了裂隙仪才显示
-	if not game_mode or not game_mode.equipment_system.is_equipped(EquipmentSystem.EquipmentType.RIFT_METER):
-		rift_meter_label.text = ""
-		return
-	
-	var cooldown = game_mode.equipment_system.get_rift_meter_cooldown()
-	if cooldown > 0:
-		# 显示冷却中（浅灰色）
-		var cooldown_text = "裂隙仪: %.1fs" % cooldown if Global.current_language == "zh" else "Rift: %.1fs" % cooldown
-		rift_meter_label.text = cooldown_text
-		rift_meter_label.add_theme_color_override("font_color", Color(0.75, 0.75, 0.75, 1))  # 浅灰色表示冷却中
-	else:
-		# 可以使用
-		var ready_text = "裂隙仪: 按S" if Global.current_language == "zh" else "Rift: Press S"
-		rift_meter_label.text = ready_text
-		rift_meter_label.add_theme_color_override("font_color", Color(0.3, 0.9, 1.0, 1))  # 青色表示就绪
+	if ui_controller:
+		ui_controller.update_rift_meter_display()
 
-# 节拍评价显示状态
-var beat_rating_display_timer: float = 0.0
-var last_beat_display_text: String = ""
-var last_beat_display_color: Color = Color.WHITE
+func _update_equipment_display():
+	if ui_controller:
+		ui_controller.update_equipment_display()
+
 
 func _update_beat_calibrator_display():
-	"""更新节拍校对器状态显示"""
-	if not beat_calibrator_label:
-		return
-	
-	# 只在歌曲模式且装备了节拍校对器时显示
-	if not game_mode is LyricModeController:
-		beat_calibrator_label.text = ""
-		return
-	
-	# 暂停时隐藏
-	if game_mode.paused:
-		beat_calibrator_label.text = ""
-		return
-	
-	if not game_mode.equipment_system.is_equipped(EquipmentSystem.EquipmentType.BEAT_CALIBRATOR):
-		beat_calibrator_label.text = ""
-		return
-	
-	# 如果有最近的评价显示，保持显示
-	if beat_rating_display_timer > 0:
-		beat_calibrator_label.text = last_beat_display_text
-		beat_calibrator_label.add_theme_color_override("font_color", last_beat_display_color)
-	else:
-		# 没有评价时显示等待状态
-		var combo = game_mode.equipment_system.get_beat_combo()
-		var status_text = "♪ 节拍校对器" if Global.current_language == "zh" else "♪ Beat Calibrator"
-		if combo > 0:
-			status_text += " x" + str(combo)
-		beat_calibrator_label.text = status_text
-		beat_calibrator_label.add_theme_color_override("font_color", Color(1.0, 0.85, 0.2, 1))
+	if ui_controller:
+		ui_controller.update_beat_calibrator_display()
 
 func update_renderer():
-	"""更新渲染器状态"""
+	# 更新渲染器状态
 	if renderer == null or game_mode == null:
 		return
 	
@@ -320,19 +232,12 @@ func _input(event):
 			_on_pause_toggle()
 		return
 	
-	# 处理裂隙仪输入（按S键）
-	if event is InputEventKey and event.pressed and event.keycode == KEY_S:
+	# 处理裂隙仪输入（按C键）
+	if event is InputEventKey and event.pressed and event.keycode == KEY_C:
 		if not is_game_over and not is_paused:
 			if game_mode.equipment_system.try_activate_rift_meter(game_mode.grid_manager):
-				# 显示裂隙仪效果
-				combo_label.text = "裂隙仪!" if Global.current_language == "zh" else "Rift!"
-				combo_label.add_theme_color_override("font_color", Color(0.3, 0.9, 1.0, 1.0))
-				combo_label.scale = Vector2(1.5, 1.5)
-				var tween = create_tween()
-				tween.tween_property(combo_label, "scale", Vector2(1.0, 1.0), 0.3).set_ease(Tween.EASE_OUT)
-				await get_tree().create_timer(1.0).timeout
-				if combo_label.text.contains("裂隙仪") or combo_label.text.contains("Rift"):
-					combo_label.text = ""
+				if ui_controller:
+					await ui_controller.show_rift_triggered()
 	
 	if input_handler:
 		input_handler.handle_input(event, is_game_over, is_paused)
@@ -366,83 +271,36 @@ func _on_game_over():
 	show_game_over_menu()
 
 func _on_score_changed(score: int):
-	score_label.text = TEXTS[Global.current_language]["score"] + str(score)
+	if ui_controller:
+		ui_controller.on_score_changed(score)
 
 func _on_lines_changed(lines: int):
-	lines_label.text = TEXTS[Global.current_language]["lines"] + str(lines)
+	if ui_controller:
+		ui_controller.on_lines_changed(lines)
 
 func _on_combo_changed(combo_count: int):
-	"""连击数变化回调"""
-	if combo_count >= 2:
-		# 显示连击
-		if Global.current_language == "zh":
-			combo_label.text = str(combo_count) + " 连击！"
-		else:
-			combo_label.text = str(combo_count) + " Combo!"
-		
-		# 根据连击数设置颜色
-		if combo_count > 10:
-			combo_label.add_theme_color_override("font_color", Color(1.0, 0.2, 0.2, 1.0))  # 红色
-		elif combo_count >= 5:
-			combo_label.add_theme_color_override("font_color", Color(1.0, 0.5, 0.1, 1.0))  # 橙色
-		else:
-			combo_label.add_theme_color_override("font_color", Color(1.0, 0.8, 0.2, 1.0))  # 黄色
-		
-		# 连击动画效果
-		combo_label.scale = Vector2(1.3, 1.3)
-		var tween = create_tween()
-		tween.tween_property(combo_label, "scale", Vector2(1.0, 1.0), 0.2).set_ease(Tween.EASE_OUT)
-	else:
-		# 连击中断，清空显示
-		combo_label.text = ""
+	if ui_controller:
+		ui_controller.on_combo_changed(combo_count)
 
 func _on_special_block_effect(effect_type: String, position: Vector2i, destroyed: int):
-	"""特殊方块效果触发回调"""
-	var effect_names = {"BOMB": "💣炸弹", "LASER_H": "━横激光", "LASER_V": "┃纵激光"}
-	var effect_name = effect_names.get(effect_type, effect_type)
-	
-	# 临时显示特效信息在连击标签位置
-	combo_label.text = effect_name + "! +" + str(destroyed * 5)
-	combo_label.add_theme_color_override("font_color", Color(1.0, 0.5, 0, 1.0))  # 橙色
-	combo_label.scale = Vector2(1.5, 1.5)
-	var tween = create_tween()
-	tween.tween_property(combo_label, "scale", Vector2(1.0, 1.0), 0.3).set_ease(Tween.EASE_OUT)
-	
-	# 1.5秒后清除
-	await get_tree().create_timer(1.5).timeout
-	if combo_label.text.contains(effect_name):
-		combo_label.text = ""
+	if ui_controller:
+		ui_controller.on_special_block_effect(effect_type, destroyed)
 
 func _on_snake_mode_changed(is_snake: bool):
-	"""贪吃蛇模式变化回调"""
-	if is_snake:
-		combo_label.text = "🐍贪吃蛇!" if Global.current_language == "zh" else "🐍Snake!"
-		combo_label.add_theme_color_override("font_color", Color(0.4, 0.9, 0.4, 1.0))  # 绿色
-		combo_label.scale = Vector2(1.5, 1.5)
-		var tween = create_tween()
-		tween.tween_property(combo_label, "scale", Vector2(1.0, 1.0), 0.3).set_ease(Tween.EASE_OUT)
+	if ui_controller:
+		ui_controller.on_snake_mode_changed(is_snake)
 
 func _on_beat_rating_changed(rating: int, text: String, color: Color, beat_combo: int):
-	"""节拍评价变化回调"""
 	print("[Main] 收到节拍评价: ", text, " 连击: ", beat_combo)
-	renderer.set_beat_rating_info(text, color, beat_combo)
-	
-	# 设置评价显示状态
-	beat_rating_display_timer = 1.5  # 显示1.5秒
-	var status_text = text
-	if beat_combo > 0:
-		status_text += " x" + str(beat_combo)
-	last_beat_display_text = status_text
-	last_beat_display_color = color
+	if ui_controller:
+		ui_controller.on_beat_rating_changed(text, color, beat_combo)
 
 func _on_lyric_changed(japanese: String, chinese: String):
-	if chinese_lyric_label:
-		# 根据是否是中文歌曲选择显示标签
-		var label_text = "中文歌词:\n" if game_mode.is_chinese_song else "中文翻译:\n"
-		chinese_lyric_label.text = label_text + chinese
+	if ui_controller:
+		ui_controller.on_lyric_changed(chinese)
 
 func _on_all_blocks_placed():
-	"""所有歌词方块已落完"""
+	# 所有歌词方块已落完
 	print("[Main] 收到方块落完信号")
 	print("  - 音乐是否播放中: ", music_player.playing)
 	print("  - 游戏是否结束: ", game_mode.game_over)
@@ -469,57 +327,9 @@ func _on_all_blocks_placed():
 		game_mode.apply_completion_bonus()
 		show_song_complete_menu()
 
-# UI相关
-const TEXTS = {
-	"zh": {
-		"score": "分数: ",
-		"lines": "行数: ",
-		"next": "下一个:",
-		"game_over": "游戏结束！\n按 Enter 重新开始",
-		"paused": "游戏暂停\n按 P 继续",
-		"controls": "控制:\n← → 移动\n↑ 旋转\n↓ 快速下降\nEnter 硬降落\nEsc 暂停游戏",
-		"scoring_easy": "计分规则:\n1行 = 100分\n2行 = 200分\n3行 = 400分\n4行 = 700分\n\n连击加分:\n连续消除时\n+原始分×10×连击数",
-		"scoring_full": "计分规则:\n1行=100 2行=200\n3行=400 4行=700\n5行=1200 6行=2000\n7行=4000\n\n连击加分:\n连续消除时\n+原始分×10×连击数",
-		"scoring_hard": "计分规则:\n1行=100 2行=200\n3行=400 4行=700\n5行=1200 6行=2000\n7行=4000\n\n连击: +原始分×10×连击数\n\n困难规则:\n每2500分减少0.5ms固定时间",
-		"scoring_song": "计分规则:\n1行=100 2行=200\n3行=400 4行=700\n5行=1200 6行=2000\n7行=4000\n\n连击: +原始分×10×连击数\n\n完成奖励:\n落块时间与歌词结束\n差值在容许范围内:\n+233分，否则扣分"
-	},
-	"en": {
-		"score": "Score: ",
-		"lines": "Lines: ",
-		"next": "Next:",
-		"game_over": "Game Over!\nPress Enter to Restart",
-		"paused": "PAUSED\nPress P to Continue",
-		"controls": "Controls:\n← → Move\n↑ Rotate\n↓ Soft Drop\nEnter Hard Drop\nEsc Pause",
-		"scoring_easy": "Scoring:\n1 Line = 100pts\n2 Lines = 200pts\n3 Lines = 400pts\n4 Lines = 700pts\n\nCombo Bonus:\nConsecutive clears\n+Base×10×Combo",
-		"scoring_full": "Scoring:\n1-4: 100/200/400/700\n5-7: 1200/2000/4000\n\nCombo Bonus:\nConsecutive clears\n+Base×10×Combo",
-		"scoring_hard": "Scoring:\n1-4: 100/200/400/700\n5-7: 1200/2000/4000\n\nCombo: +Base×10×N\n\nHard Rule:\n-0.5ms lock time\nper 2500pts",
-		"scoring_song": "Scoring:\n1-4: 100/200/400/700\n5-7: 1200/2000/4000\n\nCombo: +Base×10×N\n\nCompletion:\nFinish within tolerance\n+233pts, else penalty"
-	}
-}
-
 func update_ui_texts():
-	var texts = TEXTS[Global.current_language]
-	score_label.text = texts["score"] + "0"
-	lines_label.text = texts["lines"] + "0"
-	next_label.text = texts["next"]
-	game_over_label.text = texts["game_over"]
-	controls_label.text = texts["controls"]
-	
-	# 根据模式选择计分规则文本
-	if Global.lyric_mode_enabled:
-		# 歌词模式
-		scoring_label.text = texts["scoring_song"]
-	else:
-		# 经典模式
-		if Global.classic_difficulty == 0:
-			# 简单模式
-			scoring_label.text = texts["scoring_easy"]
-		elif Global.classic_difficulty == 2:
-			# 困难模式
-			scoring_label.text = texts["scoring_hard"]
-		else:
-			# 普通模式
-			scoring_label.text = texts["scoring_full"]
+	if ui_controller:
+		ui_controller.update_ui_texts()
 
 func toggle_pause():
 	if game_mode == null:
@@ -531,82 +341,169 @@ func toggle_pause():
 		pause_menu.show_menu()
 		pause_menu.update_ui_texts()
 		# 暂停时不隐藏UI，保持可见（有半透明遮罩）
-		if music_player.playing:
+		# BGM（经典/Rogue）保持播放，歌曲模式才暂停流
+		if not _is_bgm_stream() and music_player.playing:
 			music_player.stream_paused = true
 	else:
 		pause_menu.hide()
-		if music_player.stream_paused:
+		if _is_bgm_stream():
+			_refresh_bgm_state()
+		elif music_player.stream_paused:
 			music_player.stream_paused = false
 
 func show_game_over_menu():
-	if game_mode == null:
-		return
-	
-	# 经典模式：保存最高分
-	if game_mode is ClassicModeController:
-		var updated = Global.update_classic_score(Global.classic_difficulty, game_mode.score, game_mode.lines_cleared_total)
-		if updated:
-			print("[经典模式] 新纪录！已更新最高分")
-	
-	game_over_menu.show()
-	game_over_menu.update_ui_texts()
-	game_over_menu.set_score(game_mode.score, game_mode.lines_cleared_total)
-	
-	score_label.hide()
-	lines_label.hide()
-	next_label.hide()
-	controls_label.hide()
-	scoring_label.hide()
-	chinese_lyric_label.hide()
-	combo_label.text = ""  # 清空连击显示
-	
-	if music_player.playing:
-		music_player.stop()
+	if ui_controller:
+		ui_controller.show_game_over_menu()
 
-func show_song_complete_menu():
-	if game_mode == null:
-		print("[歌曲完成] 错误: game_mode为null")
+func show_song_complete_menu(is_natural_complete: bool = true):
+	if ui_controller:
+		ui_controller.show_song_complete_menu(is_natural_complete)
+
+# ===== BGM控制函数 =====
+
+func _notification(what):
+	if what == NOTIFICATION_WM_SIZE_CHANGED:
+		call_deferred("_apply_centered_game_frame_layout")
+	if what == NOTIFICATION_APPLICATION_FOCUS_IN or what == NOTIFICATION_APPLICATION_FOCUS_OUT:
+		# 延迟处理，确保焦点状态已更新
+		call_deferred("_handle_focus_music")
+		call_deferred("_refresh_bgm_state")
+
+func _on_window_focus_entered():
+	# 兜底：窗口焦点进入时同步音乐状态
+	call_deferred("_handle_focus_music")
+	call_deferred("_refresh_bgm_state")
+
+func _on_window_focus_exited():
+	# 兜底：窗口焦点离开时同步音乐状态
+	call_deferred("_handle_focus_music")
+	call_deferred("_refresh_bgm_state")
+
+func _handle_focus_music():
+	# 后台播放关闭时：进入后台暂停，回前台恢复
+	if not Global.play_music_when_unfocused and not _is_window_focused():
+		# 歌曲模式：后台暂停游戏逻辑
+		if Global.current_game_mode == Global.GameMode.SONG and game_mode and not game_mode.paused:
+			game_mode.paused = true
+			_background_paused = true
+		if music_player.playing:
+			music_player.stream_paused = true
 		return
-	
-	print("[歌曲完成] 显示歌曲完成菜单")
-	print("  - 当前分数: ", game_mode.score)
-	print("  - 消除行数: ", game_mode.lines_cleared_total)
-	
-	# 保存最高分
-	var is_new_record = false
-	if Global.selected_song.has("name"):
-		var song_name = Global.selected_song["name"]
-		is_new_record = Global.update_song_score(song_name, game_mode.score, game_mode.lines_cleared_total)
-		if is_new_record:
-			print("  - 新纪录！已更新最高分")
-		
-	game_mode.paused = true
-	song_complete_menu.show()
-	song_complete_menu.update_ui_texts()
-	song_complete_menu.set_score(game_mode.score, game_mode.lines_cleared_total, is_new_record)
-	
-	# 隐藏游戏UI元素
-	score_label.hide()
-	lines_label.hide()
-	next_label.hide()
-	controls_label.hide()
-	scoring_label.hide()
-	chinese_lyric_label.hide()
-	combo_label.text = ""  # 清空连击显示
-	
-	if music_player.playing:
+
+	# 回到前台：根据当前模式恢复音乐
+	if music_player.stream_paused:
+		# 暂停/设置界面不恢复
+		if game_mode and game_mode.paused:
+			# 如果是后台触发的暂停，恢复
+			if _background_paused:
+				game_mode.paused = false
+				_background_paused = false
+			else:
+				return
+		if pause_menu and pause_menu.visible:
+			return
+		if _is_options_open():
+			return
+		# BGM只在允许的模式恢复；歌曲模式则直接恢复
+		if _is_bgm_stream():
+			if _should_play_bgm():
+				music_player.stream_paused = false
+				if not music_player.playing:
+					music_player.play()
+		else:
+			music_player.stream_paused = false
+			if not music_player.playing:
+				music_player.play()
+
+func _is_bgm_stream() -> bool:
+	return music_player.stream and music_player.stream.resource_path == Global.BGM_PATH
+
+func _is_options_open() -> bool:
+	for child in get_tree().root.get_children():
+		if child.name == "OptionsMenu":
+			return true
+	return false
+
+func _should_play_bgm() -> bool:
+	if not Global.bgm_enabled:
+		return false
+	if Global.current_game_mode == Global.GameMode.SONG:
+		return false
+	if not Global.play_music_when_unfocused and not _is_window_focused():
+		return false
+	if game_mode and game_mode.paused:
+		return false
+	if pause_menu and pause_menu.visible:
+		return false
+	if _is_options_open():
+		return false
+	return true
+
+func _refresh_bgm_state():
+	if _should_play_bgm():
+		_start_bgm()
+	else:
+		# 后台播放关闭时：进入后台暂停而非停止
+		if not Global.play_music_when_unfocused and not _is_window_focused() and _is_bgm_stream():
+			if music_player.playing:
+				music_player.stream_paused = true
+		else:
+			_stop_bgm()
+
+func _is_window_focused() -> bool:
+	var window = get_window()
+	if window:
+		return window.has_focus()
+	return true
+
+func _poll_focus_state():
+	var focused = _is_window_focused()
+	if focused == _last_window_focused:
+		return
+	_last_window_focused = focused
+	call_deferred("_handle_focus_music")
+	call_deferred("_refresh_bgm_state")
+
+func _start_bgm():
+	# 播放背景音乐
+	# 不再检查条件，由_refresh_bgm_state()负责判断
+	var bgm = load(Global.BGM_PATH)
+	if bgm:
+		if music_player.stream != bgm:
+			music_player.stream = bgm
+		music_player.volume_db = 0
+		music_player.stream_paused = false
+		if not music_player.playing:
+			music_player.play()
+		print("背景音乐已加载并播放")
+	else:
+		print("警告: 无法加载BGM文件 - " + Global.BGM_PATH)
+
+func _stop_bgm():
+	# 停止背景音乐
+	if _is_bgm_stream():
+		music_player.stream_paused = false
 		music_player.stop()
-	
-	print("歌曲已完成！")
+		print("背景音乐已停止")
+
+func on_bgm_setting_changed(enabled: bool):
+	# BGM设置变更回调 - 由OptionsMenu调用
+	print("BGM设置变更: ", enabled)
+	# 仅在经典模式或Rogue模式时响应
+	if Global.current_game_mode == Global.GameMode.CLASSIC or Global.current_game_mode == Global.GameMode.ROGUE:
+		_refresh_bgm_state()
 
 func _on_music_finished():
-	"""音乐播放完成回调"""
+	# 音乐播放完成回调
 	print("[音乐完成] 音乐播放结束")
 	
 	# 经典模式：循环播放BGM
 	if game_mode is ClassicModeController and music_player.stream:
-		music_player.play()
-		print("[经典模式] BGM循环播放")
+		if _should_play_bgm():
+			music_player.play()
+			print("[经典模式] BGM循环播放")
+		else:
+			_stop_bgm()
 	# 歌词模式：检查是否满足完成条件
 	elif game_mode is LyricModeController:
 		print("[歌词模式] 音乐结束，检查完成条件:")
@@ -638,6 +535,53 @@ func _on_music_finished():
 func _on_resume_game():
 	toggle_pause()
 
+func _persist_current_run_score() -> void:
+	if game_mode == null:
+		return
+	if game_mode is ClassicModeController:
+		var classic_updated = Global.update_classic_score(
+			Global.classic_difficulty,
+			game_mode.score,
+			game_mode.lines_cleared_total
+		)
+		if classic_updated:
+			print("[经典模式] 新纪录！已更新最高分")
+	elif game_mode is LyricModeController:
+		var song_data = Global.selected_song
+		if song_data and song_data.has("name"):
+			var song_updated = Global.update_song_score(
+				song_data["name"],
+				game_mode.score,
+				game_mode.lines_cleared_total
+			)
+			if song_updated:
+				print("[歌词模式] 新纪录！已更新最高分")
+
+func _on_end_game():
+	# 主动结束游戏并进入结算
+	if game_mode == null:
+		return
+	
+	# 隐藏暂停菜单
+	pause_menu.hide()
+	game_mode.paused = false
+	
+	# 标记游戏结束
+	game_mode.game_over = true
+	
+	# 保存分数
+	_persist_current_run_score()
+	
+	# 停止音乐
+	if music_player.playing:
+		music_player.stop()
+	
+	# 显示结算界面
+	if game_mode is LyricModeController:
+		show_song_complete_menu(false)  # 主动结束，不是自然完成
+	else:
+		show_game_over_menu()
+
 func _on_restart_game():
 	get_tree().reload_current_scene()
 
@@ -646,14 +590,8 @@ func _on_select_song():
 
 func _on_goto_options():
 	pause_menu.hide()
-	
-	# 隐藏所有游戏UI元素
-	score_label.hide()
-	lines_label.hide()
-	next_label.hide()
-	controls_label.hide()
-	scoring_label.hide()
-	chinese_lyric_label.hide()
+	if ui_controller:
+		ui_controller.on_options_opened()
 	
 	var options_scene = load("res://UI/OptionsMenu.tscn")
 	var options_instance = options_scene.instantiate()
@@ -662,64 +600,120 @@ func _on_goto_options():
 	get_tree().root.add_child(options_instance)
 
 func _on_options_closed():
-	if game_mode and game_mode.paused:
-		# 恢复游戏UI元素
-		score_label.show()
-		lines_label.show()
-		next_label.show()
-		controls_label.show()
-		scoring_label.show()  # 所有模式都显示计分规则
-		
-		# 根据模式显示对应的UI
-		if game_mode is LyricModeController:
-			chinese_lyric_label.show()
-		else:
-			chinese_lyric_label.hide()
-		
-		pause_menu.show_menu()
-		pause_menu.update_ui_texts()
-		update_ui_texts()
+	if ui_controller:
+		ui_controller.on_options_closed()
 
 func _on_goto_menu():
+	# 局中主动返回主菜单也需要结算当前分数
+	_persist_current_run_score()
+
 	# 清理音乐可视化
 	if music_visualizer:
 		music_visualizer.queue_free()
 		music_visualizer = null
+	# 退出到主菜单时重置游戏模式
+	Global.current_game_mode = Global.GameMode.MAIN_MENU
 	get_tree().change_scene_to_file("res://UI/MainMenu.tscn")
 
 func _setup_music_visualizer():
-	"""设置音乐可视化背景"""
+	# 设置音乐可视化背景
 	print("[MusicVisualizer] 开始设置音乐可视化...")
 	
 	if music_visualizer != null:
 		print("[MusicVisualizer] 已存在，跳过")
 		return
 	
-	# 获取视口大小
-	var viewport_size = get_viewport().get_visible_rect().size
-	print("[MusicVisualizer] 视口大小: ", viewport_size)
-	
-	# 创建一个CanvasLayer来确保在最底层
-	var bg_layer = CanvasLayer.new()
-	bg_layer.name = "VisualizerLayer"
-	bg_layer.layer = -1  # 在其他UI层之下
-	add_child(bg_layer)
-	print("[MusicVisualizer] CanvasLayer已添加")
-	
-	# 添加背景色
-	var bg_color = ColorRect.new()
-	bg_color.name = "VisualizerBG"
-	bg_color.color = Color(0.08, 0.08, 0.15, 1.0)  # 深蓝色背景
-	bg_color.position = Vector2.ZERO
-	bg_color.size = viewport_size
-	bg_layer.add_child(bg_color)
-	print("[MusicVisualizer] 背景色已添加，大小: ", bg_color.size)
+	_ensure_background_layer()
 	
 	# 创建可视化器
 	music_visualizer = MusicVisualizer.new()
 	music_visualizer.name = "MusicVisualizer"
 	music_visualizer.position = Vector2.ZERO
-	music_visualizer.size = viewport_size
-	bg_layer.add_child(music_visualizer)
+	music_visualizer.size = background_rect.size
+	background_layer.add_child(music_visualizer)
 	
 	print("[MusicVisualizer] 音乐可视化背景已创建，大小: ", music_visualizer.size)
+
+func _setup_plain_background():
+	_ensure_background_layer()
+	if music_visualizer:
+		music_visualizer.queue_free()
+		music_visualizer = null
+	_update_background_size()
+
+func _ensure_background_layer():
+	if background_layer:
+		return
+	background_layer = CanvasLayer.new()
+	background_layer.name = "BackgroundLayer"
+	background_layer.layer = -1
+	add_child(background_layer)
+	
+	background_rect = ColorRect.new()
+	background_rect.name = "BackgroundRect"
+	background_rect.color = Color(0.08, 0.08, 0.15, 1.0)
+	background_rect.position = Vector2.ZERO
+	background_rect.size = get_viewport().get_visible_rect().size
+	background_layer.add_child(background_rect)
+
+func _update_background_size():
+	if not background_rect:
+		return
+	var viewport_size = get_viewport().get_visible_rect().size
+	background_rect.size = viewport_size
+	if music_visualizer:
+		music_visualizer.size = viewport_size
+
+func _load_audio_file(path: String) -> AudioStream:
+	# 加载音频文件，支持res://和绝对路径
+	if path.begins_with("res://"):
+		# 资源路径，使用load()
+		return load(path) as AudioStream
+	else:
+		# 绝对路径或user://路径，需要手动加载
+		var actual_path = path
+		if path.begins_with("user://"):
+			actual_path = ProjectSettings.globalize_path(path)
+		
+		# 检查文件是否存在
+		if not FileAccess.file_exists(actual_path):
+			print("[音频加载] 文件不存在: ", actual_path)
+			return null
+		
+		# 根据扩展名选择加载方式
+		var ext = actual_path.get_extension().to_lower()
+		
+		if ext == "mp3":
+			var file = FileAccess.open(actual_path, FileAccess.READ)
+			if file == null:
+				print("[音频加载] 无法打开文件: ", actual_path)
+				return null
+			var audio_stream = AudioStreamMP3.new()
+			audio_stream.data = file.get_buffer(file.get_length())
+			file.close()
+			print("[音频加载] 成功加载MP3: ", actual_path)
+			return audio_stream
+		elif ext == "ogg":
+			# OGG需要使用不同的加载方式
+			var file = FileAccess.open(actual_path, FileAccess.READ)
+			if file == null:
+				print("[音频加载] 无法打开文件: ", actual_path)
+				return null
+			var audio_stream = AudioStreamOggVorbis.load_from_buffer(file.get_buffer(file.get_length()))
+			file.close()
+			print("[音频加载] 成功加载OGG: ", actual_path)
+			return audio_stream
+		elif ext == "wav":
+			# WAV使用类似方式
+			var file = FileAccess.open(actual_path, FileAccess.READ)
+			if file == null:
+				print("[音频加载] 无法打开文件: ", actual_path)
+				return null
+			var audio_stream = AudioStreamWAV.new()
+			# WAV格式比较复杂，暂不支持
+			print("[音频加载] WAV格式暂不支持动态加载")
+			file.close()
+			return null
+		else:
+			print("[音频加载] 不支持的格式: ", ext)
+			return null

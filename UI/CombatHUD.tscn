@@ -1,0 +1,155 @@
+[gd_scene load_steps=4 format=3 uid="uid://drm4aw4om70dd"]
+
+[ext_resource type="Script" uid="uid://be1vghb6kmjct" path="res://UI/CombatHUD.gd" id="1_script"]
+[ext_resource type="FontFile" uid="uid://ddo7ybrfl5d2s" path="res://fonts/FUSION-PIXEL-12PX-MONOSPACED-ZH_HANS.OTF" id="2_font"]
+
+[sub_resource type="StyleBoxFlat" id="turn_panel_style"]
+bg_color = Color(0.12, 0.1, 0.18, 0.95)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.4, 0.4, 0.5, 0.9)
+
+[sub_resource type="StyleBoxFlat" id="mode_panel_style"]
+bg_color = Color(0.12, 0.1, 0.18, 0.95)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.9, 0.3, 0.3, 1)
+
+[node name="CombatHUD" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_script")
+
+[node name="TurnInfoPanel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_top = 0.25
+anchor_right = 0.5
+anchor_bottom = 0.25
+offset_left = -80.0
+offset_top = 5.0
+offset_right = 80.0
+offset_bottom = 55.0
+theme_override_styles/panel = SubResource("turn_panel_style")
+
+[node name="VBox" type="VBoxContainer" parent="TurnInfoPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 8.0
+offset_top = 4.0
+offset_right = -8.0
+offset_bottom = -4.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TurnLabel" type="Label" parent="TurnInfoPanel/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.9, 0.7, 1)
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 16
+text = "UI_COMBATHUD_TURN_1"
+horizontal_alignment = 1
+
+[node name="TimerLabel" type="Label" parent="TurnInfoPanel/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.75, 0.75, 0.8, 1)
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 12
+text = "UI_COMBATHUD_20_0S_LEFT"
+horizontal_alignment = 1
+
+[node name="CombatModePanel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.0
+anchor_top = 0.25
+anchor_right = 1.0
+anchor_bottom = 0.25
+offset_left = -190.0
+offset_top = 5.0
+offset_right = -10.0
+offset_bottom = 55.0
+theme_override_styles/panel = SubResource("mode_panel_style")
+
+[node name="VBox" type="VBoxContainer" parent="CombatModePanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 8.0
+offset_top = 4.0
+offset_right = -8.0
+offset_bottom = -4.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ModeLabel" type="Label" parent="CombatModePanel/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9, 0.3, 0.3, 1)
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 16
+text = "UI_COMBATHUD_ATTACK_MODE"
+horizontal_alignment = 1
+
+[node name="ModeHintLabel" type="Label" parent="CombatModePanel/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.55, 0.55, 0.6, 1)
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 10
+text = "UI_COMBATHUD_1EQATK_2EQDEF"
+horizontal_alignment = 1
+
+[node name="ControlsLabel" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -130.0
+offset_top = -175.0
+offset_right = -8.0
+offset_bottom = -18.0
+theme_override_colors/font_color = Color(0.45, 0.45, 0.5, 1)
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 10
+text = "UI_COMBATHUD_CONTROLS"
+
+[node name="ComboLabel" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 240.0
+offset_top = -40.0
+offset_right = 440.0
+offset_bottom = -10.0
+theme_override_colors/font_color = Color(0.95, 0.85, 0.35, 1)
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 20
+
+[node name="CreditLabel" type="Label" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 8.0
+offset_top = -15.0
+offset_right = -5.0
+theme_override_colors/font_color = Color(0.3, 0.3, 0.35, 1)
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 10
+text = "UI_COMBATHUD_ASSETS_MOTA_JS"

@@ -1,0 +1,69 @@
+{
+  "relics": [
+    {
+      "id": "relic_downclock_software",
+      "kind": "equipment_relic",
+      "equip_id": "downclock_software",
+      "equipment_type": 7,
+      "name": "降频软件",
+      "name_en": "Downclock",
+      "description": "敌人行为冷却×110%\n玩家伤害×0.9",
+      "description_en": "Enemy cooldown ×110%\nPlayer damage ×0.9",
+      "icon": "CLOCK",
+      "color": [0.4, 0.5, 0.9],
+      "rarity": "common"
+    },
+    {
+      "id": "relic_faulty_score_amplifier",
+      "kind": "equipment_relic",
+      "equip_id": "faulty_score_amplifier",
+      "equipment_type": 2,
+      "name": "故障增幅器",
+      "name_en": "Faulty Amp",
+      "description": "初始攻防+15%\n但下落速度+5%",
+      "description_en": "Base ATK/DEF +15%\nSpeed +5%",
+      "icon": "AMP",
+      "color": [0.9, 0.6, 0.2],
+      "rarity": "uncommon"
+    },
+    {
+      "id": "relic_rift_meter",
+      "kind": "equipment_relic",
+      "equip_id": "rift_meter",
+      "equipment_type": 3,
+      "name": "裂隙仪",
+      "name_en": "Rift Meter",
+      "description": "每45秒可消除\n指定的一整行",
+      "description_en": "Clear a row\nevery 45s",
+      "icon": "RIFT",
+      "color": [0.4, 0.7, 0.9],
+      "rarity": "uncommon"
+    },
+    {
+      "id": "relic_iron_sword",
+      "kind": "equipment_relic",
+      "equip_id": "iron_sword",
+      "equipment_type": 9,
+      "name": "铁剑",
+      "name_en": "Iron Sword",
+      "description": "攻击力+5",
+      "description_en": "ATK +5",
+      "icon": "SWORD",
+      "color": [0.8, 0.5, 0.2],
+      "rarity": "common"
+    },
+    {
+      "id": "relic_iron_shield",
+      "kind": "equipment_relic",
+      "equip_id": "iron_shield",
+      "equipment_type": 10,
+      "name": "铁盾",
+      "name_en": "Iron Shield",
+      "description": "+5防御力",
+      "description_en": "DEF +5 per line",
+      "icon": "SHIELD",
+      "color": [0.5, 0.6, 0.8],
+      "rarity": "common"
+    }
+  ]
+}

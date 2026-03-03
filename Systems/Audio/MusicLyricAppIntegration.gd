@@ -16,24 +16,26 @@ func _init():
 	DirAccess.make_dir_recursive_absolute(temp_dir)
 
 func set_app_path(path: String):
-	"""设置 MusicLyricApp 可执行文件路径"""
+	# 设置 MusicLyricApp 可执行文件路径
 	app_path = path
 
-func search_and_download_lyrics(song_name: String, artist: String = "") -> Dictionary:
-	"""搜索并下载歌词
-	
-	参数:
-		song_name: 歌曲名
-		artist: 艺术家名（可选，用于更精确的搜索）
-	
-	返回:
-		{success: bool, lyrics: String, source: String, error: String}
-	"""
+func search_and_download_lyrics(song_name: String, artist: String = "", album: String = "", duration_sec: float = 0.0) -> Dictionary:
+	# 搜索并下载歌词
+
+	# 参数:
+	# song_name: 歌曲名
+	# artist: 艺术家名（可选，用于更精确的搜索）
+	# album: 专辑名（可选，用于版本匹配）
+	# duration_sec: 音频时长（秒），用于精确匹配歌曲版本
+
+	# 返回:
+	# {success: bool, lyrics: String, source: String, error: String}
 	if not Global.online_mode:
 		return {"success": false, "error": "离线模式", "lyrics": ""}
 	
-	if app_path.is_empty() or not FileAccess.file_exists(app_path):
-		return {"success": false, "error": "未配置 MusicLyricApp 路径", "lyrics": ""}
+	# 允许无App路径，优先使用在线API检索（由wrapper处理）
+	if not app_path.is_empty() and not FileAccess.file_exists(app_path):
+		return {"success": false, "error": "MusicLyricApp 路径无效", "lyrics": ""}
 	
 	# 构建搜索关键词
 	var keyword = song_name
@@ -45,25 +47,42 @@ func search_and_download_lyrics(song_name: String, artist: String = "") -> Dicti
 	
 	# 使用 Python 包装器（转换 res:// 路径为实际文件系统路径）
 	var wrapper_path = ProjectSettings.globalize_path("res://Systems/Audio/music_lyric_wrapper.py")
-	var python_cmd = "python"  # 或者 "python3"
+	var python_cmds = []
+	# 在 Windows 下优先尝试 pythonw（无控制台窗口），然后 py，再尝试 python
+	if OS.get_name() == "Windows":
+		python_cmds.append("pythonw")
+		python_cmds.append("pythonw.exe")
+		python_cmds.append("py")
+		python_cmds.append("python")
+	else:
+		# Unix/macOS 常用可执行名
+		python_cmds.append("python3")
+		python_cmds.append("python")
 	
 	# 构建命令参数
 	var args = [
 		wrapper_path,
 		"--app", app_path,
 		"--keyword", keyword,
+		"--song", song_name,
+		"--artist", artist,
+		"--album", album,
+		"--max-checks", str(clamp(int(Global.lyric_search_retry_count) + 1, 1, 11)),
+		"--duration", str(snapped(duration_sec, 0.001)),
 		"--output", temp_file
 	]
 	
-	print("[歌词下载] 执行命令: ", python_cmd, " ", args)
-	
-	# 执行命令
+	var exit_code = -1
 	var output = []
-	var exit_code = OS.execute(python_cmd, args, output, true, false)
-	
-	print("[歌词下载] 退出码: ", exit_code)
-	if not output.is_empty():
-		print("[歌词下载] 输出: ", output)
+	for cmd in python_cmds:
+		print("[歌词下载] 执行命令: ", cmd, " ", args)
+		output.clear()
+		exit_code = OS.execute(cmd, args, output, true, false)
+		print("[歌词下载] 退出码: ", exit_code)
+		if not output.is_empty():
+			print("[歌词下载] 输出: ", output)
+		if exit_code == 0:
+			break
 	
 	# 检查是否成功
 	if exit_code != 0:
@@ -92,11 +111,11 @@ func search_and_download_lyrics(song_name: String, artist: String = "") -> Dicti
 	return {"success": true, "lyrics": lyrics, "source": "163MusicLyrics"}
 
 func is_available() -> bool:
-	"""检查工具是否可用"""
-	return not app_path.is_empty() and FileAccess.file_exists(app_path)
+	# 检查工具是否可用
+	return Global.online_mode
 
 func clear_temp():
-	"""清理临时文件"""
+	# 清理临时文件
 	var dir = DirAccess.open(temp_dir)
 	if dir:
 		dir.list_dir_begin()

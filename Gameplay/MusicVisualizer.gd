@@ -6,7 +6,7 @@ class_name MusicVisualizer
 # 可视化参数
 const BAR_COUNT = 48  # 柱状图数量（增加让柱子更细）
 const MIN_HEIGHT = 3.0  # 最小高度
-const MAX_HEIGHT_RATIO = 0.35  # 最大高度比例（由0.8降低到仅占屏幕35%）
+const MAX_HEIGHT_RATIO = 0.39  # 最大高度比例
 const SMOOTHING = 0.15  # 平滑系数（越小越平滑）
 const FALL_SPEED = 200.0  # 下落速度
 
@@ -46,9 +46,19 @@ func _ready():
 	print("[MusicVisualizer] 音频总线数量: ", AudioServer.get_bus_count())
 	for i in range(AudioServer.get_bus_count()):
 		print("  总线 ", i, ": ", AudioServer.get_bus_name(i))
+	
+	# 连接视口尺寸变化信号，确保窗口改变大小时同步修改背景
+	get_tree().root.size_changed.connect(_on_viewport_size_changed)
+	_on_viewport_size_changed()
+
+func _on_viewport_size_changed():
+	var new_size = get_viewport_rect().size
+	if new_size != size:
+		size = new_size
+		queue_redraw()
 
 func _setup_spectrum_analyzer():
-	"""设置频谱分析器"""
+	# 设置频谱分析器
 	# 查找或创建Music总线上的频谱分析器
 	audio_bus_index = AudioServer.get_bus_index("Music")
 	if audio_bus_index < 0:
@@ -99,7 +109,7 @@ func _process(delta):
 	queue_redraw()
 
 func _update_spectrum():
-	"""更新频谱数据"""
+	# 更新频谱数据
 	if spectrum_analyzer == null:
 		return
 	
@@ -118,17 +128,17 @@ func _update_spectrum():
 		var magnitude = spectrum_analyzer.get_magnitude_for_frequency_range(freq_low, freq_high)
 		var energy = (magnitude.x + magnitude.y) / 2.0
 		
-		# 转换为高度（使用对数缩放）
+		# 转换为高度（使用对数缩放，提升中等振幅）
 		var height = MIN_HEIGHT
 		if energy > 0.0001:
-			# 对数缩放，使小音量也能显示
-			height = (60.0 + linear_to_db(energy)) / 60.0 * max_height
+			# 对数缩放 + 1.6倍增益，使中等音量的柱子更高
+			height = (60.0 + linear_to_db(energy)) / 60.0 * max_height * 1.6
 			height = clamp(height, MIN_HEIGHT, max_height)
 		
 		target_heights[i] = height
 
 func _draw():
-	"""绘制柱状图"""
+	# 绘制柱状图
 	if bar_heights.is_empty():
 		return
 	

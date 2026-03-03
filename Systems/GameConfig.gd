@@ -4,11 +4,34 @@ class_name GameConfig
 ## 游戏配置 - 单一职责：管理所有游戏常量
 
 # 网格配置
-const GRID_WIDTH = 10
-const GRID_HEIGHT = 20
-const CELL_SIZE = 28
-const GRID_OFFSET_X = 240  # (800 - 10*28) / 2 = 240，居中
-const GRID_OFFSET_Y = 20
+const DEFAULT_GRID_WIDTH = 10
+const DEFAULT_GRID_HEIGHT = 20
+const DEFAULT_CELL_SIZE = 28.0
+const DEFAULT_GRID_OFFSET_X = 240.0  # (800 - 10*28) / 2 = 240，居中
+const DEFAULT_GRID_OFFSET_Y = 20.0
+
+static var GRID_WIDTH = DEFAULT_GRID_WIDTH
+static var GRID_HEIGHT = DEFAULT_GRID_HEIGHT
+static var CELL_SIZE = DEFAULT_CELL_SIZE
+static var GRID_OFFSET_X = DEFAULT_GRID_OFFSET_X
+static var GRID_OFFSET_Y = DEFAULT_GRID_OFFSET_Y
+
+static func apply_capacity_disk(enabled: bool) -> void:
+	# 扩容磁盘：10x20 -> 12x24，保持总空间不变（等比缩放）
+	if enabled:
+		var total_w = DEFAULT_GRID_WIDTH * DEFAULT_CELL_SIZE
+		var total_h = DEFAULT_GRID_HEIGHT * DEFAULT_CELL_SIZE
+		GRID_WIDTH = 12
+		GRID_HEIGHT = 24
+		CELL_SIZE = total_w / float(GRID_WIDTH)
+		GRID_OFFSET_X = DEFAULT_GRID_OFFSET_X
+		GRID_OFFSET_Y = DEFAULT_GRID_OFFSET_Y
+	else:
+		GRID_WIDTH = DEFAULT_GRID_WIDTH
+		GRID_HEIGHT = DEFAULT_GRID_HEIGHT
+		CELL_SIZE = DEFAULT_CELL_SIZE
+		GRID_OFFSET_X = DEFAULT_GRID_OFFSET_X
+		GRID_OFFSET_Y = DEFAULT_GRID_OFFSET_Y
 
 # 游戏速度配置
 const FALL_SPEED = 1.0  # 秒

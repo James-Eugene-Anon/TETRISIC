@@ -59,8 +59,14 @@ offset_bottom = -10.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="EquipmentList" type="VBoxContainer" parent="LeftPanel/VBox"]
+[node name="ScrollContainer" type="ScrollContainer" parent="LeftPanel/VBox"]
 layout_mode = 2
+size_flags_vertical = 3
+horizontal_scroll_mode = 0
+
+[node name="EquipmentList" type="VBoxContainer" parent="LeftPanel/VBox/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
 size_flags_vertical = 3
 
 [node name="BackButton" type="Button" parent="LeftPanel/VBox"]

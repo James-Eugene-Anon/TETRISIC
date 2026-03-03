@@ -40,23 +40,23 @@ func set_lyric_mode(enabled: bool):
 	is_lyric_mode = enabled
 
 func set_lyric_piece_colors(current_color: Color, next_color: Color):
-	"""设置歌词模式方块颜色"""
+	# 设置歌词模式方块颜色
 	current_lyric_piece_color = current_color
 	next_lyric_piece_color = next_color
 
 func set_special_block_info(color: Color, symbol: String):
-	"""设置特殊方块信息"""
+	# 设置特殊方块信息
 	special_block_color = color
 	special_block_symbol = symbol
 
 func set_snake_info(body: Array[Vector2i], is_active: bool, next_snake: bool):
-	"""设置贪吃蛇信息"""
+	# 设置贪吃蛇信息
 	snake_body = body
 	is_snake_mode = is_active
 	next_is_snake = next_snake
 
 func set_beat_rating_info(text: String, color: Color, combo: int):
-	"""设置节拍评价信息"""
+	# 设置节拍评价信息
 	beat_rating_text = text
 	beat_rating_color = color
 	beat_combo = combo
@@ -64,7 +64,7 @@ func set_beat_rating_info(text: String, color: Color, combo: int):
 	queue_redraw()  # 立即刷新显示
 
 func update_beat_timer(delta: float):
-	"""更新节拍评价显示计时器"""
+	# 更新节拍评价显示计时器
 	if beat_rating_timer > 0:
 		beat_rating_timer -= delta
 		queue_redraw()  # 持续刷新以显示淡出效果
@@ -84,7 +84,7 @@ func _draw():
 	draw_beat_rating()  # 绘制节拍评价
 
 func draw_grid_background():
-	"""绘制网格背景"""
+	# 绘制网格背景
 	var grid_rect = Rect2(
 		GameConfig.GRID_OFFSET_X,
 		GameConfig.GRID_OFFSET_Y,
@@ -95,7 +95,7 @@ func draw_grid_background():
 	draw_rect(grid_rect, Color.WHITE, false, 2)
 
 func draw_grid_lines():
-	"""绘制网格线"""
+	# 绘制网格线
 	for x in range(1, GameConfig.GRID_WIDTH):
 		draw_line(
 			Vector2(GameConfig.GRID_OFFSET_X + x * GameConfig.CELL_SIZE, GameConfig.GRID_OFFSET_Y),
@@ -111,7 +111,7 @@ func draw_grid_lines():
 		)
 
 func draw_placed_pieces():
-	"""绘制已放置的方块"""
+	# 绘制已放置的方块
 	for y in range(GameConfig.GRID_HEIGHT):
 		for x in range(GameConfig.GRID_WIDTH):
 			var color = grid_manager.get_cell_color(x, y)
@@ -122,7 +122,7 @@ func draw_placed_pieces():
 					draw_classic_cell(x, y, color)
 
 func draw_classic_cell(x: int, y: int, color: Color):
-	"""绘制经典模式方块单元格"""
+	# 绘制经典模式方块单元格
 	draw_rect(
 		Rect2(
 			GameConfig.GRID_OFFSET_X + x * GameConfig.CELL_SIZE + 1,
@@ -134,7 +134,7 @@ func draw_classic_cell(x: int, y: int, color: Color):
 	)
 
 func draw_lyric_cell(x: int, y: int):
-	"""绘制歌词模式方块单元格（文字）"""
+	# 绘制歌词模式方块单元格（文字）
 	var char_text = grid_manager.get_cell_char(x, y)
 	if char_text.is_empty():
 		return
@@ -153,7 +153,7 @@ func draw_lyric_cell(x: int, y: int):
 	draw_string(font, text_pos, char_text, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size, cell_color)
 
 func draw_current_piece():
-	"""绘制当前方块"""
+	# 绘制当前方块
 	if current_piece == null:
 		return
 	
@@ -163,7 +163,7 @@ func draw_current_piece():
 		draw_current_classic_piece()
 
 func draw_current_classic_piece():
-	"""绘制经典模式当前方块"""
+	# 绘制经典模式当前方块
 	var color: Color
 	if special_block_color != Color.TRANSPARENT:
 		# 特殊方块
@@ -188,7 +188,7 @@ func draw_current_classic_piece():
 				draw_string(font, text_pos, special_block_symbol, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size, Color.WHITE)
 
 func draw_current_lyric_piece():
-	"""绘制歌词模式当前方块"""
+	# 绘制歌词模式当前方块
 	var cell_index = 0
 	for cell in current_piece.cells:
 		var x = current_piece.position.x + cell.x
@@ -207,7 +207,7 @@ func draw_current_lyric_piece():
 		cell_index += 1
 
 func draw_next_piece_preview():
-	"""绘制下一个方块预览"""
+	# 绘制下一个方块预览
 	var preview_x = GameConfig.GRID_OFFSET_X + GameConfig.GRID_WIDTH * GameConfig.CELL_SIZE + 30
 	var preview_y = 160
 	var preview_size = 20
@@ -277,12 +277,12 @@ var next_special_block_color: Color = Color.TRANSPARENT  # 下一个特殊方块
 var next_special_block_symbol: String = ""  # 下一个特殊方块符号
 
 func set_next_special_block_info(color: Color, symbol: String):
-	"""设置下一个特殊方块信息"""
+	# 设置下一个特殊方块信息
 	next_special_block_color = color
 	next_special_block_symbol = symbol
 
 func draw_next_classic_piece(shape: String, cells: Array, preview_x: int, preview_y: int, preview_size: int, min_x: int, min_y: int):
-	"""绘制经典模式预览方块"""
+	# 绘制经典模式预览方块
 	var color: Color
 	var symbol: String = ""
 	
@@ -318,7 +318,7 @@ func draw_next_classic_piece(shape: String, cells: Array, preview_x: int, previe
 			draw_string(font, text_pos, symbol, HORIZONTAL_ALIGNMENT_LEFT, -1, font_size, Color.WHITE)
 
 func draw_next_lyric_piece(cells: Array, preview_x: int, preview_y: int, preview_size: int, min_x: int, min_y: int):
-	"""绘制歌词模式预览方块"""
+	# 绘制歌词模式预览方块
 	var chars = next_piece_data.get("chars", [])
 	var cell_idx = 0
 	for cell in cells:
@@ -335,7 +335,7 @@ func draw_next_lyric_piece(cells: Array, preview_x: int, preview_y: int, preview
 		cell_idx += 1
 
 func draw_snake():
-	"""绘制贪吃蛇"""
+	# 绘制贪吃蛇
 	if not is_snake_mode or snake_body.is_empty():
 		return
 	
@@ -366,7 +366,7 @@ func draw_snake():
 				draw_string(font, text_pos, "◉", HORIZONTAL_ALIGNMENT_LEFT, -1, font_size, Color.WHITE)
 
 func draw_beat_rating():
-	"""绘制节拍评价（仅歌曲模式）"""
+	# 绘制节拍评价（仅歌曲模式）
 	if not is_lyric_mode or beat_rating_text.is_empty():
 		return
 	

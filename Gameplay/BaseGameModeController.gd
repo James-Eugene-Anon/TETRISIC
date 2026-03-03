@@ -30,11 +30,12 @@ var is_special_block: bool = false
 var special_block_type: int = -1
 
 func _init():
+	GameConfig.apply_capacity_disk(Global.equipment_universal_capacity_disk)
 	grid_manager = GridManager.new(GameConfig.GRID_WIDTH, GameConfig.GRID_HEIGHT)
 	equipment_system = EquipmentSystem.new()
 
 func initialize():
-	"""初始化游戏模式"""
+	# 初始化游戏模式
 	grid_manager.initialize()
 	score = 0
 	lines_cleared_total = 0
@@ -48,14 +49,14 @@ func initialize():
 	special_block_type = -1
 
 func update(delta: float):
-	"""更新游戏逻辑"""
+	# 更新游戏逻辑
 	if paused or game_over:
 		return
 	
 	if current_piece != null:
 		# 自动下落
 		fall_timer += delta
-		var current_fall_speed = get_fall_speed()
+		var current_fall_speed: float = get_fall_speed()
 		if fall_timer >= current_fall_speed:
 			fall_timer = 0.0
 			if not current_piece.move(Vector2i(0, 1), grid_manager):
@@ -73,27 +74,30 @@ func update(delta: float):
 				lock_timer = 0.0
 
 func get_fall_speed() -> float:
-	"""获取下落速度 - 子类可重写"""
-	# 应用装备速度倍率（故障的计分增幅器）
+	# 获取下落速度 - 子类可重写
+	# 应用装备速度倍率（故障增幅器）
 	var equipment_speed_mult = equipment_system.get_speed_multiplier()
 	return GameConfig.FALL_SPEED / equipment_speed_mult
 
 func get_lock_delay() -> float:
-	"""获取方块锁定延迟 - 子类可重写"""
+	# 获取方块锁定延迟 - 子类可重写
 	return GameConfig.LOCK_DELAY
 
 func spawn_piece():
-	"""生成新方块 - 子类实现"""
+	# 生成新方块 - 子类实现
 	pass
 
 func lock_piece():
-	"""锁定方块到网格"""
+	# 锁定方块到网格
 	if current_piece == null:
 		return
 	
 	var color = get_piece_color()
 	var piece_position = current_piece.position + current_piece.cells[0]  # 获取方块实际位置
 	current_piece.place_on_grid(grid_manager, color)
+	
+	# 方块已放置到网格，立即清除引用，防止渲染器重复绘制
+	current_piece = null
 	
 	# 保存特殊方块状态供后续使用
 	var was_special_block = is_special_block
@@ -119,7 +123,7 @@ func lock_piece():
 			combo_bonus = base_score * 10 * (combo - 1)  # 第一次消除无连击加分
 			print("[连击] ", combo, " 连击！基础分: ", base_score, " 连击加分: ", combo_bonus)
 		
-		# 应用非连击得分倍率（故障的计分增幅器）
+		# 应用非连击得分倍率（故障增幅器）
 		var score_multiplier = equipment_system.get_score_multiplier(combo > 1)
 		var final_base_score = int(base_score * score_multiplier)
 		
@@ -151,22 +155,22 @@ func lock_piece():
 	spawn_piece()
 
 func get_line_score_table() -> Array:
-	"""获取得分表 - 子类可重写"""
+	# 获取得分表 - 子类可重写
 	return GameConfig.LINE_SCORES_EASY
 
 func on_score_updated(new_score: int, old_score: int, base_score_without_combo: int = 0):
-	"""分数更新回调 - 子类可重写
-	   base_score_without_combo: 不含连击加分的基础分数，用于残酷模式障碍行计算"""
+	# 分数更新回调 - 子类可重写
+	# base_score_without_combo: 不含连击加分的基础分数，用于残酷模式障碍行计算
 	pass
 
 func get_piece_color() -> Color:
-	"""获取方块颜色 - 子类可重写"""
+	# 获取方块颜色 - 子类可重写
 	if current_piece and GameConfig.COLORS.has(current_piece.shape_name):
 		return GameConfig.COLORS[current_piece.shape_name]
 	return Color.WHITE
 
 func move_piece(direction: Vector2i):
-	"""移动方块"""
+	# 移动方块
 	if current_piece and current_piece.move(direction, grid_manager):
 		# 向下移动成功时重置锁定计时器
 		if direction.y == 1:
@@ -174,13 +178,13 @@ func move_piece(direction: Vector2i):
 			lock_timer = 0.0
 
 func rotate_piece():
-	"""旋转方块"""
+	# 旋转方块
 	if current_piece and current_piece.try_rotate(grid_manager):
 		is_locking = false
 		lock_timer = 0.0
 
 func hard_drop():
-	"""硬降落"""
+	# 硬降落
 	if current_piece == null:
 		return
 	
@@ -192,12 +196,14 @@ func hard_drop():
 	lock_timer = 0.0
 
 func toggle_pause():
-	"""切换暂停状态"""
+	# 切换暂停状态
 	paused = !paused
 
 func check_game_over() -> bool:
-	"""检查游戏是否结束"""
+	# 检查游戏是否结束
 	if current_piece and not current_piece.can_place(grid_manager, current_piece.position):
+		# 不放置方块到网格，避免与已有方块重叠显示
+		current_piece = null  # 清除当前方块引用
 		game_over = true
 		game_over_signal.emit()
 		return true

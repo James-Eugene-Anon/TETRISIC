@@ -38,7 +38,7 @@ func initialize():
 	spawn_piece()
 
 func generate_next_piece():
-	"""根据难度生成下一个方块类型"""
+	# 根据难度生成下一个方块类型
 	if difficulty == 0:
 		# 简单：只使用7种经典方块
 		next_shape = GameConfig.CLASSIC_SHAPES[randi() % GameConfig.CLASSIC_SHAPES.size()]
@@ -95,6 +95,12 @@ func generate_next_piece():
 		
 		var available_shapes = shapes_by_size.get(piece_size, GameConfig.CLASSIC_SHAPES)
 		next_shape = available_shapes[randi() % available_shapes.size()]
+		
+		# 额外降低PLUS方块概率（0.3%概率重新随机）
+		if next_shape == "PLUS" and randf() < 0.003:
+			var non_plus_shapes = available_shapes.filter(func(s): return s != "PLUS")
+			if non_plus_shapes.size() > 0:
+				next_shape = non_plus_shapes[randi() % non_plus_shapes.size()]
 	
 	next_piece_data = {
 		"shape": next_shape,
@@ -125,10 +131,10 @@ func generate_next_piece():
 			next_is_snake = false
 
 func get_fall_speed() -> float:
-	"""根据难度和分数计算下落速度"""
+	# 根据难度和分数计算下落速度
 	var base_speed = GameConfig.FALL_SPEED
 	
-	# 应用装备速度倍率（故障的计分增幅器）
+	# 应用装备速度倍率（故障增幅器）
 	var equipment_speed_mult = equipment_system.get_speed_multiplier()
 	
 	if difficulty == 0:
@@ -151,7 +157,7 @@ func get_fall_speed() -> float:
 		return base_speed / (speed_multiplier * equipment_speed_mult)
 
 func get_lock_delay() -> float:
-	"""根据难度和分数计算方块锁定延迟"""
+	# 根据难度和分数计算方块锁定延迟
 	var base_delay = GameConfig.LOCK_DELAY  # 3毫秒 = 0.003秒
 	
 	if difficulty == 0 or difficulty == 1:
@@ -169,7 +175,7 @@ func get_lock_delay() -> float:
 		return max(new_delay, 0.0003)  # 最小0.3毫秒
 
 func spawn_piece():
-	"""生成新方块"""
+	# 生成新方块
 	if next_shape.is_empty():
 		generate_next_piece()
 	
@@ -202,7 +208,7 @@ func spawn_piece():
 	check_game_over()
 
 func _start_snake_mode():
-	"""开始贪吃蛇模式"""
+	# 开始贪吃蛇模式
 	is_snake_mode = true
 	current_piece = null  # 暂时没有俄罗斯方块
 	
@@ -216,7 +222,7 @@ func _start_snake_mode():
 	print("[经典模式] 开始贪吃蛇模式，长度:", equipment_system.get_snake_length())
 
 func _on_snake_fixed(cells: Array):
-	"""贪吃蛇固定时的回调"""
+	# 贪吃蛇固定时的回调
 	is_snake_mode = false
 	snake_controller = null
 	snake_mode_changed.emit(false)
@@ -252,7 +258,7 @@ func _on_snake_fixed(cells: Array):
 	spawn_piece()
 
 func _on_snake_abandoned():
-	"""贪吃蛇放弃时的回调"""
+	# 贪吃蛇放弃时的回调
 	is_snake_mode = false
 	snake_controller = null
 	snake_mode_changed.emit(false)
@@ -261,17 +267,17 @@ func _on_snake_abandoned():
 	spawn_piece()
 
 func handle_snake_input(event: InputEvent):
-	"""处理贪吃蛇输入"""
+	# 处理贪吃蛇输入
 	if snake_controller and is_snake_mode:
 		snake_controller.handle_input(event)
 
 func update_snake(delta: float):
-	"""更新贪吃蛇逻辑"""
+	# 更新贪吃蛇逻辑
 	if snake_controller and is_snake_mode:
 		snake_controller.update(delta, grid_manager)
 
 func get_line_score_table() -> Array:
-	"""根据难度返回得分表"""
+	# 根据难度返回得分表
 	if difficulty == 0:
 		# 简单模式：只有4格方块，使用简单得分表
 		return GameConfig.LINE_SCORES_EASY
@@ -280,14 +286,14 @@ func get_line_score_table() -> Array:
 		return GameConfig.LINE_SCORES_FULL
 
 func get_piece_color() -> Color:
-	"""获取方块颜色 - 处理特殊方块"""
+	# 获取方块颜色 - 处理特殊方块
 	if is_special_block and special_block_type >= 0:
 		return equipment_system.get_special_block_color(special_block_type)
 	return super.get_piece_color()
 
 func on_score_updated(new_score: int, old_score: int, base_score_without_combo: int = 0):
-	"""分数更新回调，用于残酷模式生成障碍行
-	   只计算基础分数（不含连击加分）"""
+	# 分数更新回调，用于残酷模式生成障碍行
+	# 只计算基础分数（不含连击加分）
 	if difficulty != 3:
 		return
 	
@@ -303,7 +309,7 @@ func on_score_updated(new_score: int, old_score: int, base_score_without_combo: 
 		print("[残酷模式] 生成障碍行! 基础分累计:", cruel_cached_score, " (不含连击)")
 
 func _spawn_cruel_obstacle_row():
-	"""在最底部生成一行随机缺一格的灰色方块"""
+	# 在最底部生成一行随机缺一格的灰色方块
 	# 先将所有行向上移动一格
 	for y in range(1, grid_manager.height):
 		for x in range(grid_manager.width):

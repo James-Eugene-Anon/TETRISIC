@@ -7,34 +7,14 @@ signal goto_menu
 @onready var panel = $Panel
 @onready var title_label = $Panel/VBox/TitleLabel
 @onready var score_label = $Panel/VBox/ScoreLabel
+@onready var new_record_label = $Panel/VBox/NewRecordLabel
 @onready var restart_button = $Panel/VBox/RestartButton
 @onready var select_song_button = $Panel/VBox/SelectSongButton
 @onready var menu_button = $Panel/VBox/MenuButton
 
-var TEXTS = {
-	"zh": {
-		"title": "歌曲完成！",
-		"score": "分数: %d",
-		"lines": "消除行数: %d",
-		"high_score": "最高分: %d",
-		"high_lines": "最高消除: %d",
-		"new_record": "🎉 新纪录！",
-		"restart": "重新开始",
-		"select_song": "选择歌曲",
-		"menu": "主菜单"
-	},
-	"en": {
-		"title": "Song Complete!",
-		"score": "Score: %d",
-		"lines": "Lines: %d",
-		"high_score": "High Score: %d",
-		"high_lines": "High Lines: %d",
-		"new_record": "🎉 New Record!",
-		"restart": "Restart",
-		"select_song": "Select Song",
-		"menu": "Main Menu"
-	}
-}
+
+# 是否是正常完成（用于区分主动结束和歌曲自然完成）
+var is_natural_complete: bool = true
 
 func _ready():
 	update_ui_texts()
@@ -43,7 +23,7 @@ func _ready():
 	menu_button.pressed.connect(_on_menu_button_pressed)
 
 func show_menu():
-	"""显示菜单（带动画）"""
+	# 显示菜单（带动画）
 	show()
 	panel.modulate.a = 0.0
 	panel.scale = Vector2(0.95, 0.95)
@@ -54,25 +34,42 @@ func show_menu():
 	tween.tween_property(panel, "scale", Vector2(1.0, 1.0), 0.25).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_BACK)
 
 func update_ui_texts():
-	var lang = Global.current_language
-	title_label.text = TEXTS[lang]["title"]
-	restart_button.text = TEXTS[lang]["restart"]
-	select_song_button.text = TEXTS[lang]["select_song"]
-	menu_button.text = TEXTS[lang]["menu"]
+	if is_natural_complete:
+		title_label.text = tr("UI_SONGCOMPLETE_TITLE")
+		title_label.add_theme_color_override("font_color", Color(0.2, 0.9, 0.4))  # 绿色
+		if panel:
+			var panel_style = UITheme.create_panel_style(UITheme.BG_MEDIUM,
+				UITheme.ACCENT_SUCCESS, UITheme.BORDER_NORMAL, UITheme.CORNER_LG)
+			panel.add_theme_stylebox_override("panel", panel_style)
+	else:
+		title_label.text = tr("UI_SONGCOMPLETE_TITLE_ENDED")
+		title_label.add_theme_color_override("font_color", Color(1, 0.2, 0.2))  # 红色
+		if panel:
+			var panel_style = UITheme.create_panel_style(UITheme.BG_MEDIUM,
+				UITheme.ACCENT_DANGER, UITheme.BORDER_NORMAL, UITheme.CORNER_LG)
+			panel.add_theme_stylebox_override("panel", panel_style)
+	restart_button.text = tr("UI_COMMON_RESTART")
+	select_song_button.text = tr("UI_TITLE_SELECT_SONG")
+	menu_button.text = tr("UI_COMMON_MAIN_MENU")
+
+func set_natural_complete(natural: bool):
+	# 设置是否是自然完成
+	is_natural_complete = natural
+	update_ui_texts()
 
 func set_score(score: int, lines: int, is_new_record: bool = false):
-	var lang = Global.current_language
-	var text = TEXTS[lang]["score"] % score + "\n" + TEXTS[lang]["lines"] % lines
+	var text = tr("UI_SONGCOMPLETE_SCORE") % score + "\n" + tr("UI_SONGCOMPLETE_LINES") % lines
 	
 	# 获取最高分
 	if Global.selected_song.has("name"):
 		var high_score_data = Global.get_song_score(Global.selected_song["name"])
-		text += "\n\n" + TEXTS[lang]["high_score"] % high_score_data["score"]
-		text += "\n" + TEXTS[lang]["high_lines"] % high_score_data["lines"]
+		text += "\n\n" + tr("UI_SONGCOMPLETE_HIGH_SCORE") % high_score_data["score"]
+		text += "\n" + tr("UI_SONGCOMPLETE_HIGH_LINES") % high_score_data["lines"]
 	
 	# 新纪录提示
-	if is_new_record:
-		text += "\n\n" + TEXTS[lang]["new_record"]
+	if new_record_label:
+		new_record_label.visible = is_new_record
+		new_record_label.text = tr("UI_SONGCOMPLETE_NEW_RECORD") if is_new_record else ""
 	
 	score_label.text = text
 

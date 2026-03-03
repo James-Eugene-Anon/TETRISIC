@@ -1,0 +1,52 @@
+{
+  "wave_configs": [
+    {
+      "id": "slime_lord",
+      "name": "史莱姆王",
+      "enemies": [
+        {"name": "史莱姆王", "health": 180, "damage": 16, "cooldown_base": 5.2, "cooldown_variance": 0.4, "gold_reward": 35}
+      ]
+    },
+    {
+      "id": "skeleton_soldier",
+      "name": "骷髅士兵",
+      "enemies": [
+        {"name": "骷髅士兵", "health": 110, "damage": 15, "cooldown_base": 5.8, "cooldown_variance": 0.4, "gold_reward": 21},
+        {"name": "骷髅人", "health": 50, "damage": 12, "cooldown_base": 5.2, "cooldown_variance": 0.3, "gold_reward": 17}
+      ]
+    },
+    {
+      "id": "bat_swarm",
+      "name": "大蝙蝠群",
+      "enemies": [
+        {"name": "大蝙蝠", "health": 60, "damage": 3, "cooldown_base": 4.0, "cooldown_variance": 0.3, "gold_reward": 29},
+        {"name": "大蝙蝠", "health": 60, "damage": 3, "cooldown_base": 4.0, "cooldown_variance": 0.3, "gold_reward": 29},
+        {"name": "大蝙蝠", "health": 60, "damage": 3, "cooldown_base": 4.0, "cooldown_variance": 0.3, "gold_reward": 29},
+        {"name": "大蝙蝠", "health": 60, "damage": 3, "cooldown_base": 4.0, "cooldown_variance": 0.3, "gold_reward": 29},
+        {"name": "大蝙蝠", "health": 60, "damage": 3, "cooldown_base": 4.0, "cooldown_variance": 0.3, "gold_reward": 29},
+        {"name": "大蝙蝠", "health": 60, "damage": 3, "cooldown_base": 4.0, "cooldown_variance": 0.3, "gold_reward": 29},
+        {"name": "大蝙蝠", "health": 60, "damage": 3, "cooldown_base": 4.0, "cooldown_variance": 0.3, "gold_reward": 29},
+        {"name": "大蝙蝠", "health": 60, "damage": 3, "cooldown_base": 4.0, "cooldown_variance": 0.3, "gold_reward": 29}
+      ]
+    }
+  ],
+  "shop_stat_base_prices": {
+    "hp": 30,
+    "max_hp": 20,
+    "atk": 20,
+    "def": 20
+  },
+  "shop_stat_values": {
+    "hp": 100,
+    "max_hp": 25,
+    "atk": 5,
+    "def": 10
+  },
+  "shop_equip_pool": [
+    {"id": "iron_sword", "price": 50, "type": 9},
+    {"id": "iron_shield", "price": 50, "type": 10},
+    {"id": "downclock_software", "price": 50, "type": 7},
+    {"id": "faulty_score_amplifier", "price": 60, "type": 2},
+    {"id": "rift_meter", "price": 60, "type": 3}
+  ]
+}

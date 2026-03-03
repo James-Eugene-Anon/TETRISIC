@@ -1,298 +1,518 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-歌词处理模块 - 处理歌词解析、断句和方块生成逻辑
-用于减少GDScript文件的复杂度
+歌词处理模块（简化 TGCC 版）
+
+目标：
+- 按 timestamp 分组（group）而不是逐行硬筛
+- 使用结构特征 + 轻量脚本检测 + 上下文块规则分类
+- 默认输出主歌词（LYRIC_PRIMARY）并可并行带翻译
 """
 
+from __future__ import annotations
+
+import json
 import re
-from typing import List, Dict, Tuple, Optional
-from dataclasses import dataclass
+import sys
+from dataclasses import dataclass, field
+from pathlib import Path
+from typing import Dict, List, Optional, Tuple
 
 
 @dataclass
 class LyricLine:
-    """歌词行数据结构"""
     time: float
     japanese: str
     chinese: str
 
 
+@dataclass
+class GroupLine:
+    text_raw: str
+    text_clean: str
+    script: str
+    explicit_translation: bool
+
+
+@dataclass
+class TimeGroup:
+    time: float
+    order: int
+    lines: List[GroupLine] = field(default_factory=list)
+    label: str = "UNKNOWN"  # LYRIC_PRIMARY / TRANSLATION / CREDIT / TITLE / NOISE / UNKNOWN
+
+
 class LyricProcessor:
-    """歌词处理器 - 负责LRC解析和智能断句"""
-    
-    # 方块形状定义 (格子数 -> 形状名称列表)
     SHAPE_MAP = {
         1: ["DOT"],
         2: ["I2"],
         3: ["I3"],
-        4: ["I", "O", "T", "S", "Z", "J", "L"],  # 经典7个4格方块
+        4: ["I", "O", "T", "S", "Z", "J", "L"],
         5: ["PLUS"],
         6: ["L6"],
-        7: ["T7"]
+        7: ["T7"],
     }
-    
+
+    # --- TGCC 结构化检测：不依赖关键词黑名单 ---
+    # 核心原理: role-colon pattern  head(1-10字符) + 冒号 + content
+    # 任何语言的信用行都匹配这个结构。
+
+    # 多语种 role-like pattern（简化版）
+    ROLE_COLON_RE = re.compile(r"^\s*[\w\u0080-\uffff\s]{1,12}[:：]\s*.+$", re.UNICODE)
+    EMBEDDED_TAG_RE = re.compile(r"^\[(ar|ti|al|by|offset|tool|ve|re):", re.IGNORECASE)
+    TIMESTAMP_RE = re.compile(r"[\[(](\d{1,2}):(\d{1,2}(?:\.\d{1,3})?)[\])]")
+
     def __init__(self):
         self.lyrics: List[LyricLine] = []
-        self.lyric_blocks: List[str] = []  # 包含所有字符和\n分隔符
-        
-    def parse_lrc_file(self, file_path: str) -> Tuple[List[LyricLine], int]:
-        """
-        解析LRC文件
-        返回: (歌词列表, 总字符数)
-        """
+        self.lyric_blocks: List[str] = []
+
+    # -------------------- 基础工具 --------------------
+    @staticmethod
+    def _safe_float(v: str) -> float:
+        try:
+            return float(v)
+        except Exception:
+            return 0.0
+
+    def _normalize_line(self, line: str) -> str:
+        if not line:
+            return ""
+        t = line.replace("\ufeff", "").replace("：", "：").strip()
+        return t
+
+    def _extract_timestamps_and_text(self, line: str) -> Tuple[List[float], str]:
+        # 支持多时间戳：[00:12.34][00:14.00]text 或 (00:12)text
+        matches = list(self.TIMESTAMP_RE.finditer(line))
+        if not matches:
+            return [], ""
+
+        times: List[float] = []
+        for m in matches:
+            mm = int(m.group(1))
+            ss = self._safe_float(m.group(2))
+            times.append(mm * 60 + ss)
+
+        text_start = matches[-1].end()
+        text = line[text_start:].strip()
+        return times, text
+
+    def _script_profile(self, text: str) -> Dict[str, int]:
+        profile = {"latin": 0, "han": 0, "hiragana": 0, "katakana": 0, "other": 0}
+        for ch in text:
+            cp = ord(ch)
+            if (0x41 <= cp <= 0x5A) or (0x61 <= cp <= 0x7A):
+                profile["latin"] += 1
+            elif 0x4E00 <= cp <= 0x9FFF:
+                profile["han"] += 1
+            elif 0x3040 <= cp <= 0x309F:
+                profile["hiragana"] += 1
+            elif 0x30A0 <= cp <= 0x30FF:
+                profile["katakana"] += 1
+            else:
+                profile["other"] += 1
+        return profile
+
+    def _dominant_script(self, text: str) -> str:
+        p = self._script_profile(text)
+        if p["hiragana"] + p["katakana"] > 0:
+            return "jp"
+        if p["han"] > 0 and p["latin"] == 0:
+            return "han"
+        if p["latin"] > 0 and p["han"] == 0:
+            return "latin"
+        if p["han"] > 0 and p["latin"] > 0:
+            return "mixed"
+        return "other"
+
+
+    def _is_parenthesized_role(self, text: str) -> bool:
+        """TGCC 结构化检测：括号包裹的短文本标记
+        不依赖关键词黑名单，只要结构上是 "括号包裹的短文本" 就是标记"""
+        t = text.strip()
+        if len(t) > 25 or len(t) < 3:
+            return False
+        inner = ""
+        if (t.startswith("(") and t.endswith(")")) or \
+           (t.startswith("\uff08") and t.endswith("\uff09")) or \
+           (t.startswith("\u3010") and t.endswith("\u3011")) or \
+           (t.startswith("[") and t.endswith("]")) or \
+           (t.startswith("\u3014") and t.endswith("\u3015")):
+            inner = t[1:-1].strip()
+        else:
+            return False
+        if not inner:
+            return False
+        # 结构特征：内容短(≤8字符) → 角色/标记，不是歌词
+        return len(inner) <= 8
+
+    def _is_role_colon(self, text: str) -> bool:
+        """TGCC 核心：结构化角色-冒号检测
+        模式：短文本头(1-10字符) + 冒号 + 名字/短内容
+        不依赖关键词黑名单，而是通过结构特征判断"""
+        t = text.strip()
+        if len(t) > 60:
+            return False
+        if not self.ROLE_COLON_RE.match(t):
+            return False
+        parts = re.split(r"[:：]", t, maxsplit=1)
+        if len(parts) < 2:
+            return False
+        head = parts[0].strip()
+        tail = parts[1].strip()
+        # 头部短(1-10字符) → 结构匹配
+        if len(head) < 1 or len(head) > 10:
+            return False
+        if not tail:
+            return False
+        # 排除歌词假阳性：尾部含句末标点
+        for ending in ["。", "？", "！", "…", "!", "?", "~", "～"]:
+            if tail.endswith(ending):
+                return False
+        # 尾部过长 → 更像歌词
+        if len(tail) > 25:
+            return False
+        return True
+
+    def _is_embedded_lrc_tag(self, text: str) -> bool:
+        return bool(self.EMBEDDED_TAG_RE.search(text.strip()))
+
+    def _strip_translation_prefix(self, text: str) -> Tuple[str, bool]:
+        t = text.strip()
+        if t.startswith("//"):
+            return t[2:].strip(), True
+        if t.startswith("/") and len(t) > 1:
+            return t[1:].strip(), True
+        return t, False
+
+    def _file_title_similarity(self, text: str, file_stem: str) -> float:
+        # 非 NLP，轻量词重叠分数
+        if not text or not file_stem:
+            return 0.0
+        tx = re.sub(r"[^\w\u4e00-\u9fff]+", " ", text.lower()).split()
+        fs = re.sub(r"[^\w\u4e00-\u9fff]+", " ", file_stem.lower()).split()
+        if not tx or not fs:
+            return 0.0
+        a, b = set(tx), set(fs)
+        inter = len(a & b)
+        union = max(1, len(a | b))
+        return inter / union
+
+    def _looks_like_file_title(self, text: str, file_stem: str) -> bool:
+        t = re.sub(r"[^\w\u4e00-\u9fff]+", "", text.lower())
+        s = re.sub(r"[^\w\u4e00-\u9fff]+", "", file_stem.lower())
+        if not t or not s:
+            return False
+        return len(t) <= 20 and t in s
+
+    def _normalize_primary_text(self, text: str, has_translation_line: bool) -> str:
+        t = text.strip()
+        if has_translation_line and t.endswith(("/", "／")):
+            t = t[:-1].rstrip()
+        return t
+
+    # -------------------- 简化 TGCC 主流程 --------------------
+    def _build_groups(self, file_path: str) -> List[TimeGroup]:
+        groups: Dict[float, TimeGroup] = {}
+        order_seq: List[float] = []
+        order = 0
+
+        with open(file_path, "r", encoding="utf-8", errors="ignore") as f:
+            for raw in f:
+                line = self._normalize_line(raw)
+                if not line:
+                    continue
+
+                # 跳过独立元数据 [ar:xx]
+                if self.EMBEDDED_TAG_RE.match(line):
+                    continue
+
+                times, text = self._extract_timestamps_and_text(line)
+                if not times:
+                    continue
+
+                if self._is_embedded_lrc_tag(text):
+                    continue
+
+                text2, explicit_translation = self._strip_translation_prefix(text)
+                if not text2:
+                    continue
+
+                script = self._dominant_script(text2)
+                gl = GroupLine(
+                    text_raw=text,
+                    text_clean=text2,
+                    script=script,
+                    explicit_translation=explicit_translation,
+                )
+
+                for ts in times:
+                    if ts not in groups:
+                        groups[ts] = TimeGroup(time=ts, order=order)
+                        order_seq.append(ts)
+                        order += 1
+                    groups[ts].lines.append(gl)
+
+        return [groups[t] for t in sorted(order_seq)]
+
+    def _detect_main_script(self, groups: List[TimeGroup]) -> str:
+        score = {"jp": 0, "han": 0, "latin": 0, "mixed": 0, "other": 0}
+        for g in groups:
+            for ln in g.lines:
+                if ln.explicit_translation:
+                    continue
+                if self._is_role_colon(ln.text_clean) or self._is_parenthesized_role(ln.text_clean):
+                    continue
+                score[ln.script] = score.get(ln.script, 0) + 1
+        return max(score.items(), key=lambda kv: kv[1])[0]
+
+    def _classify_group(self, group: TimeGroup, main_script: str, file_stem: str) -> Tuple[str, Optional[str], Optional[str], List[str]]:
+        # 返回: (label, primary_text, translation_text, extracted_credits)
+        extracted_credits: List[str] = []
+
+        candidates_primary: List[Tuple[float, str]] = []
+        candidates_trans: List[Tuple[float, str]] = []
+        role_count = 0
+        title_like_count = 0
+        has_translation_line = any(ln.explicit_translation for ln in group.lines)
+
+        for ln in group.lines:
+            t = ln.text_clean
+            if not t:
+                continue
+
+            if self._is_parenthesized_role(t):
+                role_count += 1
+                extracted_credits.append(t)
+                continue
+
+            if self._is_role_colon(t):
+                role_count += 1
+                extracted_credits.append(t)
+                continue
+
+            # title-like: 短 + 与文件名相似 + 靠前时间更可能是标题/噪音
+            sim = self._file_title_similarity(t, file_stem)
+            if (
+                len(t) <= 20
+                and group.time <= 60.0
+                and (sim >= 0.45 or self._looks_like_file_title(t, file_stem))
+            ):
+                title_like_count += 1
+                continue
+
+            # 单字符“翻译残片”过滤（如 /P）
+            if len(t) <= 1 and ln.explicit_translation:
+                continue
+
+            # 评分：脚本接近主脚本则更偏 primary
+            score_primary = 0.0
+            if ln.script == main_script:
+                score_primary += 2.0
+            if main_script == "jp" and ln.script in ("han", "mixed"):
+                score_primary -= 0.5
+
+            # 明显翻译 marker 提升 translation 分
+            score_trans = 0.0
+            if ln.explicit_translation:
+                score_trans += 2.5
+            if ln.script != main_script and ln.script in ("han", "mixed", "latin", "jp"):
+                score_trans += 0.8
+
+            if not ln.explicit_translation:
+                candidates_primary.append((score_primary, t))
+            candidates_trans.append((score_trans, t))
+
+        if role_count > 0 and not candidates_primary:
+            return "CREDIT", None, None, extracted_credits
+
+        if title_like_count > 0 and not candidates_primary:
+            return "TITLE", None, None, extracted_credits
+
+        if not candidates_primary:
+            return "NOISE", None, None, extracted_credits
+
+        primary = sorted(candidates_primary, key=lambda x: x[0], reverse=True)[0][1]
+        primary = self._normalize_primary_text(primary, has_translation_line)
+        translation = ""
+        if len(candidates_trans) >= 2 or any(sc >= 2.0 for sc, _ in candidates_trans):
+            tr_sorted = sorted(candidates_trans, key=lambda x: x[0], reverse=True)
+            for _, t in tr_sorted:
+                if t != primary:
+                    translation = t
+                    break
+
+        return "LYRIC_PRIMARY", primary, translation, extracted_credits
+
+    def parse_lrc_file(self, file_path: str) -> Tuple[List[LyricLine], int, List[int], bool, List[str]]:
         self.lyrics.clear()
         self.lyric_blocks.clear()
-        
-        try:
-            with open(file_path, 'r', encoding='utf-8') as f:
-                lines = f.readlines()
-        except Exception as e:
-            print(f"读取LRC文件失败: {e}")
-            return [], 0
-        
-        pattern = re.compile(r'\[(\d+):(\d+\.\d+)\](.+)')
-        
-        for line in lines:
-            line = line.strip()
-            match = pattern.match(line)
-            
-            if match:
-                minutes = int(match.group(1))
-                seconds = float(match.group(2))
-                text = match.group(3)
-                
-                time = minutes * 60 + seconds
-                
-                # 检查是否是中文翻译行
-                if text.startswith('/'):
-                    chinese_text = text[1:].strip()
-                    if self.lyrics:
-                        # 更新上一行的中文翻译
-                        self.lyrics[-1].chinese = chinese_text
-                else:
-                    # 新的日文歌词行
-                    japanese_text = text.strip()
-                    self.lyrics.append(LyricLine(
-                        time=time,
-                        japanese=japanese_text,
-                        chinese=""
-                    ))
-        
-        # 构建lyric_blocks (所有字符 + \n句子分隔符)
-        for lyric_line in self.lyrics:
-            for char in lyric_line.japanese:
-                self.lyric_blocks.append(char)
-            if lyric_line.japanese:
-                self.lyric_blocks.append("\n")  # 句子边界标记
-        
-        total_chars = len(self.lyric_blocks)
-        return self.lyrics, total_chars
-    
-    def get_next_piece_info(self, current_index: int) -> Dict:
-        """
-        智能计算下一个方块的信息
-        返回: {
-            "shape": str,        # 形状名称
-            "size": int,         # 格子数
-            "chars": List[str],  # 包含的字符
-            "new_index": int     # 更新后的索引
-        }
-        """
-        # 跳过换行符和空格
-        while current_index < len(self.lyric_blocks) and \
-              self.lyric_blocks[current_index] in ["\n", " "]:
-            current_index += 1
-        
-        remaining_chars = len(self.lyric_blocks) - current_index
-        
-        if remaining_chars <= 0:
-            return {
-                "shape": "",
-                "size": 0,
-                "chars": [],
-                "new_index": current_index
-            }
-        
-        # 找到当前句子的结束位置
-        sentence_end = current_index
-        space_positions = []  # 记录句内空格位置 (相对位置)
-        
-        for i in range(remaining_chars):
-            char = self.lyric_blocks[current_index + i]
-            if char == "\n":
-                sentence_end = current_index + i
+
+        fp = Path(file_path)
+        groups = self._build_groups(file_path)
+        if not groups:
+            return [], 0, [], False, []
+
+        main_script = self._detect_main_script(groups)
+        extracted_credits: List[str] = []
+
+        # 初始分类
+        interim: List[Tuple[TimeGroup, str, Optional[str], Optional[str]]] = []
+        for g in groups:
+            label, primary, trans, credits = self._classify_group(g, main_script, fp.stem)
+            extracted_credits.extend(credits)
+            g.label = label
+            interim.append((g, label, primary, trans))
+
+        # 上下文块修正：连续 role/title/noise 在开头集中出现视为 meta block
+        # 避免把开头短句标题误当歌词（如 Cyclone/）
+        meta_window = 0
+        for g, label, _, _ in interim:
+            if g.time > 55.0:
                 break
-            elif char == " ":
-                space_positions.append(i)
-            sentence_end = current_index + i + 1
-        
-        sentence_length = sentence_end - current_index
-        piece_size = 0
-        
-        # 断句策略: 优先4-6格, 在空格处断开保持词完整性
-        if sentence_length <= 6:
-            # 整句不超过6格,直接使用整句
-            piece_size = sentence_length
-        elif sentence_length >= 7:
-            # 长句子: 优先在空格处断开,生成4-6格方块
-            ideal_space_found = False
-            
-            # 策略1: 精确匹配4-6格内的空格(最优)
-            for pos in space_positions:
-                if 4 <= pos <= 6:
-                    piece_size = pos
-                    ideal_space_found = True
-                    break
-            
-            # 策略2: 如果没有4-6格空格,找2-3格的空格(保持词完整)
-            if not ideal_space_found:
-                for pos in space_positions:
-                    if 2 <= pos <= 3:
-                        piece_size = pos
-                        ideal_space_found = True
-                        break
-            
-            # 策略3: 都没有合适空格,按概率生成,但尽量贴近空格
-            if not ideal_space_found:
-                import random
-                rand = random.randint(0, 99)
-                
-                if rand < 60:  # 60%概率4格
-                    target_size = 4
-                elif rand < 85:  # 25%概率5格
-                    target_size = 5
-                else:  # 15%概率6格
-                    target_size = 6
-                
-                # 寻找最接近目标大小的空格
-                best_space = -1
-                min_diff = 999
-                for pos in space_positions:
-                    diff = abs(pos - target_size)
-                    if diff < min_diff and pos >= 2:  # 至少2格保证词完整
-                        min_diff = diff
-                        best_space = pos
-                
-                piece_size = best_space if best_space > 0 else target_size
-        
-        # 确保不超过句子长度
-        piece_size = min(piece_size, sentence_length)
-        
-        # 根据大小选择形状
-        shape = self._select_shape(piece_size)
-        
-        # 提取字符
-        chars = []
-        for i in range(piece_size):
-            if current_index + i < len(self.lyric_blocks):
-                chars.append(self.lyric_blocks[current_index + i])
-        
-        new_index = current_index + piece_size
-        
-        return {
-            "shape": shape,
-            "size": piece_size,
-            "chars": chars,
-            "new_index": new_index,
-            "sentence_length": sentence_length
-        }
-    
-    def _select_shape(self, size: int) -> str:
-        """根据大小选择形状"""
-        import random
-        
-        if size > 7:
-            size = 7
-        elif size < 1:
-            size = 1
-        
-        shapes = self.SHAPE_MAP.get(size, ["DOT"])
-        return random.choice(shapes)
-    
-    def predict_next_shape(self, current_index: int) -> str:
-        """预测下一个方块的形状(用于预览框)"""
-        # 跳过空格和换行
-        next_start = current_index
-        while next_start < len(self.lyric_blocks) and \
-              self.lyric_blocks[next_start] in ["\n", " "]:
-            next_start += 1
-        
-        if next_start >= len(self.lyric_blocks):
-            return ""
-        
-        # 找到下一句的长度
-        next_sentence_end = next_start
-        for i in range(len(self.lyric_blocks) - next_start):
-            char = self.lyric_blocks[next_start + i]
-            if char == "\n":
-                next_sentence_end = next_start + i
-                break
-            next_sentence_end = next_start + i + 1
-        
-        next_sentence_len = next_sentence_end - next_start
-        
-        # 预测下一个方块大小(简化)
-        import random
-        
-        if next_sentence_len <= 6:
-            next_size = next_sentence_len
-        else:
-            rand = random.randint(0, 99)
-            if rand < 60:
-                next_size = 4
-            elif rand < 85:
-                next_size = 5
+            if label in ("CREDIT", "TITLE", "NOISE"):
+                meta_window += 1
             else:
-                next_size = 6
-        
-        return self._select_shape(next_size)
+                if meta_window >= 2:
+                    break
+                meta_window = 0
+
+        # 构建输出歌词
+        for g, label, primary, trans in interim:
+            if label != "LYRIC_PRIMARY" or not primary:
+                continue
+
+            # 防御性：过短且靠前并且与文件名接近，丢弃
+            if g.time <= 50.0 and len(primary) <= 12 and self._file_title_similarity(primary, fp.stem) >= 0.6:
+                continue
+
+            self.lyrics.append(LyricLine(time=g.time, japanese=primary, chinese=trans or ""))
+
+        self.lyrics.sort(key=lambda x: x.time)
+
+        # 是否中文主歌（用于 UI 处理）
+        jp_like = 0
+        cn_like = 0
+        for l in self.lyrics:
+            script = self._dominant_script(l.japanese)
+            if script == "jp":
+                jp_like += 1
+            elif script in ("han", "mixed"):
+                cn_like += 1
+        is_chinese_song = cn_like > jp_like * 2 and cn_like > 0
+
+        # 构建 lyric_blocks + line_starts
+        line_starts: List[int] = []
+        for ln in self.lyrics:
+            line_starts.append(len(self.lyric_blocks))
+            blocks = self._text_to_blocks(ln.japanese)
+            self.lyric_blocks.extend(blocks)
+            self.lyric_blocks.append("\n")
+            self.lyric_blocks.append("\n")
+
+        # credit 去重
+        dedup_credits: List[str] = []
+        seen = set()
+        for c in extracted_credits:
+            cc = c.strip()
+            if cc and cc not in seen:
+                seen.add(cc)
+                dedup_credits.append(cc)
+
+        return self.lyrics, len(self.lyric_blocks), line_starts, is_chinese_song, dedup_credits
+
+    # -------------------- 方块相关 --------------------
+    def _text_to_blocks(self, text: str) -> List[str]:
+        # 简化：保留字符，过滤常见标点，英数字每2字符合并
+        punct = set(["?", "!", ",", ".", "。", "，", "？", "！", "、", "：", ":", ";", "；", "(", ")", "（", "）", "~", "～", "-", "—", "―", "ー", "_", "'", '"', "「", "」", "『", "』", "…", "•", "·", "◆", "◇", "●", "○", "※", "▶", "▲", "▼", "→", "←", "↑", "↓", " ", "　", "\\", "@", "#", "$", "%", "^", "&", "*", "+", "=", "[", "]", "{", "}", "<", ">", "|", "`", "♪", "♫", "★", "☆", "♥", "♡"])
+        out: List[str] = []
+        pending = ""
+        for ch in text:
+            if ch in punct:
+                if pending:
+                    out.append(pending)
+                    pending = ""
+                continue
+            if re.fullmatch(r"[A-Za-z0-9]", ch):
+                pending += ch
+                if len(pending) >= 2:
+                    out.append(pending)
+                    pending = ""
+            else:
+                if pending:
+                    out.append(pending)
+                    pending = ""
+                out.append(ch)
+        if pending:
+            out.append(pending)
+        return out
 
 
-# GDScript接口函数 (通过Godot的Python绑定调用)
+
+# -------- GDScript 接口 --------
 _processor = LyricProcessor()
 
 
 def parse_lrc(file_path: str) -> dict:
-    """
-    供GDScript调用的LRC解析函数
-    返回: {"lyrics": [...], "total_chars": int, "lyric_blocks": [...]}
-    """
-    lyrics, total_chars = _processor.parse_lrc_file(file_path)
-    
+    lyrics, total_chars, line_starts, is_chinese_song, credits = _processor.parse_lrc_file(file_path)
     return {
-        "lyrics": [
-            {"time": l.time, "japanese": l.japanese, "chinese": l.chinese}
-            for l in lyrics
-        ],
+        "lyrics": [{"time": l.time, "japanese": l.japanese, "chinese": l.chinese} for l in lyrics],
         "total_chars": total_chars,
-        "lyric_blocks": _processor.lyric_blocks.copy()
+        "lyric_blocks": _processor.lyric_blocks.copy(),
+        "line_starts": line_starts,
+        "is_chinese_song": is_chinese_song,
+        "extracted_artist": " / ".join(credits),
     }
 
 
-def get_next_piece(current_index: int) -> dict:
-    """供GDScript调用的方块生成函数"""
-    return _processor.get_next_piece_info(current_index)
 
 
-def predict_next(current_index: int) -> str:
-    """供GDScript调用的预测函数"""
-    return _processor.predict_next_shape(current_index)
+# -------- CLI --------
+def _fail(msg: str) -> None:
+    print(json.dumps({"error": msg}, ensure_ascii=False))
+
+
+def main() -> None:
+    # 兼容多种调用方式：
+    # python lyric_processor.py <function> <json_params>
+    # python lyric_processor.py <function> --params-file <path>
+    if len(sys.argv) < 3:
+        _fail("usage: lyric_processor.py <parse_lrc> <json_params|--params-file path>")
+        return
+
+    fn = sys.argv[1].strip()
+    
+    # 支持从文件读取参数（避免Windows命令行编码问题）
+    if sys.argv[2] == "--params-file" and len(sys.argv) >= 4:
+        param_file = sys.argv[3]
+        try:
+            with open(param_file, "r", encoding="utf-8") as f:
+                raw = f.read()
+        except Exception as e:
+            _fail(f"cannot_read_param_file: {e}")
+            return
+    else:
+        raw = sys.argv[2]
+
+    try:
+        params = json.loads(raw)
+    except Exception:
+        _fail("invalid_json_params")
+        return
+
+    try:
+        if fn == "parse_lrc":
+            path = params.get("file_path", "")
+            if not path:
+                _fail("missing_file_path")
+                return
+            out = parse_lrc(path)
+            print(json.dumps(out, ensure_ascii=False))
+            return
+
+        _fail("unsupported_function")
+    except Exception as exc:
+        _fail(f"exception: {exc}")
 
 
 if __name__ == "__main__":
-    # 测试代码
-    print("歌词处理模块测试")
-    processor = LyricProcessor()
-    
-    # 模拟测试数据
-    test_data = "ああもう 本当 鬱陶しいなあ"
-    processor.lyric_blocks = list(test_data) + ["\n"]
-    
-    index = 0
-    while index < len(processor.lyric_blocks):
-        info = processor.get_next_piece_info(index)
-        if info["size"] == 0:
-            break
-        print(f"方块: {info['shape']} ({info['size']}格) - 字符: {''.join(info['chars'])}")
-        index = info["new_index"]
+    main()

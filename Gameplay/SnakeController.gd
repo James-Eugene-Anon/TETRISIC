@@ -17,10 +17,10 @@ var move_timer: float = 0.0
 const MOVE_INTERVAL: float = 0.18  # 移动间隔（秒）- 原0.15秒的约1.2倍
 
 func initialize(length: int, grid_w: int, grid_h: int):
-	"""初始化贪吃蛇
-	   length: 初始长度
-	   grid_w: 网格宽度
-	   grid_h: 网格高度"""
+	# 初始化贪吃蛇
+	# length: 初始长度
+	# grid_w: 网格宽度
+	# grid_h: 网格高度
 	grid_width = grid_w
 	grid_height = grid_h
 	
@@ -37,8 +37,8 @@ func initialize(length: int, grid_w: int, grid_h: int):
 	print("[贪吃蛇] 初始化，长度:", length, " 起始位置:", body[0])
 
 func update(delta: float, grid_manager: GridManager) -> bool:
-	"""更新贪吃蛇状态
-	   返回是否仍在活动"""
+	# 更新贪吃蛇状态
+	# 返回是否仍在活动
 	if not is_active:
 		return false
 	
@@ -49,8 +49,8 @@ func update(delta: float, grid_manager: GridManager) -> bool:
 	return true
 
 func move_snake(grid_manager: GridManager) -> bool:
-	"""移动贪吃蛇一格
-	   返回是否仍在活动"""
+	# 移动贪吃蛇一格
+	# 返回是否仍在活动
 	if body.is_empty():
 		is_active = false
 		return false
@@ -93,7 +93,7 @@ func move_snake(grid_manager: GridManager) -> bool:
 	return true
 
 func _check_collision(pos: Vector2i, grid_manager: GridManager) -> bool:
-	"""检查位置是否与现有方块碰撞"""
+	# 检查位置是否与现有方块碰撞
 	if pos.y < 0 or pos.y >= grid_height:
 		return false
 	if pos.x < 0 or pos.x >= grid_width:
@@ -101,7 +101,7 @@ func _check_collision(pos: Vector2i, grid_manager: GridManager) -> bool:
 	return grid_manager.grid[pos.y][pos.x] != null
 
 func _fix_snake(grid_manager: GridManager):
-	"""将贪吃蛇固定为方块"""
+	# 将贪吃蛇固定为方块
 	var fixed_cells = []
 	for cell in body:
 		if cell.y >= 0 and cell.y < grid_height and cell.x >= 0 and cell.x < grid_width:
@@ -116,7 +116,7 @@ func _fix_snake(grid_manager: GridManager):
 	print("[贪吃蛇] 固定了", fixed_cells.size(), "个方块")
 
 func change_direction(new_dir: Vector2i):
-	"""改变移动方向（不能直接反向）"""
+	# 改变移动方向（不能直接反向）
 	# 检查是否是180度转向
 	if new_dir.x == -direction.x and new_dir.y == -direction.y:
 		return  # 不允许直接反向
@@ -125,21 +125,21 @@ func change_direction(new_dir: Vector2i):
 	print("[贪吃蛇] 方向改变:", direction)
 
 func handle_input(event: InputEvent):
-	"""处理贪吃蛇输入"""
+	# 处理贪吃蛇输入
 	if not is_active:
 		return
 	
 	if event is InputEventKey and event.pressed:
 		match event.keycode:
-			KEY_UP:
+			KEY_UP, KEY_W:
 				change_direction(Vector2i(0, -1))
-			KEY_DOWN:
+			KEY_DOWN, KEY_S:
 				change_direction(Vector2i(0, 1))
-			KEY_LEFT:
+			KEY_LEFT, KEY_A:
 				change_direction(Vector2i(-1, 0))
-			KEY_RIGHT:
+			KEY_RIGHT, KEY_D:
 				change_direction(Vector2i(1, 0))
 
 func get_body_positions() -> Array[Vector2i]:
-	"""获取蛇身所有位置"""
+	# 获取蛇身所有位置
 	return body

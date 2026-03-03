@@ -17,13 +17,13 @@ func _init(shape: String, pos: Vector2i, characters: Array = []):
 	update_cells()
 
 func update_cells():
-	"""更新当前旋转状态的单元格"""
+	# 更新当前旋转状态的单元格
 	if GameConfig.SHAPES.has(shape_name):
 		var rotations = GameConfig.SHAPES[shape_name]
 		cells = rotations[rotation % rotations.size()]
 
 func rotate():
-	"""旋转方块"""
+	# 旋转方块
 	# 只有O和DOT不能旋转
 	if shape_name == "O" or shape_name == "DOT":
 		return
@@ -36,7 +36,7 @@ func rotate():
 	update_cells()
 
 func try_rotate(grid_manager: GridManager) -> bool:
-	"""尝试旋转，带墙踢"""
+	# 尝试旋转，带墙踢
 	if shape_name == "O" or shape_name == "DOT" or shape_name == "PLUS":
 		return false
 	
@@ -74,7 +74,7 @@ func try_rotate(grid_manager: GridManager) -> bool:
 	return false
 
 func move(direction: Vector2i, grid_manager: GridManager) -> bool:
-	"""移动方块"""
+	# 移动方块
 	var new_pos = position + direction
 	if can_place(grid_manager, new_pos):
 		position = new_pos
@@ -82,7 +82,7 @@ func move(direction: Vector2i, grid_manager: GridManager) -> bool:
 	return false
 
 func can_place(grid_manager: GridManager, pos: Vector2i) -> bool:
-	"""检查方块是否可以放置在指定位置"""
+	# 检查方块是否可以放置在指定位置
 	for cell in cells:
 		var x = pos.x + cell.x
 		var y = pos.y + cell.y
@@ -98,7 +98,7 @@ func can_place(grid_manager: GridManager, pos: Vector2i) -> bool:
 	return true
 
 func place_on_grid(grid_manager: GridManager, color: Color):
-	"""将方块放置到网格上"""
+	# 将方块放置到网格上
 	var cell_index = 0
 	for cell in cells:
 		var x = position.x + cell.x
@@ -109,7 +109,7 @@ func place_on_grid(grid_manager: GridManager, color: Color):
 		cell_index += 1
 
 func get_absolute_cells() -> Array:
-	"""获取方块的绝对位置单元格"""
+	# 获取方块的绝对位置单元格
 	var result = []
 	for cell in cells:
 		result.append(position + cell)

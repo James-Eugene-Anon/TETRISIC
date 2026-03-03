@@ -1,19 +1,21 @@
-[gd_scene load_steps=4 format=3 uid="uid://bc2jxqf8gj1k1"]
+[gd_scene format=3 uid="uid://bc2jxqf8gj1k1"]
 
 [ext_resource type="Script" uid="uid://bdnwwhldne8c1" path="res://UI/MainMenu.gd" id="1_h3j8k"]
 [ext_resource type="FontFile" uid="uid://ddo7ybrfl5d2s" path="res://fonts/FUSION-PIXEL-12PX-MONOSPACED-ZH_HANS.OTF" id="2_font"]
 [ext_resource type="Script" uid="uid://4bh6r44ikc8n" path="res://UI/RainbowTitle.gd" id="3_rainbow"]
+[ext_resource type="Theme" uid="uid://ckvcxk0jalpu8" path="res://UI/game_theme.tres" id="4_theme"]
 
-[node name="MainMenu" type="Control"]
+[node name="MainMenu" type="Control" unique_id=593161050]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("4_theme")
 script = ExtResource("1_h3j8k")
 
-[node name="Background" type="ColorRect" parent="."]
+[node name="Background" type="ColorRect" parent="." unique_id=1169407020]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -22,7 +24,7 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.1, 0.1, 0.2, 1)
 
-[node name="RainbowTitle" type="Control" parent="."]
+[node name="RainbowTitle" type="Control" parent="." unique_id=193794027]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -38,7 +40,7 @@ grow_vertical = 2
 script = ExtResource("3_rainbow")
 font_size = 60
 
-[node name="TitleLabel" type="Label" parent="."]
+[node name="TitleLabel" type="Label" parent="." unique_id=393480976]
 visible = false
 layout_mode = 1
 anchors_preset = 8
@@ -54,11 +56,11 @@ grow_horizontal = 2
 grow_vertical = 2
 theme_override_fonts/font = ExtResource("2_font")
 theme_override_font_sizes/font_size = 36
-text = "俄罗斯方块"
+text = "UI_MAINMENU_TETRIS"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="VBox" type="VBoxContainer" parent="."]
+[node name="VBox" type="VBoxContainer" parent="." unique_id=1547038966]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -72,37 +74,37 @@ offset_bottom = 120.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="StartButton" type="Button" parent="VBox"]
+[node name="StartButton" type="Button" parent="VBox" unique_id=2044309062]
+custom_minimum_size = Vector2(180, 40)
 layout_mode = 2
-theme_override_fonts/font = ExtResource("2_font")
-theme_override_font_sizes/font_size = 20
-text = "经典模式"
+text = "UI_MAINMENU_CLASSIC_MODE"
 
-[node name="LyricModeButton" type="Button" parent="VBox"]
+[node name="LyricModeButton" type="Button" parent="VBox" unique_id=969986713]
+custom_minimum_size = Vector2(180, 40)
 layout_mode = 2
-theme_override_fonts/font = ExtResource("2_font")
-theme_override_font_sizes/font_size = 20
-text = "歌曲模式"
+text = "UI_MAINMENU_SONG_MODE"
 
-[node name="OptionsButton" type="Button" parent="VBox"]
+[node name="RoguelikeDemoButton" type="Button" parent="VBox" unique_id=1041762273]
+custom_minimum_size = Vector2(180, 40)
 layout_mode = 2
-theme_override_fonts/font = ExtResource("2_font")
-theme_override_font_sizes/font_size = 20
-text = "选项"
+text = "UI_MAINMENU_ROGUELIKE_DEMO"
 
-[node name="EquipmentButton" type="Button" parent="VBox"]
+[node name="OptionsButton" type="Button" parent="VBox" unique_id=1583238810]
+custom_minimum_size = Vector2(180, 40)
 layout_mode = 2
-theme_override_fonts/font = ExtResource("2_font")
-theme_override_font_sizes/font_size = 20
-text = "装备"
+text = "UI_TITLE_OPTIONS"
 
-[node name="QuitButton" type="Button" parent="VBox"]
+[node name="EquipmentButton" type="Button" parent="VBox" unique_id=577230125]
+custom_minimum_size = Vector2(180, 40)
 layout_mode = 2
-theme_override_fonts/font = ExtResource("2_font")
-theme_override_font_sizes/font_size = 20
-text = "退出游戏"
+text = "UI_MAINMENU_EQUIPMENT"
 
-[node name="Instructions" type="Label" parent="."]
+[node name="QuitButton" type="Button" parent="VBox" unique_id=1179458709]
+custom_minimum_size = Vector2(180, 40)
+layout_mode = 2
+text = "UI_MAINMENU_QUIT_GAME"
+
+[node name="Instructions" type="Label" parent="." unique_id=1219909538]
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
@@ -115,8 +117,43 @@ offset_right = 200.0
 offset_bottom = -20.0
 grow_horizontal = 2
 grow_vertical = 0
-theme_override_fonts/font = ExtResource("2_font")
+theme_override_colors/font_color = Color(0.55, 0.55, 0.6, 1)
 theme_override_font_sizes/font_size = 12
-text = "游戏控制: ← → 移动  ↑ 旋转  ↓ 快速下降  Enter 硬降落  ESC 暂停"
+text = "UI_MAINMENU_CONTROLS_MOVE_ROTATE_SOFT_DROP_ENTER_HARD_DROP"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="VersionLabel" type="Label" parent="." unique_id=803425728]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_top = -30.0
+offset_right = 180.0
+offset_bottom = -10.0
+grow_vertical = 0
+theme_override_colors/font_color = Color(0.55, 0.55, 0.6, 1)
+theme_override_font_sizes/font_size = 10
+text = "UI_MAINMENU_VERSION_ALPHA_0_1_0"
+vertical_alignment = 1
+
+[node name="AlphaDevLabel" type="Label" parent="." unique_id=1713042982]
+z_index = 10
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 60.0
+offset_top = -170.0
+offset_right = 260.0
+offset_bottom = -150.0
+grow_horizontal = 2
+grow_vertical = 2
+rotation = -0.2618
+pivot_offset = Vector2(60, 10)
+theme_override_colors/font_color = Color(1, 0.95, 0.2, 0.95)
+theme_override_font_sizes/font_size = 16
+text = "UI_MAINMENU_ALPHA_DEV_BUILD"

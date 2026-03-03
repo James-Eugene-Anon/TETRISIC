@@ -14,36 +14,6 @@ extends Control
 var selected_difficulty = -1
 var difficulty_buttons: Array = []
 
-const TEXTS = {
-	"zh": {
-		"title": "选择难度",
-		"easy": "简单",
-		"easy_desc": "只有7种经典方块\n固定下落速度\n适合新手练习",
-		"normal": "普通",
-		"normal_desc": "所有方块类型\n92%为4格方块\n每250分速度+0.3%\n最高速度133.3%",
-		"hard": "困难",
-		"hard_desc": "所有方块类型\n2%为3格、73%为4格方块\n每100分速度+0.5%\n最高速度200%",
-		"cruel": "残酷",
-		"cruel_desc": "初始速度120%\n每200分速度+1%（最高250%）\n4%为3格、66%为4格方块\n每2000分底部生成障碍行",
-		"back": "返回",
-		"start": "开始游戏",
-		"high_score": "最高分: %d (消除行数: %d)"
-	},
-	"en": {
-		"title": "Select Difficulty",
-		"easy": "Easy",
-		"easy_desc": "7 classic pieces only\nFixed fall speed\nPerfect for beginners",
-		"normal": "Normal",
-		"normal_desc": "All piece types\n92% are 4-cell pieces\nSpeed +0.3% per 250 pts\nMax speed 133.3%",
-		"hard": "Hard",
-		"hard_desc": "All piece types\n2% 3-cell, 73% 4-cell pieces\nSpeed +0.5% per 100 pts\nMax speed 200%",
-		"cruel": "Cruel",
-		"cruel_desc": "Initial speed 120%\nSpeed +1% per 200 pts (max 250%)\n4% 3-cell, 66% 4-cell pieces\nObstacle row spawns per 2000 pts",
-		"back": "Back",
-		"start": "Start Game",
-		"high_score": "High Score: %d (Lines: %d)"
-	}
-}
 
 func _ready():
 	update_ui_texts()
@@ -53,10 +23,9 @@ func _ready():
 	start_button.pressed.connect(_on_start_pressed)
 
 func update_ui_texts():
-	var texts = TEXTS[Global.current_language]
-	title_label.text = texts["title"]
-	back_button.text = texts["back"]
-	start_button.text = texts["start"]
+	title_label.text = tr("UI_DIFFICULTY_TITLE")
+	back_button.text = tr("UI_COMMON_BACK")
+	start_button.text = tr("UI_COMMON_START_GAME")
 
 func populate_difficulty_list():
 	# 清空现有项
@@ -64,22 +33,21 @@ func populate_difficulty_list():
 		child.queue_free()
 	difficulty_buttons.clear()
 	
-	var texts = TEXTS[Global.current_language]
 	var difficulties = [
-		{"key": "easy", "color": Color(0.5, 1, 0.5, 1)},
-		{"key": "normal", "color": Color(1, 1, 0.5, 1)},
-		{"key": "hard", "color": Color(1, 0.5, 0.5, 1)},
-		{"key": "cruel", "color": Color(0.8, 0.2, 0.2, 1)}
+		{"key": "UI_DIFFICULTY_EASY", "desc": "UI_DIFFICULTY_EASY_DESC", "color": Color(0.5, 1, 0.5, 1)},
+		{"key": "UI_DIFFICULTY_NORMAL", "desc": "UI_DIFFICULTY_NORMAL_DESC", "color": Color(1, 1, 0.5, 1)},
+		{"key": "UI_DIFFICULTY_HARD", "desc": "UI_DIFFICULTY_HARD_DESC", "color": Color(1, 0.5, 0.5, 1)},
+		{"key": "UI_DIFFICULTY_CRUEL", "desc": "UI_DIFFICULTY_CRUEL_DESC", "color": Color(0.8, 0.2, 0.2, 1)}
 	]
 	
 	for i in range(difficulties.size()):
 		var diff = difficulties[i]
 		var button = Button.new()
-		button.text = texts[diff["key"]]
+		button.text = tr(diff["key"])
 		button.custom_minimum_size = Vector2(300, 60)
 		
 		# 加载字体
-		var font = load("res://fonts/FUSION-PIXEL-12PX-MONOSPACED-ZH_HANS.OTF")
+		var font = load(Config.PATHS_FONT_DEFAULT)
 		button.add_theme_font_override("font", font)
 		button.add_theme_font_size_override("font_size", 20)
 		button.add_theme_color_override("font_color", diff["color"])
@@ -92,17 +60,17 @@ func populate_difficulty_list():
 
 func _on_difficulty_selected(index: int):
 	selected_difficulty = index
-	var texts = TEXTS[Global.current_language]
-	var keys = ["easy", "normal", "hard", "cruel"]
+	var keys = ["UI_DIFFICULTY_EASY", "UI_DIFFICULTY_NORMAL", "UI_DIFFICULTY_HARD", "UI_DIFFICULTY_CRUEL"]
+	var desc_keys = ["UI_DIFFICULTY_EASY_DESC", "UI_DIFFICULTY_NORMAL_DESC", "UI_DIFFICULTY_HARD_DESC", "UI_DIFFICULTY_CRUEL_DESC"]
 	var colors = [Color(0.5, 1, 0.5, 1), Color(1, 1, 0.5, 1), Color(1, 0.5, 0.5, 1), Color(0.8, 0.2, 0.2, 1)]
 	
-	detail_name.text = texts[keys[index]]
+	detail_name.text = tr(keys[index])
 	detail_name.add_theme_color_override("font_color", colors[index])
-	detail_desc.text = texts[keys[index] + "_desc"]
+	detail_desc.text = tr(desc_keys[index])
 	
 	# 获取最高分
 	var high_score_data = Global.get_classic_score(index)
-	detail_high_score.text = texts["high_score"] % [high_score_data["score"], high_score_data["lines"]]
+	detail_high_score.text = tr("UI_DIFFICULTY_HIGH_SCORE") % [high_score_data["score"], high_score_data["lines"]]
 	
 	# 更新气泡箭头位置指向选中的按钮
 	_update_bubble_position(index)
@@ -111,7 +79,7 @@ func _on_difficulty_selected(index: int):
 	_show_bubble()
 
 func _update_bubble_position(index: int):
-	"""更新气泡箭头位置，使其指向选中的按钮"""
+	# 更新气泡箭头位置，使其指向选中的按钮
 	if index < difficulty_buttons.size():
 		var button = difficulty_buttons[index]
 		var button_center_y = button.global_position.y + button.size.y / 2
@@ -126,7 +94,7 @@ func _update_bubble_position(index: int):
 		])
 
 func _show_bubble():
-	"""显示气泡（带动画）"""
+	# 显示气泡（带动画）
 	if not bubble_container.visible:
 		bubble_container.visible = true
 		bubble_container.modulate.a = 0.0
@@ -141,7 +109,7 @@ func _on_start_pressed():
 	if selected_difficulty >= 0:
 		Global.classic_difficulty = selected_difficulty
 		Global.lyric_mode_enabled = false
-		get_tree().change_scene_to_file("res://Main.tscn")
+		get_tree().change_scene_to_file(Config.PATHS_SCENE_MAIN)
 
 func _on_back_pressed():
-	get_tree().change_scene_to_file("res://UI/MainMenu.tscn")
+	get_tree().change_scene_to_file(Config.PATHS_SCENE_MAIN_MENU)

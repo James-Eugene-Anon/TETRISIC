@@ -1,0 +1,16 @@
+[gd_scene format=3 uid="uid://dpxq1k5yqhw0o"]
+
+[ext_resource type="Script" uid="uid://05bxuhm5285k" path="res://UI/RoguelikeCombat.gd" id="1_abc123"]
+[ext_resource type="PackedScene" uid="uid://drm4aw4om70dd" path="res://UI/CombatHUD.tscn" id="2_hud"]
+
+[node name="RoguelikeCombat" type="Control" unique_id=1596314370]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_abc123")
+
+[node name="CombatHUD" parent="." unique_id=959225626 instance=ExtResource("2_hud")]
+layout_mode = 1
