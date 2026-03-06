@@ -1,0 +1,126 @@
+{
+  "format": 1,
+  "restore": {
+    "d:\\Desktop\\工具图标\\游戏工具\\Godot\\Tetrisic\\addons\\163MusicLyrics-master\\archive-winform\\MusicLyricAppTest\\MusicLyricAppTest.csproj": {}
+  },
+  "projects": {
+    "d:\\Desktop\\工具图标\\游戏工具\\Godot\\Tetrisic\\addons\\163MusicLyrics-master\\archive-winform\\MusicLyricAppTest\\MusicLyricAppTest.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "d:\\Desktop\\工具图标\\游戏工具\\Godot\\Tetrisic\\addons\\163MusicLyrics-master\\archive-winform\\MusicLyricAppTest\\MusicLyricAppTest.csproj",
+        "projectName": "MusicLyricAppTest",
+        "projectPath": "d:\\Desktop\\工具图标\\游戏工具\\Godot\\Tetrisic\\addons\\163MusicLyrics-master\\archive-winform\\MusicLyricAppTest\\MusicLyricAppTest.csproj",
+        "packagesPath": "C:\\Users\\dell\\.nuget\\packages\\",
+        "outputPath": "d:\\Desktop\\工具图标\\游戏工具\\Godot\\Tetrisic\\addons\\163MusicLyrics-master\\archive-winform\\MusicLyricAppTest\\obj\\",
+        "projectStyle": "PackageReference",
+        "skipContentFileWrite": true,
+        "UsingMicrosoftNETSdk": false,
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\dell\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net48"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net48": {
+            "projectReferences": {
+              "d:\\Desktop\\工具图标\\游戏工具\\Godot\\Tetrisic\\addons\\163MusicLyrics-master\\archive-winform\\MusicLyricApp\\MusicLyricApp.csproj": {
+                "projectPath": "d:\\Desktop\\工具图标\\游戏工具\\Godot\\Tetrisic\\addons\\163MusicLyrics-master\\archive-winform\\MusicLyricApp\\MusicLyricApp.csproj"
+              }
+            }
+          }
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "all"
+        }
+      },
+      "frameworks": {
+        "net48": {
+          "dependencies": {
+            "Kawazu": {
+              "target": "Package",
+              "version": "[1.1.4, )"
+            },
+            "Markdig": {
+              "target": "Package",
+              "version": "[0.30.4, )"
+            },
+            "NTextCat": {
+              "target": "Package",
+              "version": "[0.3.65, )"
+            },
+            "NUnit": {
+              "target": "Package",
+              "version": "[3.13.3, )"
+            },
+            "Newtonsoft.Json": {
+              "target": "Package",
+              "version": "[13.0.2, )"
+            },
+            "hyjiacan.pinyin4net": {
+              "target": "Package",
+              "version": "[4.1.1, )"
+            }
+          }
+        }
+      },
+      "runtimes": {
+        "win": {
+          "#import": []
+        },
+        "win-arm64": {
+          "#import": []
+        },
+        "win-x64": {
+          "#import": []
+        },
+        "win-x86": {
+          "#import": []
+        }
+      }
+    },
+    "d:\\Desktop\\工具图标\\游戏工具\\Godot\\Tetrisic\\addons\\163MusicLyrics-master\\archive-winform\\MusicLyricApp\\MusicLyricApp.csproj": {
+      "restore": {
+        "projectUniqueName": "d:\\Desktop\\工具图标\\游戏工具\\Godot\\Tetrisic\\addons\\163MusicLyrics-master\\archive-winform\\MusicLyricApp\\MusicLyricApp.csproj",
+        "projectName": "MusicLyricApp",
+        "projectPath": "d:\\Desktop\\工具图标\\游戏工具\\Godot\\Tetrisic\\addons\\163MusicLyrics-master\\archive-winform\\MusicLyricApp\\MusicLyricApp.csproj",
+        "packagesPath": "C:\\Users\\dell\\.nuget\\packages\\",
+        "projectStyle": "PackagesConfig",
+        "UsingMicrosoftNETSdk": false,
+        "configFilePaths": [
+          "C:\\Users\\dell\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net48": {
+            "projectReferences": {}
+          }
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low"
+        },
+        "packagesConfigPath": "d:\\Desktop\\工具图标\\游戏工具\\Godot\\Tetrisic\\addons\\163MusicLyrics-master\\archive-winform\\MusicLyricApp\\packages.config"
+      },
+      "frameworks": {
+        "net48": {}
+      }
+    }
+  }
+}

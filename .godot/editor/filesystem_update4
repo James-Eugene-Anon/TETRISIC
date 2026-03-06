@@ -1,0 +1,9 @@
+res://UI/RoguelikeMap.tscn
+res://addons/gut/gui/editor_globals.gd
+res://addons/gut/gui/EditorRadioButton.tres
+res://UI/game_theme.tres
+res://Systems/Global.gd
+res://translations/translation.en.translation
+res://translations/translation.zh.translation
+res://UI/OptionsMenu.gd
+res://UI/OptionsMenu.tscn

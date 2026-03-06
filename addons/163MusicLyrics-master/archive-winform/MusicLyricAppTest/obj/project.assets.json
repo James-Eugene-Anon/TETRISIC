@@ -1,0 +1,1601 @@
+{
+  "version": 3,
+  "targets": {
+    ".NETFramework,Version=v4.8": {
+      "hyjiacan.pinyin4net/4.1.1": {
+        "type": "package",
+        "compile": {
+          "lib/net47/hyjiacan.py4n.dll": {
+            "related": ".pdb"
+          }
+        },
+        "runtime": {
+          "lib/net47/hyjiacan.py4n.dll": {
+            "related": ".pdb"
+          }
+        }
+      },
+      "Kawazu/1.1.4": {
+        "type": "package",
+        "dependencies": {
+          "LibNMeCab": "0.10.1",
+          "LibNMeCab.IpaDicBin": "0.10.0"
+        },
+        "compile": {
+          "lib/netstandard2.0/Kawazu.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/Kawazu.dll": {}
+        },
+        "contentFiles": {
+          "contentFiles/any/netstandard2.0/AUTHORS": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": false
+          },
+          "contentFiles/any/netstandard2.0/COPYING": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": false
+          },
+          "contentFiles/any/netstandard2.0/char.bin": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": false
+          },
+          "contentFiles/any/netstandard2.0/matrix.bin": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": false
+          },
+          "contentFiles/any/netstandard2.0/sys.dic": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": false
+          },
+          "contentFiles/any/netstandard2.0/unk.dic": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": false
+          }
+        }
+      },
+      "LibNMeCab/0.10.1": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.0/LibNMeCab.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/netstandard2.0/LibNMeCab.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "LibNMeCab.IpaDicBin/0.10.0": {
+        "type": "package",
+        "dependencies": {
+          "LibNMeCab": "[0.10.0, 0.11.0)"
+        },
+        "compile": {
+          "lib/netstandard2.0/LibNMeCab.IpaDicBin.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/LibNMeCab.IpaDicBin.dll": {}
+        },
+        "build": {
+          "build/_._": {}
+        },
+        "buildMultiTargeting": {
+          "buildMultiTargeting/_._": {}
+        }
+      },
+      "Markdig/0.30.4": {
+        "type": "package",
+        "dependencies": {
+          "System.Memory": "4.5.4"
+        },
+        "compile": {
+          "lib/net452/Markdig.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net452/Markdig.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "Newtonsoft.Json/13.0.2": {
+        "type": "package",
+        "compile": {
+          "lib/net45/Newtonsoft.Json.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net45/Newtonsoft.Json.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "NTextCat/0.3.65": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.0/NTextCat.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/netstandard2.0/NTextCat.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "NUnit/3.13.3": {
+        "type": "package",
+        "compile": {
+          "lib/net45/nunit.framework.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net45/nunit.framework.dll": {
+            "related": ".xml"
+          }
+        },
+        "build": {
+          "build/NUnit.props": {}
+        }
+      },
+      "System.Buffers/4.5.1": {
+        "type": "package",
+        "frameworkAssemblies": [
+          "mscorlib"
+        ],
+        "compile": {
+          "ref/net45/System.Buffers.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net461/System.Buffers.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "System.Memory/4.5.4": {
+        "type": "package",
+        "dependencies": {
+          "System.Buffers": "4.5.1",
+          "System.Numerics.Vectors": "4.5.0",
+          "System.Runtime.CompilerServices.Unsafe": "4.5.3"
+        },
+        "frameworkAssemblies": [
+          "System",
+          "mscorlib"
+        ],
+        "compile": {
+          "lib/net461/System.Memory.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net461/System.Memory.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "System.Numerics.Vectors/4.5.0": {
+        "type": "package",
+        "frameworkAssemblies": [
+          "System.Numerics",
+          "mscorlib"
+        ],
+        "compile": {
+          "ref/net46/System.Numerics.Vectors.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net46/System.Numerics.Vectors.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "System.Runtime.CompilerServices.Unsafe/4.5.3": {
+        "type": "package",
+        "frameworkAssemblies": [
+          "mscorlib"
+        ],
+        "compile": {
+          "ref/net461/System.Runtime.CompilerServices.Unsafe.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net461/System.Runtime.CompilerServices.Unsafe.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "MusicLyricApp/1.0.0": {
+        "type": "project",
+        "compile": {
+          "bin/placeholder/MusicLyricApp.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/MusicLyricApp.dll": {}
+        }
+      }
+    },
+    ".NETFramework,Version=v4.8/win": {
+      "hyjiacan.pinyin4net/4.1.1": {
+        "type": "package",
+        "compile": {
+          "lib/net47/hyjiacan.py4n.dll": {
+            "related": ".pdb"
+          }
+        },
+        "runtime": {
+          "lib/net47/hyjiacan.py4n.dll": {
+            "related": ".pdb"
+          }
+        }
+      },
+      "Kawazu/1.1.4": {
+        "type": "package",
+        "dependencies": {
+          "LibNMeCab": "0.10.1",
+          "LibNMeCab.IpaDicBin": "0.10.0"
+        },
+        "compile": {
+          "lib/netstandard2.0/Kawazu.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/Kawazu.dll": {}
+        },
+        "contentFiles": {
+          "contentFiles/any/netstandard2.0/AUTHORS": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": false
+          },
+          "contentFiles/any/netstandard2.0/COPYING": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": false
+          },
+          "contentFiles/any/netstandard2.0/char.bin": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": false
+          },
+          "contentFiles/any/netstandard2.0/matrix.bin": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": false
+          },
+          "contentFiles/any/netstandard2.0/sys.dic": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": false
+          },
+          "contentFiles/any/netstandard2.0/unk.dic": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": false
+          }
+        }
+      },
+      "LibNMeCab/0.10.1": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.0/LibNMeCab.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/netstandard2.0/LibNMeCab.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "LibNMeCab.IpaDicBin/0.10.0": {
+        "type": "package",
+        "dependencies": {
+          "LibNMeCab": "[0.10.0, 0.11.0)"
+        },
+        "compile": {
+          "lib/netstandard2.0/LibNMeCab.IpaDicBin.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/LibNMeCab.IpaDicBin.dll": {}
+        },
+        "build": {
+          "build/_._": {}
+        },
+        "buildMultiTargeting": {
+          "buildMultiTargeting/_._": {}
+        }
+      },
+      "Markdig/0.30.4": {
+        "type": "package",
+        "dependencies": {
+          "System.Memory": "4.5.4"
+        },
+        "compile": {
+          "lib/net452/Markdig.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net452/Markdig.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "Newtonsoft.Json/13.0.2": {
+        "type": "package",
+        "compile": {
+          "lib/net45/Newtonsoft.Json.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net45/Newtonsoft.Json.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "NTextCat/0.3.65": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.0/NTextCat.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/netstandard2.0/NTextCat.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "NUnit/3.13.3": {
+        "type": "package",
+        "compile": {
+          "lib/net45/nunit.framework.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net45/nunit.framework.dll": {
+            "related": ".xml"
+          }
+        },
+        "build": {
+          "build/NUnit.props": {}
+        }
+      },
+      "System.Buffers/4.5.1": {
+        "type": "package",
+        "frameworkAssemblies": [
+          "mscorlib"
+        ],
+        "compile": {
+          "ref/net45/System.Buffers.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net461/System.Buffers.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "System.Memory/4.5.4": {
+        "type": "package",
+        "dependencies": {
+          "System.Buffers": "4.5.1",
+          "System.Numerics.Vectors": "4.5.0",
+          "System.Runtime.CompilerServices.Unsafe": "4.5.3"
+        },
+        "frameworkAssemblies": [
+          "System",
+          "mscorlib"
+        ],
+        "compile": {
+          "lib/net461/System.Memory.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net461/System.Memory.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "System.Numerics.Vectors/4.5.0": {
+        "type": "package",
+        "frameworkAssemblies": [
+          "System.Numerics",
+          "mscorlib"
+        ],
+        "compile": {
+          "ref/net46/System.Numerics.Vectors.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net46/System.Numerics.Vectors.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "System.Runtime.CompilerServices.Unsafe/4.5.3": {
+        "type": "package",
+        "frameworkAssemblies": [
+          "mscorlib"
+        ],
+        "compile": {
+          "ref/net461/System.Runtime.CompilerServices.Unsafe.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net461/System.Runtime.CompilerServices.Unsafe.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "MusicLyricApp/1.0.0": {
+        "type": "project",
+        "compile": {
+          "bin/placeholder/MusicLyricApp.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/MusicLyricApp.dll": {}
+        }
+      }
+    },
+    ".NETFramework,Version=v4.8/win-arm64": {
+      "hyjiacan.pinyin4net/4.1.1": {
+        "type": "package",
+        "compile": {
+          "lib/net47/hyjiacan.py4n.dll": {
+            "related": ".pdb"
+          }
+        },
+        "runtime": {
+          "lib/net47/hyjiacan.py4n.dll": {
+            "related": ".pdb"
+          }
+        }
+      },
+      "Kawazu/1.1.4": {
+        "type": "package",
+        "dependencies": {
+          "LibNMeCab": "0.10.1",
+          "LibNMeCab.IpaDicBin": "0.10.0"
+        },
+        "compile": {
+          "lib/netstandard2.0/Kawazu.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/Kawazu.dll": {}
+        },
+        "contentFiles": {
+          "contentFiles/any/netstandard2.0/AUTHORS": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": false
+          },
+          "contentFiles/any/netstandard2.0/COPYING": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": false
+          },
+          "contentFiles/any/netstandard2.0/char.bin": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": false
+          },
+          "contentFiles/any/netstandard2.0/matrix.bin": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": false
+          },
+          "contentFiles/any/netstandard2.0/sys.dic": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": false
+          },
+          "contentFiles/any/netstandard2.0/unk.dic": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": false
+          }
+        }
+      },
+      "LibNMeCab/0.10.1": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.0/LibNMeCab.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/netstandard2.0/LibNMeCab.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "LibNMeCab.IpaDicBin/0.10.0": {
+        "type": "package",
+        "dependencies": {
+          "LibNMeCab": "[0.10.0, 0.11.0)"
+        },
+        "compile": {
+          "lib/netstandard2.0/LibNMeCab.IpaDicBin.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/LibNMeCab.IpaDicBin.dll": {}
+        },
+        "build": {
+          "build/_._": {}
+        },
+        "buildMultiTargeting": {
+          "buildMultiTargeting/_._": {}
+        }
+      },
+      "Markdig/0.30.4": {
+        "type": "package",
+        "dependencies": {
+          "System.Memory": "4.5.4"
+        },
+        "compile": {
+          "lib/net452/Markdig.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net452/Markdig.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "Newtonsoft.Json/13.0.2": {
+        "type": "package",
+        "compile": {
+          "lib/net45/Newtonsoft.Json.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net45/Newtonsoft.Json.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "NTextCat/0.3.65": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.0/NTextCat.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/netstandard2.0/NTextCat.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "NUnit/3.13.3": {
+        "type": "package",
+        "compile": {
+          "lib/net45/nunit.framework.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net45/nunit.framework.dll": {
+            "related": ".xml"
+          }
+        },
+        "build": {
+          "build/NUnit.props": {}
+        }
+      },
+      "System.Buffers/4.5.1": {
+        "type": "package",
+        "frameworkAssemblies": [
+          "mscorlib"
+        ],
+        "compile": {
+          "ref/net45/System.Buffers.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net461/System.Buffers.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "System.Memory/4.5.4": {
+        "type": "package",
+        "dependencies": {
+          "System.Buffers": "4.5.1",
+          "System.Numerics.Vectors": "4.5.0",
+          "System.Runtime.CompilerServices.Unsafe": "4.5.3"
+        },
+        "frameworkAssemblies": [
+          "System",
+          "mscorlib"
+        ],
+        "compile": {
+          "lib/net461/System.Memory.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net461/System.Memory.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "System.Numerics.Vectors/4.5.0": {
+        "type": "package",
+        "frameworkAssemblies": [
+          "System.Numerics",
+          "mscorlib"
+        ],
+        "compile": {
+          "ref/net46/System.Numerics.Vectors.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net46/System.Numerics.Vectors.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "System.Runtime.CompilerServices.Unsafe/4.5.3": {
+        "type": "package",
+        "frameworkAssemblies": [
+          "mscorlib"
+        ],
+        "compile": {
+          "ref/net461/System.Runtime.CompilerServices.Unsafe.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net461/System.Runtime.CompilerServices.Unsafe.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "MusicLyricApp/1.0.0": {
+        "type": "project",
+        "compile": {
+          "bin/placeholder/MusicLyricApp.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/MusicLyricApp.dll": {}
+        }
+      }
+    },
+    ".NETFramework,Version=v4.8/win-x64": {
+      "hyjiacan.pinyin4net/4.1.1": {
+        "type": "package",
+        "compile": {
+          "lib/net47/hyjiacan.py4n.dll": {
+            "related": ".pdb"
+          }
+        },
+        "runtime": {
+          "lib/net47/hyjiacan.py4n.dll": {
+            "related": ".pdb"
+          }
+        }
+      },
+      "Kawazu/1.1.4": {
+        "type": "package",
+        "dependencies": {
+          "LibNMeCab": "0.10.1",
+          "LibNMeCab.IpaDicBin": "0.10.0"
+        },
+        "compile": {
+          "lib/netstandard2.0/Kawazu.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/Kawazu.dll": {}
+        },
+        "contentFiles": {
+          "contentFiles/any/netstandard2.0/AUTHORS": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": false
+          },
+          "contentFiles/any/netstandard2.0/COPYING": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": false
+          },
+          "contentFiles/any/netstandard2.0/char.bin": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": false
+          },
+          "contentFiles/any/netstandard2.0/matrix.bin": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": false
+          },
+          "contentFiles/any/netstandard2.0/sys.dic": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": false
+          },
+          "contentFiles/any/netstandard2.0/unk.dic": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": false
+          }
+        }
+      },
+      "LibNMeCab/0.10.1": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.0/LibNMeCab.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/netstandard2.0/LibNMeCab.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "LibNMeCab.IpaDicBin/0.10.0": {
+        "type": "package",
+        "dependencies": {
+          "LibNMeCab": "[0.10.0, 0.11.0)"
+        },
+        "compile": {
+          "lib/netstandard2.0/LibNMeCab.IpaDicBin.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/LibNMeCab.IpaDicBin.dll": {}
+        },
+        "build": {
+          "build/_._": {}
+        },
+        "buildMultiTargeting": {
+          "buildMultiTargeting/_._": {}
+        }
+      },
+      "Markdig/0.30.4": {
+        "type": "package",
+        "dependencies": {
+          "System.Memory": "4.5.4"
+        },
+        "compile": {
+          "lib/net452/Markdig.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net452/Markdig.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "Newtonsoft.Json/13.0.2": {
+        "type": "package",
+        "compile": {
+          "lib/net45/Newtonsoft.Json.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net45/Newtonsoft.Json.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "NTextCat/0.3.65": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.0/NTextCat.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/netstandard2.0/NTextCat.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "NUnit/3.13.3": {
+        "type": "package",
+        "compile": {
+          "lib/net45/nunit.framework.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net45/nunit.framework.dll": {
+            "related": ".xml"
+          }
+        },
+        "build": {
+          "build/NUnit.props": {}
+        }
+      },
+      "System.Buffers/4.5.1": {
+        "type": "package",
+        "frameworkAssemblies": [
+          "mscorlib"
+        ],
+        "compile": {
+          "ref/net45/System.Buffers.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net461/System.Buffers.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "System.Memory/4.5.4": {
+        "type": "package",
+        "dependencies": {
+          "System.Buffers": "4.5.1",
+          "System.Numerics.Vectors": "4.5.0",
+          "System.Runtime.CompilerServices.Unsafe": "4.5.3"
+        },
+        "frameworkAssemblies": [
+          "System",
+          "mscorlib"
+        ],
+        "compile": {
+          "lib/net461/System.Memory.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net461/System.Memory.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "System.Numerics.Vectors/4.5.0": {
+        "type": "package",
+        "frameworkAssemblies": [
+          "System.Numerics",
+          "mscorlib"
+        ],
+        "compile": {
+          "ref/net46/System.Numerics.Vectors.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net46/System.Numerics.Vectors.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "System.Runtime.CompilerServices.Unsafe/4.5.3": {
+        "type": "package",
+        "frameworkAssemblies": [
+          "mscorlib"
+        ],
+        "compile": {
+          "ref/net461/System.Runtime.CompilerServices.Unsafe.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net461/System.Runtime.CompilerServices.Unsafe.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "MusicLyricApp/1.0.0": {
+        "type": "project",
+        "compile": {
+          "bin/placeholder/MusicLyricApp.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/MusicLyricApp.dll": {}
+        }
+      }
+    },
+    ".NETFramework,Version=v4.8/win-x86": {
+      "hyjiacan.pinyin4net/4.1.1": {
+        "type": "package",
+        "compile": {
+          "lib/net47/hyjiacan.py4n.dll": {
+            "related": ".pdb"
+          }
+        },
+        "runtime": {
+          "lib/net47/hyjiacan.py4n.dll": {
+            "related": ".pdb"
+          }
+        }
+      },
+      "Kawazu/1.1.4": {
+        "type": "package",
+        "dependencies": {
+          "LibNMeCab": "0.10.1",
+          "LibNMeCab.IpaDicBin": "0.10.0"
+        },
+        "compile": {
+          "lib/netstandard2.0/Kawazu.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/Kawazu.dll": {}
+        },
+        "contentFiles": {
+          "contentFiles/any/netstandard2.0/AUTHORS": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": false
+          },
+          "contentFiles/any/netstandard2.0/COPYING": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": false
+          },
+          "contentFiles/any/netstandard2.0/char.bin": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": false
+          },
+          "contentFiles/any/netstandard2.0/matrix.bin": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": false
+          },
+          "contentFiles/any/netstandard2.0/sys.dic": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": false
+          },
+          "contentFiles/any/netstandard2.0/unk.dic": {
+            "buildAction": "Content",
+            "codeLanguage": "any",
+            "copyToOutput": false
+          }
+        }
+      },
+      "LibNMeCab/0.10.1": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.0/LibNMeCab.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/netstandard2.0/LibNMeCab.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "LibNMeCab.IpaDicBin/0.10.0": {
+        "type": "package",
+        "dependencies": {
+          "LibNMeCab": "[0.10.0, 0.11.0)"
+        },
+        "compile": {
+          "lib/netstandard2.0/LibNMeCab.IpaDicBin.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/LibNMeCab.IpaDicBin.dll": {}
+        },
+        "build": {
+          "build/_._": {}
+        },
+        "buildMultiTargeting": {
+          "buildMultiTargeting/_._": {}
+        }
+      },
+      "Markdig/0.30.4": {
+        "type": "package",
+        "dependencies": {
+          "System.Memory": "4.5.4"
+        },
+        "compile": {
+          "lib/net452/Markdig.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net452/Markdig.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "Newtonsoft.Json/13.0.2": {
+        "type": "package",
+        "compile": {
+          "lib/net45/Newtonsoft.Json.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net45/Newtonsoft.Json.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "NTextCat/0.3.65": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.0/NTextCat.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/netstandard2.0/NTextCat.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "NUnit/3.13.3": {
+        "type": "package",
+        "compile": {
+          "lib/net45/nunit.framework.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net45/nunit.framework.dll": {
+            "related": ".xml"
+          }
+        },
+        "build": {
+          "build/NUnit.props": {}
+        }
+      },
+      "System.Buffers/4.5.1": {
+        "type": "package",
+        "frameworkAssemblies": [
+          "mscorlib"
+        ],
+        "compile": {
+          "ref/net45/System.Buffers.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net461/System.Buffers.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "System.Memory/4.5.4": {
+        "type": "package",
+        "dependencies": {
+          "System.Buffers": "4.5.1",
+          "System.Numerics.Vectors": "4.5.0",
+          "System.Runtime.CompilerServices.Unsafe": "4.5.3"
+        },
+        "frameworkAssemblies": [
+          "System",
+          "mscorlib"
+        ],
+        "compile": {
+          "lib/net461/System.Memory.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net461/System.Memory.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "System.Numerics.Vectors/4.5.0": {
+        "type": "package",
+        "frameworkAssemblies": [
+          "System.Numerics",
+          "mscorlib"
+        ],
+        "compile": {
+          "ref/net46/System.Numerics.Vectors.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net46/System.Numerics.Vectors.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "System.Runtime.CompilerServices.Unsafe/4.5.3": {
+        "type": "package",
+        "frameworkAssemblies": [
+          "mscorlib"
+        ],
+        "compile": {
+          "ref/net461/System.Runtime.CompilerServices.Unsafe.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net461/System.Runtime.CompilerServices.Unsafe.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "MusicLyricApp/1.0.0": {
+        "type": "project",
+        "compile": {
+          "bin/placeholder/MusicLyricApp.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/MusicLyricApp.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "hyjiacan.pinyin4net/4.1.1": {
+      "sha512": "HaoIr102GuvLNyzboTN3haf7uFGdYREYBaWP8sPlAX5GoZPgAyBGA2j9LJpTKY0u80T8GUbOJHW8KDRxeGAerA==",
+      "type": "package",
+      "path": "hyjiacan.pinyin4net/4.1.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "hyjiacan.pinyin4net.4.1.1.nupkg.sha512",
+        "hyjiacan.pinyin4net.nuspec",
+        "lib/net40/hyjiacan.py4n.dll",
+        "lib/net40/hyjiacan.py4n.pdb",
+        "lib/net45/hyjiacan.py4n.dll",
+        "lib/net45/hyjiacan.py4n.pdb",
+        "lib/net451/hyjiacan.py4n.dll",
+        "lib/net451/hyjiacan.py4n.pdb",
+        "lib/net452/hyjiacan.py4n.dll",
+        "lib/net452/hyjiacan.py4n.pdb",
+        "lib/net46/hyjiacan.py4n.dll",
+        "lib/net46/hyjiacan.py4n.pdb",
+        "lib/net461/hyjiacan.py4n.dll",
+        "lib/net461/hyjiacan.py4n.pdb",
+        "lib/net462/hyjiacan.py4n.dll",
+        "lib/net462/hyjiacan.py4n.pdb",
+        "lib/net47/hyjiacan.py4n.dll",
+        "lib/net47/hyjiacan.py4n.pdb",
+        "lib/net5.0/hyjiacan.py4n.dll",
+        "lib/net5.0/hyjiacan.py4n.pdb",
+        "lib/net6.0/hyjiacan.py4n.dll",
+        "lib/net6.0/hyjiacan.py4n.pdb",
+        "lib/net7.0/hyjiacan.py4n.dll",
+        "lib/net7.0/hyjiacan.py4n.pdb",
+        "lib/netcoreapp2.0/hyjiacan.py4n.dll",
+        "lib/netcoreapp2.0/hyjiacan.py4n.pdb",
+        "lib/netcoreapp3.0/hyjiacan.py4n.dll",
+        "lib/netcoreapp3.0/hyjiacan.py4n.pdb",
+        "lib/netcoreapp3.1/hyjiacan.py4n.dll",
+        "lib/netcoreapp3.1/hyjiacan.py4n.pdb",
+        "lib/netstandard1.6/hyjiacan.py4n.dll",
+        "lib/netstandard1.6/hyjiacan.py4n.pdb",
+        "lib/netstandard2.0/hyjiacan.py4n.dll",
+        "lib/netstandard2.0/hyjiacan.py4n.pdb",
+        "lib/netstandard2.1/hyjiacan.py4n.dll",
+        "lib/netstandard2.1/hyjiacan.py4n.pdb"
+      ]
+    },
+    "Kawazu/1.1.4": {
+      "sha512": "ZXSCv+STeJomB+sjHBk74b30rAI/JTPAzanC7YhsP+6qy7HzZV5QYHhtpXd21jdCUjvSasAhbIZzpa+BFZoOfA==",
+      "type": "package",
+      "path": "kawazu/1.1.4",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "Kawazu_icon.png",
+        "content/AUTHORS",
+        "content/COPYING",
+        "content/char.bin",
+        "content/matrix.bin",
+        "content/sys.dic",
+        "content/unk.dic",
+        "contentFiles/any/net5.0/AUTHORS",
+        "contentFiles/any/net5.0/COPYING",
+        "contentFiles/any/net5.0/char.bin",
+        "contentFiles/any/net5.0/matrix.bin",
+        "contentFiles/any/net5.0/sys.dic",
+        "contentFiles/any/net5.0/unk.dic",
+        "contentFiles/any/netcoreapp3.1/AUTHORS",
+        "contentFiles/any/netcoreapp3.1/COPYING",
+        "contentFiles/any/netcoreapp3.1/char.bin",
+        "contentFiles/any/netcoreapp3.1/matrix.bin",
+        "contentFiles/any/netcoreapp3.1/sys.dic",
+        "contentFiles/any/netcoreapp3.1/unk.dic",
+        "contentFiles/any/netstandard2.0/AUTHORS",
+        "contentFiles/any/netstandard2.0/COPYING",
+        "contentFiles/any/netstandard2.0/char.bin",
+        "contentFiles/any/netstandard2.0/matrix.bin",
+        "contentFiles/any/netstandard2.0/sys.dic",
+        "contentFiles/any/netstandard2.0/unk.dic",
+        "kawazu.1.1.4.nupkg.sha512",
+        "kawazu.nuspec",
+        "lib/net5.0/Kawazu.dll",
+        "lib/netcoreapp3.1/Kawazu.dll",
+        "lib/netstandard2.0/Kawazu.dll"
+      ]
+    },
+    "LibNMeCab/0.10.1": {
+      "sha512": "GXP1Lu5YJQM1kE0KYMMDoYVwdZdLja66yaiQK/tR3XWNGalCC+gwDS6Dm4WWuB8xgFq9VB0c71WfTNEhXyR7ww==",
+      "type": "package",
+      "path": "libnmecab/0.10.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "NMeCab-icon-512.png",
+        "lib/netstandard2.0/LibNMeCab.dll",
+        "lib/netstandard2.0/LibNMeCab.xml",
+        "libnmecab.0.10.1.nupkg.sha512",
+        "libnmecab.nuspec"
+      ]
+    },
+    "LibNMeCab.IpaDicBin/0.10.0": {
+      "sha512": "Ky8tAvVnsRyAcRi70RvA/y7+Vr/n77kqdGI+JFoH2nbMIf2ZQr8iWNDcIy8Quh/kugjYVrA2yles32xcx75nYg==",
+      "type": "package",
+      "path": "libnmecab.ipadicbin/0.10.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "NMeCab-icon-512.png",
+        "build/LibNMeCab.IpaDicBin.props",
+        "build/LibNMeCab.IpaDicBin.targets",
+        "buildMultiTargeting/LibNMeCab.IpaDicBin.props",
+        "buildMultiTargeting/LibNMeCab.IpaDicBin.targets",
+        "content/IpaDic/AUTHORS",
+        "content/IpaDic/COPYING",
+        "content/IpaDic/char.bin",
+        "content/IpaDic/matrix.bin",
+        "content/IpaDic/sys.dic",
+        "content/IpaDic/unk.dic",
+        "lib/netstandard2.0/LibNMeCab.IpaDicBin.dll",
+        "libnmecab.ipadicbin.0.10.0.nupkg.sha512",
+        "libnmecab.ipadicbin.nuspec"
+      ]
+    },
+    "Markdig/0.30.4": {
+      "sha512": "9LL7Mzubwf6QmOTZIqf+vERiinqPA1H+irBA38POhr93W/it00AvFWaCtF80+8VJTooFmcAJyZT2f60t1f88eQ==",
+      "type": "package",
+      "path": "markdig/0.30.4",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/net452/Markdig.dll",
+        "lib/net452/Markdig.xml",
+        "lib/net6.0/Markdig.dll",
+        "lib/net6.0/Markdig.xml",
+        "lib/netcoreapp3.1/Markdig.dll",
+        "lib/netcoreapp3.1/Markdig.xml",
+        "lib/netstandard2.0/Markdig.dll",
+        "lib/netstandard2.0/Markdig.xml",
+        "lib/netstandard2.1/Markdig.dll",
+        "lib/netstandard2.1/Markdig.xml",
+        "markdig.0.30.4.nupkg.sha512",
+        "markdig.nuspec",
+        "markdig.png",
+        "readme.md"
+      ]
+    },
+    "Newtonsoft.Json/13.0.2": {
+      "sha512": "R2pZ3B0UjeyHShm9vG+Tu0EBb2lC8b0dFzV9gVn50ofHXh9Smjk6kTn7A/FdAsC8B5cKib1OnGYOXxRBz5XQDg==",
+      "type": "package",
+      "path": "newtonsoft.json/13.0.2",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE.md",
+        "README.md",
+        "lib/net20/Newtonsoft.Json.dll",
+        "lib/net20/Newtonsoft.Json.xml",
+        "lib/net35/Newtonsoft.Json.dll",
+        "lib/net35/Newtonsoft.Json.xml",
+        "lib/net40/Newtonsoft.Json.dll",
+        "lib/net40/Newtonsoft.Json.xml",
+        "lib/net45/Newtonsoft.Json.dll",
+        "lib/net45/Newtonsoft.Json.xml",
+        "lib/net6.0/Newtonsoft.Json.dll",
+        "lib/net6.0/Newtonsoft.Json.xml",
+        "lib/netstandard1.0/Newtonsoft.Json.dll",
+        "lib/netstandard1.0/Newtonsoft.Json.xml",
+        "lib/netstandard1.3/Newtonsoft.Json.dll",
+        "lib/netstandard1.3/Newtonsoft.Json.xml",
+        "lib/netstandard2.0/Newtonsoft.Json.dll",
+        "lib/netstandard2.0/Newtonsoft.Json.xml",
+        "newtonsoft.json.13.0.2.nupkg.sha512",
+        "newtonsoft.json.nuspec",
+        "packageIcon.png"
+      ]
+    },
+    "NTextCat/0.3.65": {
+      "sha512": "Yc2mJwJJPf5rEmzadOPFWmsejuHbCIqKwmarrwibNT6MhySs3COKZ1dEL7Z+UzsiQ7pO2RWhpvatilxB+l4DaQ==",
+      "type": "package",
+      "path": "ntextcat/0.3.65",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "README.txt",
+        "content/Core14.profile.xml",
+        "lib/netstandard2.0/NTextCat.dll",
+        "lib/netstandard2.0/NTextCat.xml",
+        "ntextcat.0.3.65.nupkg.sha512",
+        "ntextcat.nuspec"
+      ]
+    },
+    "NUnit/3.13.3": {
+      "sha512": "KNPDpls6EfHwC3+nnA67fh5wpxeLb3VLFAfLxrug6JMYDLHH6InaQIWR7Sc3y75d/9IKzMksH/gi08W7XWbmnQ==",
+      "type": "package",
+      "path": "nunit/3.13.3",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "CHANGES.md",
+        "LICENSE.txt",
+        "NOTICES.txt",
+        "build/NUnit.props",
+        "icon.png",
+        "lib/net35/nunit.framework.dll",
+        "lib/net35/nunit.framework.xml",
+        "lib/net40/nunit.framework.dll",
+        "lib/net40/nunit.framework.xml",
+        "lib/net45/nunit.framework.dll",
+        "lib/net45/nunit.framework.xml",
+        "lib/netstandard2.0/nunit.framework.dll",
+        "lib/netstandard2.0/nunit.framework.xml",
+        "nunit.3.13.3.nupkg.sha512",
+        "nunit.nuspec"
+      ]
+    },
+    "System.Buffers/4.5.1": {
+      "sha512": "Rw7ijyl1qqRS0YQD/WycNst8hUUMgrMH4FCn1nNm27M4VxchZ1js3fVjQaANHO5f3sN4isvP4a+Met9Y4YomAg==",
+      "type": "package",
+      "path": "system.buffers/4.5.1",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE.TXT",
+        "THIRD-PARTY-NOTICES.TXT",
+        "lib/net461/System.Buffers.dll",
+        "lib/net461/System.Buffers.xml",
+        "lib/netcoreapp2.0/_._",
+        "lib/netstandard1.1/System.Buffers.dll",
+        "lib/netstandard1.1/System.Buffers.xml",
+        "lib/netstandard2.0/System.Buffers.dll",
+        "lib/netstandard2.0/System.Buffers.xml",
+        "lib/uap10.0.16299/_._",
+        "ref/net45/System.Buffers.dll",
+        "ref/net45/System.Buffers.xml",
+        "ref/netcoreapp2.0/_._",
+        "ref/netstandard1.1/System.Buffers.dll",
+        "ref/netstandard1.1/System.Buffers.xml",
+        "ref/netstandard2.0/System.Buffers.dll",
+        "ref/netstandard2.0/System.Buffers.xml",
+        "ref/uap10.0.16299/_._",
+        "system.buffers.4.5.1.nupkg.sha512",
+        "system.buffers.nuspec",
+        "useSharedDesignerContext.txt",
+        "version.txt"
+      ]
+    },
+    "System.Memory/4.5.4": {
+      "sha512": "1MbJTHS1lZ4bS4FmsJjnuGJOu88ZzTT2rLvrhW7Ygic+pC0NWA+3hgAen0HRdsocuQXCkUTdFn9yHJJhsijDXw==",
+      "type": "package",
+      "path": "system.memory/4.5.4",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE.TXT",
+        "THIRD-PARTY-NOTICES.TXT",
+        "lib/net461/System.Memory.dll",
+        "lib/net461/System.Memory.xml",
+        "lib/netcoreapp2.1/_._",
+        "lib/netstandard1.1/System.Memory.dll",
+        "lib/netstandard1.1/System.Memory.xml",
+        "lib/netstandard2.0/System.Memory.dll",
+        "lib/netstandard2.0/System.Memory.xml",
+        "ref/netcoreapp2.1/_._",
+        "system.memory.4.5.4.nupkg.sha512",
+        "system.memory.nuspec",
+        "useSharedDesignerContext.txt",
+        "version.txt"
+      ]
+    },
+    "System.Numerics.Vectors/4.5.0": {
+      "sha512": "QQTlPTl06J/iiDbJCiepZ4H//BVraReU4O4EoRw1U02H5TLUIT7xn3GnDp9AXPSlJUDyFs4uWjWafNX6WrAojQ==",
+      "type": "package",
+      "path": "system.numerics.vectors/4.5.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE.TXT",
+        "THIRD-PARTY-NOTICES.TXT",
+        "lib/MonoAndroid10/_._",
+        "lib/MonoTouch10/_._",
+        "lib/net46/System.Numerics.Vectors.dll",
+        "lib/net46/System.Numerics.Vectors.xml",
+        "lib/netcoreapp2.0/_._",
+        "lib/netstandard1.0/System.Numerics.Vectors.dll",
+        "lib/netstandard1.0/System.Numerics.Vectors.xml",
+        "lib/netstandard2.0/System.Numerics.Vectors.dll",
+        "lib/netstandard2.0/System.Numerics.Vectors.xml",
+        "lib/portable-net45+win8+wp8+wpa81/System.Numerics.Vectors.dll",
+        "lib/portable-net45+win8+wp8+wpa81/System.Numerics.Vectors.xml",
+        "lib/uap10.0.16299/_._",
+        "lib/xamarinios10/_._",
+        "lib/xamarinmac20/_._",
+        "lib/xamarintvos10/_._",
+        "lib/xamarinwatchos10/_._",
+        "ref/MonoAndroid10/_._",
+        "ref/MonoTouch10/_._",
+        "ref/net45/System.Numerics.Vectors.dll",
+        "ref/net45/System.Numerics.Vectors.xml",
+        "ref/net46/System.Numerics.Vectors.dll",
+        "ref/net46/System.Numerics.Vectors.xml",
+        "ref/netcoreapp2.0/_._",
+        "ref/netstandard1.0/System.Numerics.Vectors.dll",
+        "ref/netstandard1.0/System.Numerics.Vectors.xml",
+        "ref/netstandard2.0/System.Numerics.Vectors.dll",
+        "ref/netstandard2.0/System.Numerics.Vectors.xml",
+        "ref/uap10.0.16299/_._",
+        "ref/xamarinios10/_._",
+        "ref/xamarinmac20/_._",
+        "ref/xamarintvos10/_._",
+        "ref/xamarinwatchos10/_._",
+        "system.numerics.vectors.4.5.0.nupkg.sha512",
+        "system.numerics.vectors.nuspec",
+        "useSharedDesignerContext.txt",
+        "version.txt"
+      ]
+    },
+    "System.Runtime.CompilerServices.Unsafe/4.5.3": {
+      "sha512": "3TIsJhD1EiiT0w2CcDMN/iSSwnNnsrnbzeVHSKkaEgV85txMprmuO+Yq2AdSbeVGcg28pdNDTPK87tJhX7VFHw==",
+      "type": "package",
+      "path": "system.runtime.compilerservices.unsafe/4.5.3",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE.TXT",
+        "THIRD-PARTY-NOTICES.TXT",
+        "lib/net461/System.Runtime.CompilerServices.Unsafe.dll",
+        "lib/net461/System.Runtime.CompilerServices.Unsafe.xml",
+        "lib/netcoreapp2.0/System.Runtime.CompilerServices.Unsafe.dll",
+        "lib/netcoreapp2.0/System.Runtime.CompilerServices.Unsafe.xml",
+        "lib/netstandard1.0/System.Runtime.CompilerServices.Unsafe.dll",
+        "lib/netstandard1.0/System.Runtime.CompilerServices.Unsafe.xml",
+        "lib/netstandard2.0/System.Runtime.CompilerServices.Unsafe.dll",
+        "lib/netstandard2.0/System.Runtime.CompilerServices.Unsafe.xml",
+        "ref/net461/System.Runtime.CompilerServices.Unsafe.dll",
+        "ref/net461/System.Runtime.CompilerServices.Unsafe.xml",
+        "ref/netstandard1.0/System.Runtime.CompilerServices.Unsafe.dll",
+        "ref/netstandard1.0/System.Runtime.CompilerServices.Unsafe.xml",
+        "ref/netstandard2.0/System.Runtime.CompilerServices.Unsafe.dll",
+        "ref/netstandard2.0/System.Runtime.CompilerServices.Unsafe.xml",
+        "system.runtime.compilerservices.unsafe.4.5.3.nupkg.sha512",
+        "system.runtime.compilerservices.unsafe.nuspec",
+        "useSharedDesignerContext.txt",
+        "version.txt"
+      ]
+    },
+    "MusicLyricApp/1.0.0": {
+      "type": "project",
+      "path": "../MusicLyricApp/MusicLyricApp.csproj",
+      "msbuildProject": "../MusicLyricApp/MusicLyricApp.csproj"
+    }
+  },
+  "projectFileDependencyGroups": {
+    ".NETFramework,Version=v4.8": [
+      "Kawazu >= 1.1.4",
+      "Markdig >= 0.30.4",
+      "MusicLyricApp >= 1.0.0",
+      "NTextCat >= 0.3.65",
+      "NUnit >= 3.13.3",
+      "Newtonsoft.Json >= 13.0.2",
+      "hyjiacan.pinyin4net >= 4.1.1"
+    ]
+  },
+  "packageFolders": {
+    "C:\\Users\\dell\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
+  },
+  "project": {
+    "version": "1.0.0",
+    "restore": {
+      "projectUniqueName": "d:\\Desktop\\工具图标\\游戏工具\\Godot\\Tetrisic\\addons\\163MusicLyrics-master\\archive-winform\\MusicLyricAppTest\\MusicLyricAppTest.csproj",
+      "projectName": "MusicLyricAppTest",
+      "projectPath": "d:\\Desktop\\工具图标\\游戏工具\\Godot\\Tetrisic\\addons\\163MusicLyrics-master\\archive-winform\\MusicLyricAppTest\\MusicLyricAppTest.csproj",
+      "packagesPath": "C:\\Users\\dell\\.nuget\\packages\\",
+      "outputPath": "d:\\Desktop\\工具图标\\游戏工具\\Godot\\Tetrisic\\addons\\163MusicLyrics-master\\archive-winform\\MusicLyricAppTest\\obj\\",
+      "projectStyle": "PackageReference",
+      "skipContentFileWrite": true,
+      "UsingMicrosoftNETSdk": false,
+      "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+      ],
+      "configFilePaths": [
+        "C:\\Users\\dell\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+      ],
+      "originalTargetFrameworks": [
+        "net48"
+      ],
+      "sources": {
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "https://api.nuget.org/v3/index.json": {}
+      },
+      "frameworks": {
+        "net48": {
+          "projectReferences": {
+            "d:\\Desktop\\工具图标\\游戏工具\\Godot\\Tetrisic\\addons\\163MusicLyrics-master\\archive-winform\\MusicLyricApp\\MusicLyricApp.csproj": {
+              "projectPath": "d:\\Desktop\\工具图标\\游戏工具\\Godot\\Tetrisic\\addons\\163MusicLyrics-master\\archive-winform\\MusicLyricApp\\MusicLyricApp.csproj"
+            }
+          }
+        }
+      },
+      "restoreAuditProperties": {
+        "enableAudit": "true",
+        "auditLevel": "low",
+        "auditMode": "all"
+      }
+    },
+    "frameworks": {
+      "net48": {
+        "dependencies": {
+          "Kawazu": {
+            "target": "Package",
+            "version": "[1.1.4, )"
+          },
+          "Markdig": {
+            "target": "Package",
+            "version": "[0.30.4, )"
+          },
+          "NTextCat": {
+            "target": "Package",
+            "version": "[0.3.65, )"
+          },
+          "NUnit": {
+            "target": "Package",
+            "version": "[3.13.3, )"
+          },
+          "Newtonsoft.Json": {
+            "target": "Package",
+            "version": "[13.0.2, )"
+          },
+          "hyjiacan.pinyin4net": {
+            "target": "Package",
+            "version": "[4.1.1, )"
+          }
+        }
+      }
+    },
+    "runtimes": {
+      "win": {
+        "#import": []
+      },
+      "win-arm64": {
+        "#import": []
+      },
+      "win-x64": {
+        "#import": []
+      },
+      "win-x86": {
+        "#import": []
+      }
+    }
+  }
+}

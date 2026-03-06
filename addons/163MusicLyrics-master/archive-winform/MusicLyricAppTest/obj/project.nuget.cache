@@ -1,0 +1,21 @@
+{
+  "version": 2,
+  "dgSpecHash": "E78focQrP+M=",
+  "success": true,
+  "projectFilePath": "d:\\Desktop\\工具图标\\游戏工具\\Godot\\Tetrisic\\addons\\163MusicLyrics-master\\archive-winform\\MusicLyricAppTest\\MusicLyricAppTest.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\dell\\.nuget\\packages\\hyjiacan.pinyin4net\\4.1.1\\hyjiacan.pinyin4net.4.1.1.nupkg.sha512",
+    "C:\\Users\\dell\\.nuget\\packages\\kawazu\\1.1.4\\kawazu.1.1.4.nupkg.sha512",
+    "C:\\Users\\dell\\.nuget\\packages\\libnmecab\\0.10.1\\libnmecab.0.10.1.nupkg.sha512",
+    "C:\\Users\\dell\\.nuget\\packages\\libnmecab.ipadicbin\\0.10.0\\libnmecab.ipadicbin.0.10.0.nupkg.sha512",
+    "C:\\Users\\dell\\.nuget\\packages\\markdig\\0.30.4\\markdig.0.30.4.nupkg.sha512",
+    "C:\\Users\\dell\\.nuget\\packages\\newtonsoft.json\\13.0.2\\newtonsoft.json.13.0.2.nupkg.sha512",
+    "C:\\Users\\dell\\.nuget\\packages\\ntextcat\\0.3.65\\ntextcat.0.3.65.nupkg.sha512",
+    "C:\\Users\\dell\\.nuget\\packages\\nunit\\3.13.3\\nunit.3.13.3.nupkg.sha512",
+    "C:\\Users\\dell\\.nuget\\packages\\system.buffers\\4.5.1\\system.buffers.4.5.1.nupkg.sha512",
+    "C:\\Users\\dell\\.nuget\\packages\\system.memory\\4.5.4\\system.memory.4.5.4.nupkg.sha512",
+    "C:\\Users\\dell\\.nuget\\packages\\system.numerics.vectors\\4.5.0\\system.numerics.vectors.4.5.0.nupkg.sha512",
+    "C:\\Users\\dell\\.nuget\\packages\\system.runtime.compilerservices.unsafe\\4.5.3\\system.runtime.compilerservices.unsafe.4.5.3.nupkg.sha512"
+  ],
+  "logs": []
+}
