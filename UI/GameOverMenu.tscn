@@ -1,0 +1,94 @@
+[gd_scene load_steps=5 format=3 uid="uid://dwh7k3x8qaq1m"]
+
+[ext_resource type="Script" uid="uid://dwvyytrev4r4o" path="res://UI/GameOverMenu.gd" id="1_script"]
+[ext_resource type="FontFile" uid="uid://ddo7ybrfl5d2s" path="res://fonts/FUSION-PIXEL-12PX-MONOSPACED-ZH_HANS.OTF" id="2_font"]
+[ext_resource type="Theme" path="res://UI/game_theme.tres" id="3_theme"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
+bg_color = Color(0.14, 0.12, 0.2, 0.95)
+border_color = Color(0.4, 0.4, 0.5, 0.9)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+content_margin_left = 20.0
+content_margin_right = 20.0
+content_margin_top = 20.0
+content_margin_bottom = 20.0
+
+[node name="GameOverMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+theme = ExtResource("3_theme")
+script = ExtResource("1_script")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+color = Color(0, 0, 0, 0.8)
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 8
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -150.0
+offset_top = -120.0
+offset_right = 150.0
+offset_bottom = 120.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 16.0
+offset_top = 16.0
+offset_right = -16.0
+offset_bottom = -16.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+
+[node name="TitleLabel" type="Label" parent="Panel/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.2, 0.2, 1)
+theme_override_font_sizes/font_size = 28
+text = "UI_GAMEOVERMENU_GAME_OVER"
+horizontal_alignment = 1
+
+[node name="ScoreLabel" type="Label" parent="Panel/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.75, 0.75, 0.8, 1)
+theme_override_font_sizes/font_size = 18
+text = "UI_GAMEOVER_SCORE_INIT"
+horizontal_alignment = 1
+
+[node name="Spacer" type="Control" parent="Panel/VBoxContainer"]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+
+[node name="RestartButton" type="Button" parent="Panel/VBoxContainer"]
+custom_minimum_size = Vector2(180, 40)
+layout_mode = 2
+text = "UI_COMMON_RESTART"
+
+[node name="MenuButton" type="Button" parent="Panel/VBoxContainer"]
+custom_minimum_size = Vector2(180, 40)
+layout_mode = 2
+text = "UI_COMMON_MAIN_MENU"

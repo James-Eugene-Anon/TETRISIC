@@ -1,0 +1,87 @@
+{
+  "enemies": [
+    {
+      "id": "enemy_slime_lord",
+      "kind": "enemy",
+      "name": "史莱姆王",
+      "name_en": "Slime Lord",
+      "type": "boss",
+      "act": 1,
+      "health": 180,
+      "damage": 16,
+      "cooldown_base": 5.2,
+      "cooldown_variance": 0.4,
+      "gold_reward": 35
+    },
+    {
+      "id": "enemy_skeleton_soldier",
+      "kind": "enemy",
+      "name": "骷髅士兵",
+      "name_en": "Skeleton Soldier",
+      "type": "normal",
+      "act": 1,
+      "health": 110,
+      "damage": 15,
+      "cooldown_base": 5.8,
+      "cooldown_variance": 0.4,
+      "gold_reward": 21
+    },
+    {
+      "id": "enemy_skeleton",
+      "kind": "enemy",
+      "name": "骷髅人",
+      "name_en": "Skeleton",
+      "type": "normal",
+      "act": 1,
+      "health": 50,
+      "damage": 12,
+      "cooldown_base": 5.2,
+      "cooldown_variance": 0.3,
+      "gold_reward": 17
+    },
+    {
+      "id": "enemy_big_bat",
+      "kind": "enemy",
+      "name": "大蝙蝠",
+      "name_en": "Big Bat",
+      "type": "normal",
+      "act": 1,
+      "health": 60,
+      "damage": 3,
+      "cooldown_base": 4.0,
+      "cooldown_variance": 0.3,
+      "gold_reward": 29
+    },
+    {
+      "id": "wave_1_slime_lord",
+      "kind": "wave",
+      "order": 1,
+      "name": "史莱姆王",
+      "name_en": "Slime Lord",
+      "enemies": [
+        { "enemy_id": "enemy_slime_lord", "count": 1 }
+      ]
+    },
+    {
+      "id": "wave_2_skeleton_duo",
+      "kind": "wave",
+      "order": 2,
+      "name": "骷髅士兵",
+      "name_en": "Skeleton Duo",
+      "enemies": [
+        { "enemy_id": "enemy_skeleton_soldier", "count": 1 },
+        { "enemy_id": "enemy_skeleton", "count": 1 }
+      ]
+    },
+    {
+      "id": "wave_3_big_bat_swarm",
+      "kind": "wave",
+      "order": 3,
+      "name": "大蝙蝠群",
+      "name_en": "Big Bat Swarm",
+      "enemies": [
+        { "enemy_id": "enemy_big_bat", "count": 8 }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,99 @@
+[gd_scene load_steps=5 format=3 uid="uid://bvn2k3x8qaq1l"]
+
+[ext_resource type="Script" uid="uid://ch6diq1no5cfs" path="res://UI/PauseMenu.gd" id="1_k8m3n"]
+[ext_resource type="FontFile" uid="uid://ddo7ybrfl5d2s" path="res://fonts/FUSION-PIXEL-12PX-MONOSPACED-ZH_HANS.OTF" id="2_font"]
+[ext_resource type="Theme" path="res://UI/game_theme.tres" id="3_theme"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
+bg_color = Color(0.14, 0.12, 0.2, 0.95)
+border_color = Color(0.5, 0.7, 0.9, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+content_margin_left = 20.0
+content_margin_right = 20.0
+content_margin_top = 20.0
+content_margin_bottom = 20.0
+
+[node name="PauseMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("3_theme")
+script = ExtResource("1_k8m3n")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.7)
+
+[node name="Panel" type="Panel" parent="."]
+modulate = Color(1, 1, 1, 0.95)
+layout_mode = 1
+anchors_preset = 8
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -180.0
+offset_top = -160.0
+offset_right = 180.0
+offset_bottom = 160.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBox" type="VBoxContainer" parent="Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 20.0
+offset_top = 20.0
+offset_right = -20.0
+offset_bottom = -20.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TitleLabel" type="Label" parent="Panel/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.9, 0.7, 1)
+theme_override_font_sizes/font_size = 28
+text = "UI_TITLE_GAME_PAUSED"
+horizontal_alignment = 1
+
+[node name="Separator1" type="HSeparator" parent="Panel/VBox"]
+layout_mode = 2
+
+[node name="ResumeButton" type="Button" parent="Panel/VBox"]
+custom_minimum_size = Vector2(180, 40)
+layout_mode = 2
+text = "UI_PAUSEMENU_RESUME"
+
+[node name="RestartButton" type="Button" parent="Panel/VBox"]
+custom_minimum_size = Vector2(180, 40)
+layout_mode = 2
+text = "UI_COMMON_RESTART"
+
+[node name="EndGameButton" type="Button" parent="Panel/VBox"]
+custom_minimum_size = Vector2(180, 40)
+layout_mode = 2
+text = "UI_PAUSEMENU_END_GAME"
+
+[node name="OptionsButton" type="Button" parent="Panel/VBox"]
+custom_minimum_size = Vector2(180, 40)
+layout_mode = 2
+text = "UI_TITLE_OPTIONS"
+
+[node name="MenuButton" type="Button" parent="Panel/VBox"]
+custom_minimum_size = Vector2(180, 40)
+layout_mode = 2
+text = "UI_COMMON_MAIN_MENU"

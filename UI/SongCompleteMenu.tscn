@@ -1,0 +1,113 @@
+[gd_scene load_steps=4 format=3 uid="uid://qyoyrkii2uhp"]
+
+[ext_resource type="Script" uid="uid://b3btf443wcrkg" path="res://UI/SongCompleteMenu.gd" id="1_script"]
+[ext_resource type="Theme" path="res://UI/game_theme.tres" id="2_theme"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
+bg_color = Color(0.18, 0.16, 0.25, 0.95)
+border_color = Color(0.2, 0.9, 0.4, 1)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+corner_radius_left_top = 10
+corner_radius_right_top = 10
+corner_radius_left_bottom = 10
+corner_radius_right_bottom = 10
+content_margin_left = 20.0
+content_margin_top = 10.0
+content_margin_right = 20.0
+content_margin_bottom = 10.0
+
+[node name="SongCompleteMenu" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+theme = ExtResource("2_theme")
+script = ExtResource("1_script")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 2.0
+offset_top = 10.0
+offset_right = 2.0
+offset_bottom = 10.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+color = Color(0, 0, 0, 0.7)
+
+[node name="Panel" type="Panel" parent="."]
+modulate = Color(1, 1, 1, 0.95)
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.275
+anchor_top = 0.182
+anchor_right = 0.725
+anchor_bottom = 0.742
+offset_top = -0.200005
+offset_bottom = -0.200012
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
+
+[node name="VBox" type="VBoxContainer" parent="Panel"]
+layout_mode = 1
+anchors_preset = -1
+anchor_top = 0.035
+anchor_right = 1.0
+anchor_bottom = 0.92
+offset_left = 20.0
+offset_top = 16.75
+offset_right = -20.0
+offset_bottom = -19.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="TitleLabel" type="Label" parent="Panel/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.2, 0.9, 0.4, 1)
+theme_override_font_sizes/font_size = 24
+text = "UI_SONGCOMPLETEMENU_SONG_COMPLETE"
+horizontal_alignment = 1
+vertical_alignment = 2
+
+[node name="Separator1" type="HSeparator" parent="Panel/VBox"]
+layout_mode = 2
+
+[node name="ScoreLabel" type="Label" parent="Panel/VBox"]
+layout_mode = 2
+theme_override_font_sizes/font_size = 18
+text = "UI_SONGCOMPLETE_SCORE_INIT"
+horizontal_alignment = 1
+
+[node name="NewRecordLabel" type="Label" parent="Panel/VBox"]
+visible = false
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.9, 0.3, 1)
+horizontal_alignment = 1
+
+[node name="Separator2" type="HSeparator" parent="Panel/VBox"]
+layout_mode = 2
+
+[node name="RestartButton" type="Button" parent="Panel/VBox"]
+layout_mode = 2
+custom_minimum_size = Vector2(180, 40)
+text = "UI_COMMON_RESTART"
+
+[node name="SelectSongButton" type="Button" parent="Panel/VBox"]
+layout_mode = 2
+custom_minimum_size = Vector2(180, 40)
+text = "UI_TITLE_SELECT_SONG"
+
+[node name="MenuButton" type="Button" parent="Panel/VBox"]
+layout_mode = 2
+custom_minimum_size = Vector2(180, 40)
+text = "UI_COMMON_MAIN_MENU"

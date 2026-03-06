@@ -1,0 +1,159 @@
+[gd_scene format=3 uid="uid://4f8cuwt7cs21"]
+
+[ext_resource type="Script" uid="uid://cycgrsutk0pqe" path="res://UI/RoguelikeMap.gd" id="1"]
+[ext_resource type="FontFile" uid="uid://ddo7ybrfl5d2s" path="res://fonts/FUSION-PIXEL-12PX-MONOSPACED-ZH_HANS.OTF" id="2_font"]
+[ext_resource type="PackedScene" uid="uid://ot4cfif1hja2" path="res://UI/RogueDefeatScreen.tscn" id="3_defeat"]
+[ext_resource type="PackedScene" path="res://UI/RogueVictoryScreen.tscn" id="4_victory"]
+[ext_resource type="PackedScene" path="res://UI/RogueRestScreen.tscn" id="5_rest"]
+
+[sub_resource type="StyleBoxFlat" id="status_panel_style"]
+bg_color = Color(0.12, 0.1, 0.18, 0.95)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.4, 0.7, 0.9, 1)
+
+[sub_resource type="StyleBoxFlat" id="hp_bar_bg"]
+bg_color = Color(0.25, 0.08, 0.08, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.5, 0.5, 0.6, 0.8)
+
+[sub_resource type="StyleBoxFlat" id="hp_bar_fill"]
+bg_color = Color(0.9, 0.3, 0.3, 1)
+
+[node name="RoguelikeMap" type="Control" unique_id=790653290]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1")
+
+[node name="MapTitle" type="Label" parent="." unique_id=1724504578]
+layout_mode = 0
+offset_left = 320.0
+offset_top = 30.0
+offset_right = 480.0
+offset_bottom = 60.0
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 28
+text = "UI_ROGUELIKEMAP_ADVENTURE_MAP"
+horizontal_alignment = 1
+
+[node name="PlayerStatusPanel" type="Panel" parent="." unique_id=1389110654]
+layout_mode = 0
+offset_left = 20.0
+offset_top = 85.0
+offset_right = 230.0
+offset_bottom = 215.0
+theme_override_styles/panel = SubResource("status_panel_style")
+
+[node name="StatusTitle" type="Label" parent="PlayerStatusPanel" unique_id=79997753]
+layout_mode = 0
+offset_left = 12.0
+offset_top = 5.0
+offset_right = 198.0
+offset_bottom = 25.0
+theme_override_colors/font_color = Color(0.95, 0.9, 0.7, 1)
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 14
+text = "UI_ROGUELIKEMAP_PLAYER_STATUS"
+
+[node name="HPBar" type="ProgressBar" parent="PlayerStatusPanel" unique_id=1287846139]
+layout_mode = 0
+offset_left = 12.0
+offset_top = 32.0
+offset_right = 198.0
+offset_bottom = 52.0
+theme_override_styles/background = SubResource("hp_bar_bg")
+theme_override_styles/fill = SubResource("hp_bar_fill")
+value = 100.0
+show_percentage = false
+
+[node name="HPLabel" type="Label" parent="PlayerStatusPanel" unique_id=1302005391]
+layout_mode = 0
+offset_left = 18.0
+offset_top = 34.0
+offset_right = 198.0
+offset_bottom = 52.0
+theme_override_colors/font_color = Color(0.95, 0.95, 0.98, 1)
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 12
+text = "UI_ROGUELIKEMAP_HP_300_OR_300"
+
+[node name="EquipLabel" type="Label" parent="PlayerStatusPanel" unique_id=2101694061]
+layout_mode = 0
+offset_left = 12.0
+offset_top = 60.0
+offset_right = 198.0
+offset_bottom = 80.0
+theme_override_colors/font_color = Color(0.9, 0.7, 0.3, 1)
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 14
+text = "UI_ROGUELIKEMAP_RELICS_0"
+
+[node name="LinesLabel" type="Label" parent="PlayerStatusPanel" unique_id=688203643]
+layout_mode = 0
+offset_left = 12.0
+offset_top = 82.0
+offset_right = 198.0
+offset_bottom = 98.0
+theme_override_colors/font_color = Color(0.55, 0.55, 0.6, 1)
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 12
+text = "UI_ROGUELIKEMAP_LINES_0"
+
+[node name="EquipHintLabel" type="Label" parent="PlayerStatusPanel" unique_id=543201137]
+layout_mode = 0
+offset_left = 12.0
+offset_top = 100.0
+offset_right = 198.0
+offset_bottom = 118.0
+theme_override_colors/font_color = Color(0.6, 0.8, 1, 0.8)
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 12
+text = "UI_ROGUELIKEMAP_E_VIEW_EQUIP"
+
+[node name="HintLabel" type="Label" parent="." unique_id=323689273]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.5
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -200.0
+offset_top = -50.0
+offset_right = 200.0
+theme_override_colors/font_color = Color(0.6, 0.6, 0.6, 1)
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 12
+text = "UI_HINT_ENTER_NEXT_NODE_ESC_PAUSE"
+horizontal_alignment = 1
+
+[node name="CreditLabel" type="Label" parent="." unique_id=1463977432]
+layout_mode = 1
+anchors_preset = -1
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -210.0
+offset_top = -20.0
+offset_right = -10.0
+theme_override_colors/font_color = Color(0.3, 0.3, 0.35, 1)
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 10
+text = "UI_ROGUELIKEMAP_ASSETS_MOTA_JS_BSD_3_CLAUSE"
+horizontal_alignment = 2
+
+[node name="DefeatScreen" parent="." unique_id=1629624796 instance=ExtResource("3_defeat")]
+layout_mode = 1
+
+[node name="VictoryScreen" parent="." unique_id=1209563651 instance=ExtResource("4_victory")]
+layout_mode = 1
+
+[node name="RestScreen" parent="." unique_id=1094101952 instance=ExtResource("5_rest")]
+layout_mode = 1

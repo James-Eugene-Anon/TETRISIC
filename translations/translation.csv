@@ -1,0 +1,341 @@
+key,en,zh
+LOG_COMBAT_BAT_MERGE,[Bat Swarm] %d bats merged into Vampire! (missing %d -%.0f%%) HP:%d ATK:%d DEF:%d,[大蝙蝠群] %d只大蝙蝠合体为吸血鬼！(缺%d只，-%.0f%%) HP:%d ATK:%d DEF:%d
+LOG_COMBAT_DAMAGE_DEALT,Dealt %d damage to %s!,造成 %d 点伤害：%s！
+LOG_COMBAT_DEFEAT,Battle defeated!,战斗失败！
+LOG_COMBAT_ENEMY_ATTACK,%s attacks! Deals %d damage,%s 攻击！造成 %d 点伤害
+LOG_COMBAT_ENEMY_DEFEATED,%s defeated!,%s 被击败！
+LOG_COMBAT_ENEMY_DEFEND,%s defends! Armor +%d,%s 防御！获得护甲 +%d
+LOG_COMBAT_ENEMY_MERGE_CHARGE,%s is charging merge...,%s 正在合体蓄势...
+LOG_COMBAT_EQUIP_SYNC,[Equip Sync] base=%d | sword=+%d | faulty=+%d => atk=%d,[装备同步] base=%d，sword=+%d，faulty=+%d => atk=%d
+LOG_COMBAT_GOLD_GAIN,[Gold] Defeated %s gained %d gold! Total: %d,[金币] 击败 %s 获得 %d 金币！总计: %d
+LOG_COMBAT_MYSTERY_TRIGGER,[Mystery] Rescue triggered! Player near death in vampire fight,[神秘人] 救援触发！吸血鬼战斗中玩家濒死
+LOG_COMBAT_MYSTERY_VAMP_HEAL,[Mystery] Vampire defeated - player HP restored to: %d,[神秘人] 吸血鬼已被消灭，玩家HP恢复至: %d
+LOG_COMBAT_OVERFLOW_DAMAGE,Block overflow! Took %d damage penalty,方块溢出！受到 %d 点惩罚伤害
+LOG_COMBAT_RELIC_GAIN,Relic obtained: %d,获得遗物: %d
+LOG_COMBAT_RELIC_SKIP,Relic skipped,放弃遗物
+LOG_COMBAT_SHIELD_ABSORB,%s armor absorbed %d damage,%s 的护甲吸收 %d 点伤害
+LOG_COMBAT_SHIELD_ABSORB_SIMPLE,Armor absorbed %d damage,护甲吸收 %d 点伤害
+LOG_COMBAT_SHIELD_GAIN,Gained %d armor! (%d lines x %d def/line),获得 %d 点护甲！（%d行 × %d防御/行）
+LOG_COMBAT_SLIME_MERGED,Green slimes merged into Slime King!,绿色史莱姆合体成了史莱姆王！
+LOG_COMBAT_SLIME_MERGE_CANCEL,[Slime] Merge conditions not met - switch to attack intent,[史莱姆] 合体条件不满足，改为攻击意图
+LOG_COMBAT_SLIME_SPLIT,[Slime King] Split into 2 green + 1 red! HP each: %d,[史莱姆王] 分裂为2绿+1红史莱姆！每个HP: %d
+LOG_COMBAT_VICTORY,Battle victory!,战斗胜利！
+LOG_IMPORT_CREATE_FAIL,[Import] Cannot create destination file: %s,[导入] 无法创建目标文件: %s
+LOG_IMPORT_FAIL_MUSIC,[Import] Failed: music=%s,[导入] 失败: 音乐=%s
+LOG_IMPORT_OPEN_FAIL,[Import] Cannot open source file: %s,[导入] 无法打开源文件: %s
+LOG_IMPORT_SUCCESS,[Import] Imported: %s,[导入] 成功导入: %s
+LOG_MP3_ID3_SIZE,[MP3] ID3v2.%d.%d tag size: %d,[MP3解析] ID3v2.%d.%d 标签大小: %d
+LOG_MP3_METADATA,[MP3] Parsed metadata: %s,[MP3解析] 读取到元数据: %s
+LOG_MP3_OPEN_FAIL,[MP3] Failed to open file: %s,[MP3解析] 无法打开文件: %s
+LOG_ROGUE_BATTLE_SCENE_MISSING,Battle scene not found - skipping combat,战斗场景未找到，跳过战斗
+LOG_ROGUE_BGM_FALLBACK,[Rogue] Rogue BGM not found - using default,[Rogue] Rogue BGM未找到，使用默认BGM
+LOG_ROGUE_BGM_LOADED,[Rogue] Background music loaded and playing,[Rogue] 背景音乐已加载并播放
+LOG_ROGUE_BGM_PLAYED,[Rogue] Rogue BGM started,[Rogue] Rogue专属BGM已播放
+LOG_ROGUE_BGM_STOPPED,[Rogue] Background music stopped,[Rogue] 背景音乐已停止
+LOG_ROGUE_EQUIP_AUTO_PLACED,[Equip] Auto placed: %s (EquipmentType=%d),[装备] 已自动放置: %s (EquipmentType=%d)
+LOG_ROGUE_EQUIP_CHANGED,[Rogue] Equipment changed: %s,[Rogue] 装备变更: %s
+LOG_ROGUE_EQUIP_GRID_FULL,[Equip] Grid full - %s added to bag (press E to manage),[装备] 网格已满，%s 已加入背包（按E手动管理）
+LOG_ROGUE_EQUIP_ID_EMPTY,[Warn] Equip ID empty or tangram_equipment not ready: relic_type=%d,[警告] 装备ID为空或tangram_equipment未初始化: relic_type=%d
+LOG_ROGUE_REST_HEAL,Rest healed HP: %d/%d,休息回满 HP: %d/%d
+LOG_ROGUE_SHOP_ATK,[Shop] ATK +%d,[商店] 攻击力 +%d
+LOG_ROGUE_SHOP_DEF,[Shop] DEF +%d,[商店] 防御力 +%d
+LOG_ROGUE_SHOP_EQUIP_BUY,[Shop] Bought equipment: %s,[商店] 购买装备: %s
+LOG_ROGUE_SHOP_HP_BUY,[Shop Buy] HP restore (paid; buy_count=%d),[商店购买] HP回复（非免费，buy_count=%d）
+LOG_ROGUE_SHOP_HP_FREE_AVAILABLE,[Shop Init] Free HP restore available this shop,[商店初始化] 本次商店首次HP回复免费
+LOG_ROGUE_SHOP_HP_FREE_USED,[Shop Buy] Used free HP restore this shop,[商店购买] 使用本次商店首次免费HP回复
+LOG_ROGUE_SHOP_HP_RESTORE,[Shop] HP restore +%d -> %d/%d,[商店] 回复HP +%d → %d/%d
+LOG_ROGUE_SHOP_MAX_HP,[Shop] Max HP +%d -> %d/%d,[商店] 最大HP +%d → %d/%d
+LOG_ROGUE_SKIP_EQUIP,Skip equipment,放弃装备
+LOG_SONG_SCAN_FOUND,Song scan: found %s -> %s,[歌曲扫描] 找到: %s -> %s
+LOG_SONG_SCAN_NO_LRC,Song scan: no LRC for %s (added without lyrics),[歌曲扫描] 未找到LRC: %s (已添加无歌词版本)
+LOG_SONG_SCAN_TOTAL,Song scan: found %d songs,[歌曲扫描] 共找到 %d 首歌曲
+LOG_SONG_SCORE_DELETE,Deleted score records for '%s' (%d items),已删除歌曲 '%s' 的最高分记录（%d 项）
+UI_COMBATHUD_1EQATK_2EQDEF,1=ATK  2=DEF,按 1=攻击  2=防御
+UI_COMBATHUD_20_0S_LEFT,20.0s left,剩余 20.0s
+UI_COMBATHUD_ASSETS_MOTA_JS,Assets: mota-js,素材: mota-js
+UI_COMBATHUD_ATTACK_MODE,Attack Mode,攻击模式
+UI_COMBATHUD_COMBO,%d Combo!,%d 连击！
+UI_COMBATHUD_CONTROLS,Controls\n─────────\n←→/AD  Move\n↑/W    Rotate\n↓/S    Soft Drop\nSpace  Hard Drop\n─────────\n1      Attack\n2      Defend\nT      Freeze\nESC    Pause,操作指南\n─────────\n←→/AD  移动\n↑/W    旋转\n↓/S    软降\n空格   硬降\n─────────\n1      攻击\n2      防御\nT      时停\nESC    暂停
+UI_COMBATHUD_DEFEND,Defend Mode,防御模式
+UI_COMBATHUD_MODE_HINT,1=ATK  2=DEF,按 1=攻击  2=防御
+UI_COMBATHUD_TIMER,%.1fs left,剩余 %.1fs
+UI_COMBATHUD_TURN,Turn %d,第 %d 回合
+UI_COMBATHUD_TURN_1,Turn 1,第 1 回合
+UI_COMBAT_CONTINUE_HINT,Enter to continue,Enter 继续
+UI_COMBAT_COOLDOWN_DONE,DONE,已行动
+UI_COMBAT_INTENT_MERGE,MERGE,合体
+UI_COMBAT_REWARD_CONTINUE,Reward: Continue Adventure,奖励：继续冒险
+UI_COMBAT_RIFT_HINT,Rift: Press C,裂隙仪: 按C
+UI_COMBAT_VICTORY_SUMMARY,Lines: %d\nScore: %d\nGold: +%d,消除行数: %d\n本场分数: %d\n获得金币: +%d
+UI_COMMON_BACK,Back,返回
+UI_COMMON_CONFIRM_DELETE,Confirm Delete,确认删除
+UI_COMMON_CONTINUE,Continue,继续
+UI_COMMON_IMPORT_LOCAL,Import Local Song,导入本地歌曲
+UI_COMMON_KEY_E_BRACKET,[E],[E]
+UI_COMMON_MAIN_MENU,Main Menu,主菜单
+UI_COMMON_REFRESH_LIST,Refresh Song List,刷新歌曲列表
+UI_COMMON_RESTART,Restart,重新开始
+UI_COMMON_SEARCH_LYRIC,Search Online Lyrics,搜索在线歌词
+UI_COMMON_SELECT,Select,选择
+UI_COMMON_START_GAME,Start Game,开始游戏
+UI_COMMON_VIEW_EQUIP,View Equip,查看装备
+UI_DIFFICULTYSELECTION_DIFFICULTY_DESCRIPTION,Difficulty Description,难度描述
+UI_DIFFICULTYSELECTION_DIFFICULTY_NAME,Difficulty Name,难度名称
+UI_DIFFICULTYSELECTION_HIGH_SCORE_0_LINES_0,High Score: 0 (Lines: 0),最高分: 0 (消除行数: 0)
+UI_DIFFICULTYSELECTION_SELECT_DIFFICULTY,Select Difficulty,选择难度
+UI_DIFFICULTY_CRUEL,Cruel,残酷
+UI_DIFFICULTY_CRUEL_DESC,Initial speed 120%\nSpeed +1% per 200 pts (max 250%)\n4% 3-cell 66% 4-cell pieces\nObstacle row spawns per 2000 pts,初始速度120%\n每200分速度+1%（最高250%）\n4%为3格、66%为4格方块\n每2000分底部生成障碍行
+UI_DIFFICULTY_EASY,Easy,简单
+UI_DIFFICULTY_EASY_DESC,7 classic pieces only\nFixed fall speed\nPerfect for beginners,只有7种经典方块\n固定下落速度\n适合新手练习
+UI_DIFFICULTY_HARD,Hard,困难
+UI_DIFFICULTY_HARD_DESC,All piece types\n2% 3-cell 73% 4-cell pieces\nSpeed +0.5% per 100 pts\nMax speed 200%,所有方块类型\n2%为3格、73%为4格方块\n每100分速度+0.5%\n最高速度200%
+UI_DIFFICULTY_HIGH_SCORE,High Score: %d (Lines: %d),最高分: %d (消除行数: %d)
+UI_DIFFICULTY_NORMAL,Normal,普通
+UI_DIFFICULTY_NORMAL_DESC,All piece types\n92% are 4-cell pieces\nSpeed +0.3% per 250 pts\nMax speed 133.3%,所有方块类型\n92%为4格方块\n每250分速度+0.3%\n最高速度133.3%
+UI_DIFFICULTY_TITLE,Select Difficulty,选择难度
+UI_GAMEHUD_CONTROLS_BLOCK,Controls:\n← → Move\n↑ Rotate\n↓ Soft Drop\nEnter Hard Drop\nEsc Pause,控制:\n← → 移动\n↑ 旋转\n↓ 快速下降\nEnter 硬降落\nEsc 暂停游戏
+UI_GAMEHUD_LINES_0,Lines: 0,消除行数: 0
+UI_GAMEHUD_NEXT,Next:,下一个:
+UI_GAMEHUD_SCORE_0,Score: 0,分数: 0
+UI_GAMEHUD_SCORING_BLOCK,Scoring:\n1 line = 100\n2 lines = 300\n3 lines = 500\n4 lines = 800,计分规则:\n1行 = 100分\n2行 = 300分\n3行 = 500分\n4行 = 800分
+UI_GAMEOVERMENU_GAME_OVER,Game Over,游戏结束
+UI_GAMEOVER_LINES,Lines: %d,消除行数: %d
+UI_GAMEOVER_MENU,←  Main Menu,←  返回主菜单
+UI_GAMEOVER_RESTART,↺  Restart,↺  重新开始
+UI_GAMEOVER_SCORE,Score: %d,得分: %d
+UI_GAMEOVER_SCORE_INIT,Score: 0\nLines: 0,分数: 0\n消除行数: 0
+UI_GAMEOVER_TITLE,Game Over,游戏结束
+UI_HINT_ENTER_NEXT_NODE_ESC_PAUSE,Enter Next Node | ESC Pause,Enter 进入下一节点 | ESC 暂停
+UI_HINT_PRESS_ENTER_FOR_MENU,Press Enter for Menu,按 Enter 返回主菜单
+UI_HINT_PRESS_ENTER_TO_REST,Press Enter to Rest,按 Enter 休息并继续
+UI_MAINMENU_ALPHA_DEV_BUILD,alpha dev build,alpha开发版本
+UI_MAINMENU_CLASSIC_MODE,Classic Mode,经典模式
+UI_MAINMENU_CONTROLS_MOVE_ROTATE_SOFT_DROP_ENTER_HARD_DROP_ESC_PAUSE,Controls: ← → Move  ↑ Rotate  ↓ Soft Drop  Enter Hard Drop  ESC Pause,游戏控制: ← → 移动  ↑ 旋转  ↓ 软降  Enter 硬降落  ESC 暂停
+UI_MAINMENU_EQUIPMENT,Equipment,装备
+UI_MAINMENU_QUIT_GAME,Quit Game,退出游戏
+UI_MAINMENU_ROGUELIKE_DEMO,Roguelike Demo,Roguelike演示
+UI_MAINMENU_SONG_MODE,Song Mode,歌曲模式
+UI_MAINMENU_TETRIS,Tetris,俄罗斯方块
+UI_MAINMENU_VERSION_ALPHA_0_1_0,Version Alpha 0.1.0,版本 Alpha 0.1.0
+UI_MAIN_EQUIPMENT,★  Equipment,★  装备系统
+UI_MAIN_INSTRUCTIONS,Controls: ← → Move | ↑ Rotate | ↓ Soft Drop | Space Hard Drop | ESC Pause,控制说明: ← → 移动 | ↑ 旋转 | ↓ 软降 | 空格 硬降 | ESC 暂停
+UI_MAIN_LYRIC_MODE,♪  Song Mode,♪  歌曲模式
+UI_MAIN_MENU_ALPHA_BUILD,alpha dev build,alpha开发版本
+UI_MAIN_MENU_WIP_HINT,Roguelike demo is in development...,Roguelike演示场景正在开发中...
+UI_MAIN_OPTIONS,⚙  Options,⚙  选项设置
+UI_MAIN_QUIT,✕  Quit Game,✕  退出游戏
+UI_MAIN_ROGUELIKE_DEMO,⚔  Roguelike Demo,⚔  Roguelike演示
+UI_MAIN_ROGUE_NOT_FOUND,Roguelike demo scene not found,Roguelike演示场景不存在
+UI_MAIN_START,▶  Classic Mode,▶  经典模式
+UI_MAIN_TITLE,Tetrisic,俄罗斯方块
+UI_OPTIONSMENU_AUTHOR_JAMES_EUGENE_ANON,Author: James-Eugene-Anon,作者: James-Eugene-Anon
+UI_OPTIONSMENU_BG_IN_BACK_NO,BG in Back: No,后台音乐: 否
+UI_OPTIONSMENU_DISCLAIMER,Disclaimer,免责声明
+UI_OPTIONSMENU_LANGUAGE_CHINESE,Language: Chinese,语言: 中文
+UI_OPTIONSMENU_LYRIC_CANDIDATE_CHECKS,Lyric Candidate Checks:,歌词候选检查次数:
+UI_OPTIONSMENU_MUSIC_VOLUME_80,Music Volume: 80%,音乐音量: 80%
+UI_OPTIONSMENU_NETWORK_OFFLINE,Network: Offline,联网模式: 离线
+UI_OPTIONSMENU_PLAY_BGM_ON,Play BGM: On,播放BGM: 开启
+UI_OPTIONSMENU_RESOLUTION_SMALL_800X600,Resolution: Small (800x600),分辨率: 小 (800x600)
+UI_OPTIONSMENU_SFX_VOLUME_80,SFX Volume: 80%,音效音量: 80%
+UI_OPTIONSMENU_SPECIAL_THANKS,Special Thanks,特别感谢
+UI_OPTIONSMENU_VERSION_ALPHA_0_1_0,Version Alpha 0.1.0,版本 Alpha 0.1.0
+UI_OPTIONSMENU_WINDOW_MODE_WINDOWED,Window Mode: Windowed,窗口模式: 窗口化
+UI_OPTIONS_BGM,Play BGM:,播放BGM:
+UI_OPTIONS_BGM_DISABLED,(Song Mode N/A),（歌曲模式不可用）
+UI_OPTIONS_BGM_FOCUS,BG in Back:,后台音乐:
+UI_OPTIONS_BGM_FOCUS_OFF,No,否
+UI_OPTIONS_BGM_FOCUS_ON,Yes,是
+UI_OPTIONS_BGM_OFF,Off,关闭
+UI_OPTIONS_BGM_ON,On,开启
+UI_OPTIONS_CONTROLS_TITLE,Controls,操作说明
+UI_OPTIONS_DISCLAIMER_BODY,This game is for entertainment and learning only.\n\nAll music and lyric files in Song Mode belong to their respective authors.,本游戏仅供娱乐和学习使用。\n\n歌曲模式中的音乐和歌词文件版权归各自原作者所有。
+UI_OPTIONS_DISCLAIMER_TITLE,Disclaimer,免责声明
+UI_OPTIONS_FULLSCREEN,Window Mode:,窗口模式:
+UI_OPTIONS_FULLSCREEN_OFF,Windowed,窗口化
+UI_OPTIONS_FULLSCREEN_ON,Fullscreen,全屏
+UI_OPTIONS_LANGUAGE_EN,Language: English,语言: English
+UI_OPTIONS_LANGUAGE_ZH,Language: 中文,语言: 中文
+UI_OPTIONS_LYRIC_RETRY,Lyric Candidate Checks:,歌词候选检查次数:
+UI_OPTIONS_MUSIC_VOLUME,Music Volume:,音乐音量:
+UI_OPTIONS_ONLINE_MODE,Network:,联网模式:
+UI_OPTIONS_ONLINE_OFF,Offline,离线
+UI_OPTIONS_ONLINE_ON,Online,在线
+UI_OPTIONS_RESOLUTION,Resolution:,分辨率:
+UI_OPTIONS_WINDOW_MODE_WINDOWED,Windowed,窗口化
+UI_OPTIONS_WINDOW_MODE_FULLSCREEN,Fullscreen,全屏
+UI_RESOLUTION_FMT,Resolution: %dx%d,分辨率：%dx%d
+UI_RESOLUTION_CUSTOM_FMT,Custom resolution: %dx%d,自定义分辨率：%dx%d
+UI_OPTIONS_SFX_VOLUME,SFX Volume:,音效音量:
+UI_OPTIONS_TAB_ABOUT,About,关于
+UI_OPTIONS_TAB_SETTINGS,Settings,设置
+UI_OPTIONS_THANKS_BODY,Thanks to the Godot Engine for an excellent game engine.\nThanks to all open-source contributors.\nThanks to players for their support and feedback.\n\nSpecial thanks:\n- Original authors of music and lyrics\n- Open source projects:\n 163MusicLyrics\n dialogic\n Gut\n mota-js,感谢 Godot Engine 提供的优秀游戏引擎\n感谢所有开源社区的贡献者\n感谢玩家们的支持与反馈\n\n特别鸣谢：\n- 音乐和歌词的原作者们\n- 开源项目:\n 163MusicLyrics\n dialogic\n Gut\n mota-js
+UI_OPTIONS_THANKS_TITLE,Special Thanks,特别感谢
+UI_PAUSEMENU_END_GAME,End Game,结束游戏
+UI_PAUSEMENU_RESUME,Resume,恢复游戏
+UI_PAUSE_END_GAME,■  End Game,■  结束游戏
+UI_PAUSE_MENU,←  Main Menu,←  返回主菜单
+UI_PAUSE_OPTIONS,⚙  Options,⚙  选项设置
+UI_PAUSE_RESTART,↺  Restart,↺  重新开始
+UI_PAUSE_RESUME,▶  Resume,▶  继续游戏
+UI_RELICSELECTIONUI_ATK_PLUS5,ATK +5,攻击力+5
+UI_RELICSELECTIONUI_CLEAR_A_ROW_EVERY_45S,Clear a row every 45s,每45秒可消除指定一整行
+UI_RELICSELECTIONUI_DEF_PLUS5_PER_LINE,DEF +5 per line,每次防御额外+5护甲
+UI_RELICSELECTIONUI_EQUIPMENT_FOUND,Equipment Found!,获得装备！
+UI_RELICSELECTIONUI_IRON_SHIELD,Iron Shield,铁盾
+UI_RELICSELECTIONUI_IRON_SWORD,Iron Sword,铁剑
+UI_RELICSELECTIONUI_RIFT,RIFT,裂隙
+UI_RELICSELECTIONUI_RIFT_METER,Rift Meter,裂隙仪
+UI_RELICSELECTIONUI_SHIELD,SHIELD,盾
+UI_RELICSELECTIONUI_SWORD,SWORD,剑
+UI_RELICSELECTIONUI_TAKE_ESC_SKIP,⏎ Take   ESC Skip,⏎ 获取   ESC 放弃
+UI_RELICSELECTIONUI_UNKNOWN,----------------------------,────────────────────────────
+UI_RELIC_CHOOSE_HINT,◀ ▶ Select   ⏎ Confirm,◀ ▶ 选择   ⏎ 确认
+UI_RELIC_CHOOSE_TITLE,Choose Equipment,选择一个装备
+UI_RELIC_DESC_DOWNCLOCK,Enemy cooldown ×110%\nPlayer damage ×0.9,敌人行为冷却×110%\n玩家伤害×0.9
+UI_RELIC_DESC_FAULTY_AMP,Base ATK/DEF +15%\nSpeed +5%,初始攻防+15%\n但下落速度+5%
+UI_RELIC_DESC_IRON_SHIELD,DEF +5 per line,+5防御力
+UI_RELIC_DESC_IRON_SWORD,ATK +5,攻击力+5
+UI_RELIC_DESC_RIFT_METER,Clear a row\nevery 45s,每45秒可消除\n指定的一整行
+UI_RELIC_FOUND_HINT,⏎ Take   ESC Skip,⏎ 获取   ESC 放弃
+UI_RELIC_FOUND_TITLE,Equipment Found!,获得装备！
+UI_RELIC_NAME_DOWNCLOCK,Downclock,降频软件
+UI_RELIC_NAME_FAULTY_AMP,Faulty Amp,故障增幅器
+UI_RELIC_NAME_IRON_SHIELD,Iron Shield,铁盾
+UI_RELIC_NAME_IRON_SWORD,Iron Sword,铁剑
+UI_RELIC_NAME_RIFT_METER,Rift Meter,裂隙仪
+UI_RELIC_UNKNOWN,Unknown,未知装备
+UI_ROGUEDEFEATSCREEN_ADVENTURE_FAILED,Adventure Failed,冒险失败
+UI_ROGUEDEFEAT_TITLE,Adventure Failed,冒险失败
+UI_ROGUELIKECOMBAT_1FS,%.1fs,%.1fs
+UI_ROGUELIKECOMBAT_ARMOR_NUM,Armor: %d,护甲: %d
+UI_ROGUELIKECOMBAT_ATK_NUM,ATK %d,攻击 %d
+UI_ROGUELIKECOMBAT_ATK_NUM_OR_LINE,ATK: %d/line,攻击: %d/行
+UI_ROGUELIKECOMBAT_ATTACK,attack,攻击
+UI_ROGUELIKECOMBAT_DEF_PLUSNUM,DEF +%d,防御 +%d
+UI_ROGUELIKECOMBAT_GOLD_NUM,Gold: %d,金币: %d
+UI_ROGUELIKECOMBAT_LINES_CLEARED_NUM_NBATTLE_SCORE_NUM_NGOLD_EARNED_PLUSNUM,Lines Cleared: %d\nBattle Score: %d\nGold Earned: +%d,消除行数: %d\n本场分数: %d\n获得金币: +%d
+UI_ROGUELIKECOMBAT_MYSTERY_LINE_1,Not too impressive - are you?,这一届勇者水平也不怎么样嘛~
+UI_ROGUELIKECOMBAT_PLAYER_NAME,Noob Hero,新手勇者
+UI_ROGUELIKECOMBAT_RIFT_1FS,Rift: %.1fs,裂隙仪: %.1fs
+UI_ROGUELIKECOMBAT_UNKNOWN,?,？
+UI_ROGUELIKECOMBAT_UNKNOWN_2,???,？？？
+UI_ROGUELIKEMAP_ADVENTURE_MAP,Adventure Map,冒险地图
+UI_ROGUELIKEMAP_ASSETS_MOTA_JS_BSD_3_CLAUSE,Assets: mota-js (BSD-3-Clause),素材: mota-js (BSD-3-Clause)
+UI_ROGUELIKEMAP_ATK_PLUSNUM,ATK +%d,攻击力 +%d
+UI_ROGUELIKEMAP_DOWNCLOCK,Downclock,降频软件
+UI_ROGUELIKEMAP_ENEMY_FALLBACK,Enemy,敌人
+UI_ROGUELIKEMAP_EQUIPMENT,Relics,装备
+UI_ROGUELIKEMAP_E_VIEW_EQUIP,[E] View Equip,[E] 查看装备
+UI_ROGUELIKEMAP_FAULTY_AMP,Faulty Amp,故障增幅器
+UI_ROGUELIKEMAP_HEAL_HP_PLUSNUM,Heal HP +%d,回复生命 +%d
+UI_ROGUELIKEMAP_HP_300_OR_300,HP: 300/300,生命: 300/300
+UI_ROGUELIKEMAP_HP_NUM_OR_NUM,HP: %d/%d,生命: %d/%d
+UI_ROGUELIKEMAP_ICON_BOSS,B,王
+UI_ROGUELIKEMAP_ICON_COMBAT,F,战
+UI_ROGUELIKEMAP_ICON_END,E,终
+UI_ROGUELIKEMAP_ICON_RELIC,L,备
+UI_ROGUELIKEMAP_ICON_REST,R,篝
+UI_ROGUELIKEMAP_ICON_SHOP,$,商
+UI_ROGUELIKEMAP_ICON_START,S,起
+UI_ROGUELIKEMAP_LINES,Lines,消除
+UI_ROGUELIKEMAP_LINES_0,Lines: 0,消除: 0
+UI_ROGUELIKEMAP_MAP_TITLE,Adventure Map,冒险地图
+UI_ROGUELIKEMAP_MAX_HP_PLUSNUM,Max HP +%d,最大生命 +%d
+UI_ROGUELIKEMAP_NEXT_HINT,Next,下
+UI_ROGUELIKEMAP_NODE_RELIC,Relic,装备
+UI_ROGUELIKEMAP_NODE_REST,Campfire,篝火
+UI_ROGUELIKEMAP_NODE_SHOP,Shop,商店
+UI_ROGUELIKEMAP_NODE_SKELETON,Skeleton Soldier,骷髅士兵
+UI_ROGUELIKEMAP_NODE_SLIME,Slime Lord,史莱姆王
+UI_ROGUELIKEMAP_NODE_START,Start,起点
+UI_ROGUELIKEMAP_NODE_VAMPIRE,Big Bat Swarm,大蝙蝠群
+UI_ROGUELIKEMAP_NODE_VICTORY,Victory,胜利
+UI_ROGUELIKEMAP_PLAYER_STATUS,Player Status,玩家状态
+UI_ROGUELIKEMAP_RELICS_0,Relics: 0,装备: 0
+UI_ROGUELIKEMAP_VAR_NUM,%s: %d,%s: %d
+UI_ROGUELIKEMAP_VAR_NUM_VAR_NUM,%s: %d  %s: %d,%s: %d  %s: %d
+UI_ROGUELIKEMAP_WAVE_FALLBACK,Wave,波次
+UI_ROGUELIKE_MAP_GOLD,Gold,金币
+UI_ROGUERESTSCREEN_CAMPFIRE,Campfire,篝火休息
+UI_ROGUERESTSCREEN_FIRE,Fire,火
+UI_ROGUERESTSCREEN_HEAL_TO_FULL_HP_300_300,Heal to Full HP (300 → 300),完全恢复 HP (300 → 300)
+UI_ROGUEREST_PREVIEW,Heal to Full HP (%d → %d),完全恢复 HP (%d → %d)
+UI_ROGUEREST_TITLE,Campfire,篝火休息
+UI_ROGUESHOPUI_VAR_VAR,%s - %s,%s - %s
+UI_ROGUESHOP_EQUIP_EMPTY,---,---
+UI_ROGUESHOP_EQUIP_HEADER,== Equipment ==,━━ 装备购入 ━━
+UI_ROGUESHOP_FREE,FREE,免费
+UI_ROGUESHOP_GOLD,Gold,金币
+UI_ROGUESHOP_HINT,↑↓←→ Select Enter Buy | E Equip | Esc Leave,↑↓←→选择 Enter购买 | E装备 | ESC离开
+UI_ROGUESHOP_POTION,Potion,药水
+UI_ROGUESHOP_POTION_UNAVAILABLE,Supplier Missing,供应商失踪
+UI_ROGUESHOP_SOLD,SOLD,已售罄
+UI_ROGUESHOP_STAT_HEADER,== Stat Upgrades ==,━━ 属性升级 ━━
+UI_ROGUESHOP_TITLE,SHOP,商  店
+UI_ROGUEVICTORYSCREEN_ADVENTURE_CLEARED,Adventure Cleared,冒险胜利
+UI_ROGUEVICTORYSCREEN_ADVENTURE_STATS,------- Adventure Stats -------,─────── 冒险统计 ───────
+UI_ROGUEVICTORYSCREEN_FINAL_SCORE,----- Final Score -----,───── 结算分数 ─────
+UI_ROGUEVICTORYSCREEN_GOLD_0,Gold: 0,收集金币: 0
+UI_ROGUEVICTORYSCREEN_RELICS_0,Relics: 0,收集装备: 0
+UI_ROGUEVICTORYSCREEN_TOTAL_0,Total: 0,总分: 0
+UI_ROGUEVICTORYSCREEN_TOTAL_LINES_0,Total Lines: 0,总消除行数: 0
+UI_ROGUEVICTORYSCREEN_VAR_NVAR_NVAR_NVAR,%s\n%s\n%s\n%s,%s\n%s\n%s\n%s
+UI_ROGUEVICTORY_GOLD,Gold: %d,收集金币: %d
+UI_ROGUEVICTORY_LINES,Total Lines: %d,总消除行数: %d
+UI_ROGUEVICTORY_RELICS,Relics: %d,收集装备: %d
+UI_ROGUEVICTORY_SCORE_GOLD,Gold: %d × 5 = %d,金币: %d × 5 = %d
+UI_ROGUEVICTORY_SCORE_HEADER,───── Final Score ─────,───── 结算分数 ─────
+UI_ROGUEVICTORY_SCORE_LINES,Lines: %d × 50 = %d,消行: %d × 50 = %d
+UI_ROGUEVICTORY_SCORE_RELICS,Relics: %d × 100 = %d,装备: %d × 100 = %d
+UI_ROGUEVICTORY_SCORE_TOTAL,Total: %d,总分: %d
+UI_ROGUEVICTORY_STATS_HEADER,────── Adventure Stats ──────,─────── 冒险统计 ───────
+UI_ROGUEVICTORY_TITLE_LOSE,Run Ended,冒险结束
+UI_ROGUEVICTORY_TITLE_WIN,Adventure Cleared,冒险胜利
+UI_SONGCOMPLETEMENU_SONG_COMPLETE,Song Complete!,歌曲完成！
+UI_SONGCOMPLETE_HIGH_LINES,High Lines: %d,最高消除: %d
+UI_SONGCOMPLETE_HIGH_SCORE,High Score: %d,最高分: %d
+UI_SONGCOMPLETE_LINES,Lines: %d,消除行数: %d
+UI_SONGCOMPLETE_NEW_RECORD,🎉 New Record!,🎉 新纪录！
+UI_SONGCOMPLETE_SCORE,Score: %d,分数: %d
+UI_SONGCOMPLETE_SCORE_INIT,Score: 0\nLines: 0,分数: 0\n消除行数: 0
+UI_SONGCOMPLETE_TITLE,Song Complete!,歌曲完成！
+UI_SONGCOMPLETE_TITLE_ENDED,Game Over,游戏结束
+UI_SONGSELECTION_ALBUM,Album:,专辑:
+UI_SONGSELECTION_ARE_YOU_SURE_YOU_WANT_TO_DELETE_THIS_SONG,Are you sure you want to delete this song?,确定要删除这首歌曲吗？
+UI_SONGSELECTION_ARTIST,Artist:,艺术家:
+UI_SONGSELECTION_CANCEL,Cancel,取消
+UI_SONGSELECTION_COMPOSER,Composer:,作曲:
+UI_SONGSELECTION_CONFIRM_DELETE_MESSAGE,Are you sure you want to delete this song?,确定要删除这首歌曲吗？
+UI_SONGSELECTION_CONFIRM_DELETE_WARNING,This action cannot be undone.,此操作无法撤销。
+UI_SONGSELECTION_DELETE_SONG,Delete Song,删除歌曲
+UI_SONGSELECTION_FILTER_AUDIO,Audio Files,音频文件
+UI_SONGSELECTION_HIGH_SCORE_FORMAT,%s: %d  %s: %d,%s： %d  %s： %d
+UI_SONGSELECTION_IMPORT_COUNT,Imported %d songs,成功导入 %d 首歌曲
+UI_SONGSELECTION_IMPORT_FAIL,Import failed,导入失败
+UI_SONGSELECTION_IMPORT_FILE,Import File,导入文件
+UI_SONGSELECTION_IMPORT_FOLDER,Import Folder,导入文件夹
+UI_SONGSELECTION_IMPORT_SUCCESS,Imported: %s,导入成功: %s
+UI_SONGSELECTION_LABEL_ALBUM,Album,专辑
+UI_SONGSELECTION_LABEL_ARTIST,Artist,艺术家
+UI_SONGSELECTION_LABEL_COLON_VALUE,%s: %s,%s： %s
+UI_SONGSELECTION_LABEL_COMPOSER,Composer,作曲
+UI_SONGSELECTION_LABEL_HIGH_SCORE,High Score,最高分
+UI_SONGSELECTION_LABEL_LINES,Lines,消除行数
+UI_SONGSELECTION_LABEL_LYRICIST,Lyricist,作词
+UI_SONGSELECTION_LYRICIST,Lyricist:,作词:
+UI_SONGSELECTION_LYRIC_FOUND,Lyrics Found,已找到歌词
+UI_SONGSELECTION_LYRIC_NOT_FOUND,Lyrics Not Found,未找到歌词
+UI_SONGSELECTION_NO_SUPPORTED_AUDIO_FILES_FOUND,No supported audio files found,未找到支持的音频文件
+UI_SONGSELECTION_SEARCHING,Searching...,搜索中...
+UI_SONGSELECTION_SONG_NAME,Song Name,歌曲名称
+UI_SONGSELECTION_START,Start,开始
+UI_SONGSELECTION_THIS_ACTION_CANNOT_BE_UNDONE,This action cannot be undone.,此操作无法撤销。
+UI_SONGSELECTION_TOOL_NOT_CONFIGURED,Tool Not Configured,工具未配置
+UI_SONGSELECTION_UNKNOWN,Unknown,未知
+UI_SONGSELECTION_UNKNOWN_ARTIST,Unknown Artist,未知艺术家
+UI_SONG_SELECTION_SAVE_FAILED,Save failed,保存失败
+UI_TITLE_GAME_PAUSED,Game Paused,游戏暂停
+UI_TITLE_OPTIONS,Options,选项设置
+UI_TITLE_SELECT_SONG,Select Song,选择歌曲
+UI_TITLE_VICTORY,Victory!,战斗胜利！
