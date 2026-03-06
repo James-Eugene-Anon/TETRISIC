@@ -27,7 +27,7 @@ var font: Font
 
 func _ready():
 	# 尝试加载字体
-	font = load("res://fonts/FUSION-PIXEL-12PX-MONOSPACED-ZH_HANS.OTF")
+	font = load(Config.PATHS_FONT_DEFAULT)
 
 func _process(delta):
 	# 更新颜色偏移（平滑过渡）

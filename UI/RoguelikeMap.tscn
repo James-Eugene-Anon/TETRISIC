@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://4f8cuwt7cs21"]
 
-[ext_resource type="Script" uid="uid://cycgrsutk0pqe" path="res://UI/RoguelikeMap.gd" id="1"]
+[ext_resource type="Script" uid="uid://cycgrsutk0pqe" path="res://UI/RoguelikeMap.gd" id="1_script"]
 [ext_resource type="FontFile" uid="uid://ddo7ybrfl5d2s" path="res://fonts/FUSION-PIXEL-12PX-MONOSPACED-ZH_HANS.OTF" id="2_font"]
 [ext_resource type="PackedScene" uid="uid://ot4cfif1hja2" path="res://UI/RogueDefeatScreen.tscn" id="3_defeat"]
 [ext_resource type="PackedScene" path="res://UI/RogueVictoryScreen.tscn" id="4_victory"]
@@ -25,16 +25,35 @@ border_color = Color(0.5, 0.5, 0.6, 0.8)
 [sub_resource type="StyleBoxFlat" id="hp_bar_fill"]
 bg_color = Color(0.9, 0.3, 0.3, 1)
 
-[node name="RoguelikeMap" type="Control" unique_id=790653290]
+[sub_resource type="StyleBoxFlat" id="panel_style"]
+bg_color = Color(0.08, 0.06, 0.14, 0.97)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.9, 0.65, 0.2, 1)
+
+[sub_resource type="StyleBoxFlat" id="sep_style"]
+bg_color = Color(0.85, 0.58, 0.15, 0.7)
+
+[sub_resource type="StyleBoxFlat" id="desc_bg"]
+bg_color = Color(0.05, 0.04, 0.1, 0.6)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.38, 0.26, 0.52, 0.5)
+
+[node name="RoguelikeMap" type="Control"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1")
+script = ExtResource("1_script")
 
-[node name="MapTitle" type="Label" parent="." unique_id=1724504578]
+[node name="MapTitle" type="Label" parent="."]
 layout_mode = 0
 offset_left = 320.0
 offset_top = 30.0
@@ -46,7 +65,7 @@ theme_override_font_sizes/font_size = 28
 text = "UI_ROGUELIKEMAP_ADVENTURE_MAP"
 horizontal_alignment = 1
 
-[node name="PlayerStatusPanel" type="Panel" parent="." unique_id=1389110654]
+[node name="PlayerStatusPanel" type="Panel" parent="."]
 layout_mode = 0
 offset_left = 20.0
 offset_top = 85.0
@@ -54,7 +73,7 @@ offset_right = 230.0
 offset_bottom = 215.0
 theme_override_styles/panel = SubResource("status_panel_style")
 
-[node name="StatusTitle" type="Label" parent="PlayerStatusPanel" unique_id=79997753]
+[node name="StatusTitle" type="Label" parent="PlayerStatusPanel"]
 layout_mode = 0
 offset_left = 12.0
 offset_top = 5.0
@@ -65,7 +84,7 @@ theme_override_fonts/font = ExtResource("2_font")
 theme_override_font_sizes/font_size = 14
 text = "UI_ROGUELIKEMAP_PLAYER_STATUS"
 
-[node name="HPBar" type="ProgressBar" parent="PlayerStatusPanel" unique_id=1287846139]
+[node name="HPBar" type="ProgressBar" parent="PlayerStatusPanel"]
 layout_mode = 0
 offset_left = 12.0
 offset_top = 32.0
@@ -76,7 +95,7 @@ theme_override_styles/fill = SubResource("hp_bar_fill")
 value = 100.0
 show_percentage = false
 
-[node name="HPLabel" type="Label" parent="PlayerStatusPanel" unique_id=1302005391]
+[node name="HPLabel" type="Label" parent="PlayerStatusPanel"]
 layout_mode = 0
 offset_left = 18.0
 offset_top = 34.0
@@ -85,9 +104,9 @@ offset_bottom = 52.0
 theme_override_colors/font_color = Color(0.95, 0.95, 0.98, 1)
 theme_override_fonts/font = ExtResource("2_font")
 theme_override_font_sizes/font_size = 12
-text = "UI_ROGUELIKEMAP_HP_300_OR_300"
+text = "UI_ROGUELIKEMAP_HP_NUM_OR_NUM"
 
-[node name="EquipLabel" type="Label" parent="PlayerStatusPanel" unique_id=2101694061]
+[node name="EquipLabel" type="Label" parent="PlayerStatusPanel"]
 layout_mode = 0
 offset_left = 12.0
 offset_top = 60.0
@@ -96,9 +115,9 @@ offset_bottom = 80.0
 theme_override_colors/font_color = Color(0.9, 0.7, 0.3, 1)
 theme_override_fonts/font = ExtResource("2_font")
 theme_override_font_sizes/font_size = 14
-text = "UI_ROGUELIKEMAP_RELICS_0"
+text = "UI_ROGUELIKEMAP_VAR_NUM"
 
-[node name="LinesLabel" type="Label" parent="PlayerStatusPanel" unique_id=688203643]
+[node name="LinesLabel" type="Label" parent="PlayerStatusPanel"]
 layout_mode = 0
 offset_left = 12.0
 offset_top = 82.0
@@ -109,7 +128,7 @@ theme_override_fonts/font = ExtResource("2_font")
 theme_override_font_sizes/font_size = 12
 text = "UI_ROGUELIKEMAP_LINES_0"
 
-[node name="EquipHintLabel" type="Label" parent="PlayerStatusPanel" unique_id=543201137]
+[node name="EquipHintLabel" type="Label" parent="PlayerStatusPanel"]
 layout_mode = 0
 offset_left = 12.0
 offset_top = 100.0
@@ -120,22 +139,22 @@ theme_override_fonts/font = ExtResource("2_font")
 theme_override_font_sizes/font_size = 12
 text = "UI_ROGUELIKEMAP_E_VIEW_EQUIP"
 
-[node name="HintLabel" type="Label" parent="." unique_id=323689273]
+[node name="HintLabel" type="Label" parent="."]
 layout_mode = 1
 anchors_preset = -1
 anchor_left = 0.5
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -200.0
+offset_left = -220.0
 offset_top = -50.0
-offset_right = 200.0
+offset_right = 220.0
 theme_override_colors/font_color = Color(0.6, 0.6, 0.6, 1)
 theme_override_fonts/font = ExtResource("2_font")
 theme_override_font_sizes/font_size = 12
 text = "UI_HINT_ENTER_NEXT_NODE_ESC_PAUSE"
 horizontal_alignment = 1
 
-[node name="CreditLabel" type="Label" parent="." unique_id=1463977432]
+[node name="CreditLabel" type="Label" parent="."]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 1.0
@@ -149,11 +168,79 @@ theme_override_font_sizes/font_size = 10
 text = "UI_ROGUELIKEMAP_ASSETS_MOTA_JS_BSD_3_CLAUSE"
 horizontal_alignment = 2
 
-[node name="DefeatScreen" parent="." unique_id=1629624796 instance=ExtResource("3_defeat")]
+[node name="DefeatScreen" parent="." instance=ExtResource("3_defeat")]
 layout_mode = 1
 
-[node name="VictoryScreen" parent="." unique_id=1209563651 instance=ExtResource("4_victory")]
+[node name="VictoryScreen" parent="." instance=ExtResource("4_victory")]
 layout_mode = 1
 
-[node name="RestScreen" parent="." unique_id=1094101952 instance=ExtResource("5_rest")]
+[node name="RestScreen" parent="." instance=ExtResource("5_rest")]
 layout_mode = 1
+
+[node name="EventPanel" type="PanelContainer" parent="."]
+visible = false
+layout_mode = 0
+offset_left = 236.0
+offset_top = 78.0
+offset_right = 792.0
+offset_bottom = 592.0
+theme_override_styles/panel = SubResource("panel_style")
+
+[node name="Margin" type="MarginContainer" parent="EventPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 16
+
+[node name="VBox" type="VBoxContainer" parent="EventPanel/Margin"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 12
+
+[node name="TitleLabel" type="Label" parent="EventPanel/Margin/VBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.95, 0.75, 0.25, 1)
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 22
+text = ""
+horizontal_alignment = 1
+
+[node name="TitleSep" type="HSeparator" parent="EventPanel/Margin/VBox"]
+layout_mode = 2
+theme_override_styles/separator = SubResource("sep_style")
+theme_override_constants/separation = 2
+
+[node name="ContentHBox" type="HBoxContainer" parent="EventPanel/Margin/VBox"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 14
+
+[node name="DescLabel" type="Label" parent="EventPanel/Margin/VBox/ContentHBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+size_flags_stretch_ratio = 2.0
+theme_override_styles/normal = SubResource("desc_bg")
+theme_override_colors/font_color = Color(0.88, 0.85, 0.8, 1)
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 16
+text = ""
+autowrap_mode = 3
+vertical_alignment = 1
+
+[node name="ButtonsRow" type="VBoxContainer" parent="EventPanel/Margin/VBox/ContentHBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+alignment = 1
+theme_override_constants/separation = 14

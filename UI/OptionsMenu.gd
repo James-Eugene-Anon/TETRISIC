@@ -19,20 +19,21 @@ extends Control
 # 关于页面标签
 @onready var version_label = $"TabContainer/关于/AboutVBox/VersionLabel"
 @onready var author_label = $"TabContainer/关于/AboutVBox/AuthorLabel"
-@onready var description_label = $"TabContainer/关于/AboutVBox/DescriptionLabel"
-@onready var controls_label = $"TabContainer/关于/AboutVBox/ControlsLabel"
 @onready var disclaimer_label = $"TabContainer/关于/AboutVBox/DisclaimerLabel"
 @onready var thanks_label = $"TabContainer/关于/AboutVBox/ThanksLabel"
 
 
 func _ready():
+	# 确保在暂停时也能处理输入和渲染
+	process_mode = Node.PROCESS_MODE_ALWAYS
+	
 	# 初始化下拉菜单项
 	update_option_items()
 	
 	update_ui_texts()
 	
-	language_button.pressed.connect(_on_language_button_pressed)
-	window_mode_option.item_selected.connect(_on_window_mode_selected)
+	language_button.item_selected.connect(_on_language_button_pressed)
+	window_mode_option.toggled.connect(_on_window_mode_toggled)
 	resolution_option.item_selected.connect(_on_resolution_selected)
 	music_volume_slider.value_changed.connect(_on_music_volume_changed)
 	sfx_volume_slider.value_changed.connect(_on_sfx_volume_changed)
@@ -50,11 +51,6 @@ func _ready():
 	if window:
 		window.size_changed.connect(_on_window_size_changed)
 	
-	# 设置初始状态
-	music_volume_slider.value = Global.music_volume * 100
-	sfx_volume_slider.value = Global.sfx_volume * 100
-	window_mode_option.selected = Global.window_mode_index
-	
 	_refresh_resolution_selection()
 
 func _input(event):
@@ -64,17 +60,8 @@ func _input(event):
 		return
 
 func update_option_items():
-	window_mode_option.clear()
 	resolution_option.clear()
 	
-	# 窗口模式选项
-	var mode_keys = [
-		"UI_OPTIONS_WINDOW_MODE_WINDOWED",
-		"UI_OPTIONS_WINDOW_MODE_FULLSCREEN"
-	]
-	for key in mode_keys:
-		window_mode_option.add_item(tr(key))
-		
 	# 分辨率选项
 	for i in range(Global.resolutions.size()):
 		resolution_option.add_item(Global.get_resolution_label(i))
@@ -89,18 +76,25 @@ func update_ui_texts():
 		tab_container.set_tab_title(0, tr("UI_OPTIONS_TAB_SETTINGS"))
 		tab_container.set_tab_title(1, tr("UI_OPTIONS_TAB_ABOUT"))
 	
-	# 语言按钮显示
-	if Global.current_language == "zh":
-		language_button.text = tr("UI_OPTIONS_LANGUAGE_ZH")
-	else:
-		language_button.text = tr("UI_OPTIONS_LANGUAGE_EN")
+	# 语言下拉项（0=en, 1=zh）
+	language_button.clear()
+	language_button.add_item(tr("UI_OPTIONS_LANGUAGE_EN"))
+	language_button.add_item(tr("UI_OPTIONS_LANGUAGE_ZH"))
+	var lang_index = 0 if Global.current_language == "en" else 1
+	language_button.selected = lang_index
+	# 设置 OptionButton 的主文本为“选择语言”
+	language_button.text = tr("UI_OPTIONS_LANGUAGE_SELECT")
 	
 	update_option_items()
-	window_mode_option.selected = Global.window_mode_index
+	window_mode_option.text = tr("UI_OPTIONS_FULLSCREEN")
+	window_mode_option.button_pressed = Global.is_fullscreen
 	_refresh_resolution_selection()
 	
 	music_volume_label.text = tr("UI_OPTIONS_MUSIC_VOLUME") + str(int(Global.music_volume * 100)) + "%"
 	sfx_volume_label.text = tr("UI_OPTIONS_SFX_VOLUME") + str(int(Global.sfx_volume * 100)) + "%"
+	# 同步滑条位置到实际保存值，使用 no_signal 避免触发重复保存
+	music_volume_slider.set_value_no_signal(Global.music_volume * 100.0)
+	sfx_volume_slider.set_value_no_signal(Global.sfx_volume * 100.0)
 	
 	# 联网模式按钮
 	var online_status = tr("UI_OPTIONS_ONLINE_ON") if Global.online_mode else tr("UI_OPTIONS_ONLINE_OFF")
@@ -154,7 +148,7 @@ func _on_window_size_changed() -> void:
 
 func _refresh_resolution_selection() -> void:
 	var current_size = get_window().size
-	if Global.window_mode_index == 1:
+	if Global.is_fullscreen:
 		current_size = DisplayServer.screen_get_size()
 	
 	while resolution_option.item_count > Global.resolutions.size():
@@ -173,18 +167,19 @@ func _refresh_resolution_selection() -> void:
 		resolution_option.add_item(res_name)
 		resolution_option.selected = resolution_option.item_count - 1
 
-	if Global.window_mode_index == 1:
+	if Global.is_fullscreen:
 		resolution_option.disabled = true
 		resolution_option.modulate.a = 0.5
 	else:
 		resolution_option.disabled = false
 		resolution_option.modulate.a = 1.0
 
-func _on_language_button_pressed():
-	Global.switch_language()
+func _on_language_button_pressed(index):
+	Global.switch_language(index)
 	update_ui_texts()
 
-func _on_window_mode_selected(index):
+func _on_window_mode_toggled(pressed: bool):
+	var index = 1 if pressed else 0
 	Global.set_window_mode(index)
 	update_ui_texts()
 

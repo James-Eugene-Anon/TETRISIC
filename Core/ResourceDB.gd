@@ -8,6 +8,19 @@ class_name ResourceDBClass
 signal database_loaded(db_name: String)
 signal database_load_failed(db_name: String, error: String)
 
+
+func _write_log(msg: String) -> void:
+	var path = "user://resource_db.log"
+	var file = FileAccess.open(path, FileAccess.WRITE_READ)
+	if not file:
+		file = FileAccess.open(path, FileAccess.WRITE)
+		if not file:
+			print("[ResourceDB] 无法写入日志: ", path)
+			return
+	file.seek_end()
+	file.store_string("%s\n" % msg)
+	file.close()
+
 # ==================== 数据库存储 ====================
 var items_db: Dictionary = {}       # 物品数据库
 var relics_db: Dictionary = {}      # 遗物数据库
@@ -52,8 +65,10 @@ func _load_json_database(db_name: String, target_db: Dictionary) -> void:
 	
 	var dir = DirAccess.open(path)
 	if not dir:
-		# 目录不存在，创建示例数据
-		_create_sample_data(db_name)
+		# 目录不存在，将报错写入 log，并发出失败信号
+		var err = "资源目录不存在: %s" % path
+		_write_log("[ResourceDB] " + err)
+		database_load_failed.emit(db_name, err)
 		return
 	
 	dir.list_dir_begin()
@@ -256,206 +271,3 @@ func get_narrative_by_keyword(keyword: String) -> Array[Dictionary]:
 		if keyword in keywords:
 			result.append(fragment)
 	return result
-
-# ==================== 示例数据创建 ====================
-func _create_sample_data(db_name: String) -> void:
-	# 创建示例数据文件
-	match db_name:
-		"items":
-			_create_sample_items()
-		"relics":
-			_create_sample_relics()
-		"enemies":
-			_create_sample_enemies()
-		"events":
-			_create_sample_events()
-
-func _create_sample_items() -> void:
-	# 创建示例物品数据
-	var sample_items = [
-		{
-			"id": "sword_basic",
-			"name": "铁剑",
-			"name_en": "Iron Sword",
-			"description": "一把普通的铁剑",
-			"type": "weapon",
-			"slot": "weapon",
-			"rarity": "common",
-			"attack_bonus": 5,
-			"icon": "res://Assets/Items/sword_basic.png"
-		},
-		{
-			"id": "armor_leather",
-			"name": "皮甲",
-			"name_en": "Leather Armor",
-			"description": "轻便的皮革护甲",
-			"type": "armor",
-			"slot": "armor",
-			"rarity": "common",
-			"defense_bonus": 3,
-			"icon": "res://Assets/Items/armor_leather.png"
-		},
-		{
-			"id": "ring_power",
-			"name": "力量戒指",
-			"name_en": "Ring of Power",
-			"description": "增加攻击力的戒指",
-			"type": "accessory",
-			"slot": "accessory_1",
-			"rarity": "uncommon",
-			"attack_bonus": 3,
-			"icon": "res://Assets/Items/ring_power.png"
-		}
-	]
-	
-	for item in sample_items:
-		items_db[item.id] = item
-
-func _create_sample_relics() -> void:
-	# 创建示例遗物数据
-	var sample_relics = [
-		{
-			"id": "relic_burning_blood",
-			"name": "燃烧之血",
-			"name_en": "Burning Blood",
-			"description": "每场战斗结束后恢复6点生命值",
-			"lore": "曾属于一位堕落的圣骑士，鲜血中蕴含着不灭的生命力。",
-			"rarity": "starter",
-			"effect_type": "on_combat_end",
-			"effect_value": 6,
-			"icon": "res://Assets/Relics/burning_blood.png"
-		},
-		{
-			"id": "relic_anchor",
-			"name": "船锚",
-			"name_en": "Anchor",
-			"description": "每回合开始时获得10点格挡",
-			"lore": "沉重却令人安心。",
-			"rarity": "common",
-			"effect_type": "on_turn_start",
-			"effect_value": 10,
-			"icon": "res://Assets/Relics/anchor.png"
-		},
-		{
-			"id": "relic_lantern",
-			"name": "灯笼",
-			"name_en": "Lantern",
-			"description": "每场战斗的第一回合获得1点额外能量",
-			"lore": "照亮前路，驱散黑暗。",
-			"rarity": "boss",
-			"effect_type": "on_combat_start",
-			"effect_value": 1,
-			"icon": "res://Assets/Relics/lantern.png"
-		}
-	]
-	
-	for relic in sample_relics:
-		relics_db[relic.id] = relic
-
-func _create_sample_enemies() -> void:
-	# 创建示例敌人数据
-	var sample_enemies = [
-		{
-			"id": "enemy_slime",
-			"name": "史莱姆",
-			"name_en": "Slime",
-			"description": "一团黏糊糊的生物",
-			"type": "normal",
-			"act": 1,
-			"max_health": 20,
-			"base_attack": 5,
-			"moves": ["attack", "defend"],
-			"icon": "res://Assets/Enemies/slime.png"
-		},
-		{
-			"id": "enemy_goblin",
-			"name": "哥布林",
-			"name_en": "Goblin",
-			"description": "狡猾的小型生物",
-			"type": "normal",
-			"act": 1,
-			"max_health": 30,
-			"base_attack": 8,
-			"moves": ["attack", "attack", "buff"],
-			"icon": "res://Assets/Enemies/goblin.png"
-		},
-		{
-			"id": "enemy_elite_knight",
-			"name": "黑暗骑士",
-			"name_en": "Dark Knight",
-			"description": "曾经的英雄，如今堕入黑暗",
-			"type": "elite",
-			"act": 1,
-			"max_health": 80,
-			"base_attack": 15,
-			"moves": ["attack", "heavy_attack", "defend"],
-			"icon": "res://Assets/Enemies/dark_knight.png"
-		},
-		{
-			"id": "enemy_boss_dragon",
-			"name": "远古巨龙",
-			"name_en": "Ancient Dragon",
-			"description": "统治这片土地的远古存在",
-			"type": "boss",
-			"act": 1,
-			"max_health": 200,
-			"base_attack": 25,
-			"moves": ["attack", "flame_breath", "tail_sweep", "enrage"],
-			"icon": "res://Assets/Enemies/dragon.png"
-		}
-	]
-	
-	for enemy in sample_enemies:
-		enemies_db[enemy.id] = enemy
-
-func _create_sample_events() -> void:
-	# 创建示例事件数据
-	var sample_events = [
-		{
-			"id": "event_shrine",
-			"name": "神秘祭坛",
-			"name_en": "Mysterious Shrine",
-			"description": "你发现了一座古老的祭坛，散发着微弱的光芒。",
-			"act": 0,  # 0 表示任意章节
-			"choices": [
-				{
-					"text": "祈祷 (恢复25%生命)",
-					"effect": {"type": "heal_percent", "value": 25}
-				},
-				{
-					"text": "献祭 (失去10%生命，获得随机遗物)",
-					"effect": {"type": "sacrifice", "health_cost_percent": 10, "reward": "random_relic"}
-				},
-				{
-					"text": "离开",
-					"effect": {"type": "none"}
-				}
-			]
-		},
-		{
-			"id": "event_merchant",
-			"name": "旅行商人",
-			"name_en": "Traveling Merchant",
-			"description": "一位神秘的商人出现在你面前。",
-			"act": 0,
-			"choices": [
-				{
-					"text": "购买补给 (50金币，恢复30生命)",
-					"cost": 50,
-					"effect": {"type": "heal", "value": 30}
-				},
-				{
-					"text": "购买装备 (100金币，获得随机装备)",
-					"cost": 100,
-					"effect": {"type": "random_item"}
-				},
-				{
-					"text": "离开",
-					"effect": {"type": "none"}
-				}
-			]
-		}
-	]
-	
-	for event in sample_events:
-		events_db[event.id] = event

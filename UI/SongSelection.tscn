@@ -335,7 +335,7 @@ alignment = 1
 [node name="CancelButton" type="Button" parent="ConfirmDeleteDialog/DialogPanel/VBox/HBox" unique_id=1544181397]
 custom_minimum_size = Vector2(150, 40)
 layout_mode = 2
-text = "UI_SONGSELECTION_CANCEL"
+text = "UI_COMMON_CANCEL"
 
 [node name="ConfirmButton" type="Button" parent="ConfirmDeleteDialog/DialogPanel/VBox/HBox" unique_id=389013632]
 custom_minimum_size = Vector2(150, 40)

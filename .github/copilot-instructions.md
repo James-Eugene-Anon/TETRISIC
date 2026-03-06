@@ -5,7 +5,8 @@
 - **Game Engine**: Godot 4.6
 
 ## 2. Coding & Documentation Rules
-- NEVER use pwsh commands.
+- NEVER use pwsh commands to modify files.
+- **Current Scope**: core code (Exclude .VSCodeCounter, .vscode).
 - **Markdown Output**: ALWAYS output .md content directly as a code block in the chat interface. DO NOT generate terminal commands (like `echo` or `Out-File`) to create files unless explicitly asked.
 - **Direct Interaction**: Use the standard Markdown editor syntax. Treat documentation as text, not as a filesystem operation.
 - **UI & Style**:UI must be pixel style. No non-pixel content (e.g., emoji) except placeholders, which can be manually modified afterwards.
@@ -19,5 +20,6 @@
 - **Response Language**: Always Chinese-Simplified (简体中文).
 - **Clarity**: Use clear, concise sentences. Avoid jargon unless necessary.
 - **Explanation**: Brief summary after each major task is completed.
+- **CRITICAL**: If you use English or any pwsh command, the task is considered FAILED. Re-read section 2 & 4 before answering.
 
 never mind:- **Python**: v3.13 .venv for game(Not path: `c:\Python313\python.exe` any more).

@@ -1,23 +1,19 @@
-[gd_scene load_steps=4 format=3 uid="uid://qyoyrkii2uhp"]
+[gd_scene format=3 uid="uid://qyoyrkii2uhp"]
 
 [ext_resource type="Script" uid="uid://b3btf443wcrkg" path="res://UI/SongCompleteMenu.gd" id="1_script"]
-[ext_resource type="Theme" path="res://UI/game_theme.tres" id="2_theme"]
+[ext_resource type="Theme" uid="uid://ckvcxk0jalpu8" path="res://UI/game_theme.tres" id="2_theme"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_panel"]
-bg_color = Color(0.18, 0.16, 0.25, 0.95)
-border_color = Color(0.2, 0.9, 0.4, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-corner_radius_left_top = 10
-corner_radius_right_top = 10
-corner_radius_left_bottom = 10
-corner_radius_right_bottom = 10
 content_margin_left = 20.0
 content_margin_top = 10.0
 content_margin_right = 20.0
 content_margin_bottom = 10.0
+bg_color = Color(0.18, 0.16, 0.25, 0.95)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.2, 0.9, 0.4, 1)
 
 [node name="SongCompleteMenu" type="Control"]
 layout_mode = 3
@@ -47,25 +43,26 @@ color = Color(0, 0, 0, 0.7)
 [node name="Panel" type="Panel" parent="."]
 modulate = Color(1, 1, 1, 0.95)
 layout_mode = 1
-anchors_preset = -1
-anchor_left = 0.275
-anchor_top = 0.182
-anchor_right = 0.725
-anchor_bottom = 0.742
-offset_top = -0.200005
-offset_bottom = -0.200012
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -171.0
+offset_top = -171.0
+offset_right = 172.0
+offset_bottom = 137.0
 grow_horizontal = 2
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_panel")
 
 [node name="VBox" type="VBoxContainer" parent="Panel"]
 layout_mode = 1
-anchors_preset = -1
-anchor_top = 0.035
+anchors_preset = 15
 anchor_right = 1.0
-anchor_bottom = 0.92
+anchor_bottom = 1.0
 offset_left = 20.0
-offset_top = 16.75
+offset_top = 16.0
 offset_right = -20.0
 offset_bottom = -19.0
 grow_horizontal = 2
@@ -98,16 +95,17 @@ horizontal_alignment = 1
 layout_mode = 2
 
 [node name="RestartButton" type="Button" parent="Panel/VBox"]
-layout_mode = 2
 custom_minimum_size = Vector2(180, 40)
+layout_mode = 2
 text = "UI_COMMON_RESTART"
 
 [node name="SelectSongButton" type="Button" parent="Panel/VBox"]
-layout_mode = 2
 custom_minimum_size = Vector2(180, 40)
+layout_mode = 2
 text = "UI_TITLE_SELECT_SONG"
 
 [node name="MenuButton" type="Button" parent="Panel/VBox"]
-layout_mode = 2
 custom_minimum_size = Vector2(180, 40)
+layout_mode = 2
 text = "UI_COMMON_MAIN_MENU"
+

@@ -80,7 +80,7 @@ func _ready():
 	)
 	
 	# 应用窗口模式与尺寸（保持用户当前窗口模式）
-	Global.set_window_mode(Global.window_mode_index)
+	Global.set_window_mode(Global.is_fullscreen)
 	
 	# 监听窗口焦点变化（用于后台暂停音乐）
 	var window = get_window()
@@ -338,6 +338,7 @@ func toggle_pause():
 	game_mode.toggle_pause()
 	
 	if game_mode.paused:
+		get_tree().paused = true
 		pause_menu.show_menu()
 		pause_menu.update_ui_texts()
 		# 暂停时不隐藏UI，保持可见（有半透明遮罩）
@@ -345,6 +346,7 @@ func toggle_pause():
 		if not _is_bgm_stream() and music_player.playing:
 			music_player.stream_paused = true
 	else:
+		get_tree().paused = false
 		pause_menu.hide()
 		if _is_bgm_stream():
 			_refresh_bgm_state()
@@ -562,8 +564,9 @@ func _on_end_game():
 	if game_mode == null:
 		return
 	
-	# 隐藏暂停菜单
+	# 隐藏暂停菜单并且恢复游戏状态树的计时
 	pause_menu.hide()
+	get_tree().paused = false
 	game_mode.paused = false
 	
 	# 标记游戏结束
@@ -583,6 +586,7 @@ func _on_end_game():
 		show_game_over_menu()
 
 func _on_restart_game():
+	get_tree().paused = false
 	get_tree().reload_current_scene()
 
 func _on_select_song():
@@ -604,6 +608,7 @@ func _on_options_closed():
 		ui_controller.on_options_closed()
 
 func _on_goto_menu():
+	get_tree().paused = false
 	# 局中主动返回主菜单也需要结算当前分数
 	_persist_current_run_score()
 

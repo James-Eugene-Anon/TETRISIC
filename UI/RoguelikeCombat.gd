@@ -447,7 +447,6 @@ func _draw_mystery_rescue_dialogue(target: CanvasItem = self):
 	target.draw_rect(Rect2(dialog_pos - Vector2(2, 2), Vector2(dialog_w + 4, dialog_h + 4)), Color(0.5, 0.4, 0.7), false, 2)
 
 	# 名称标签
-	var is_zh = Global.current_language == "zh"
 	var name_text = tr("UI_ROGUELIKECOMBAT_UNKNOWN_2")
 	target.draw_rect(Rect2(dialog_pos + Vector2(12, -14), Vector2(80, 18)), Color(0.15, 0.12, 0.25), true)
 	target.draw_rect(Rect2(dialog_pos + Vector2(12, -14), Vector2(80, 18)), Color(0.5, 0.4, 0.7), false, 1)
@@ -530,7 +529,7 @@ func _draw_player_portrait(pos: Vector2):
 				Vector2(shield_width, hp_bar_height)), Color(0.3, 0.6, 0.9, 0.85), true)
 	
 	# 血量文字
-	draw_string(UI_FONT, hp_bar_pos + Vector2(6, 14), "%d/%d" % [player_health, player_max_health], 
+	draw_string(UI_FONT, hp_bar_pos + Vector2(6, 14), tr("UI_ROGUELIKECOMBAT_HP_FMT") % [player_health, player_max_health], 
 		HORIZONTAL_ALIGNMENT_LEFT, -1, UITheme.FONT_SIZE_SM, UITheme.TEXT_PRIMARY)
 	
 	# 护甲值显示（紧贴生命条下方）
@@ -626,7 +625,7 @@ func _draw_enemies_portrait(pos: Vector2):
 		var display_name = RoguelikeSpriteManager.get_mapped_enemy_name(enemy.name)
 		if is_bat_swarm and i == max_draw - 1 and enemies.size() > max_draw:
 			var stack_count = enemies.size() - (max_draw - 1)
-			display_name += " x" + str(stack_count)
+			display_name += tr("UI_ROGUELIKECOMBAT_STACK_FMT") % stack_count
 		draw_string(UI_FONT, card_pos + Vector2(5, 64), display_name, 
 			HORIZONTAL_ALIGNMENT_LEFT, enemy_card_width - 10, UITheme.FONT_SIZE_SM, 
 			UITheme.TEXT_PRIMARY)
@@ -654,7 +653,7 @@ func _draw_enemies_portrait(pos: Vector2):
 		# 血条底部Y=72+12=84，增加4像素间距从88开始
 		var info_y_offset = 96  # 调大间距避免重叠
 		if enemy.has("shield") and enemy.shield > 0:
-			draw_string(UI_FONT, card_pos + Vector2(6, info_y_offset), "🛡 %d" % enemy.shield,
+			draw_string(UI_FONT, card_pos + Vector2(6, info_y_offset), tr("UI_ROGUELIKECOMBAT_SHIELD_FMT") % enemy.shield,
 				HORIZONTAL_ALIGNMENT_LEFT, -1, UITheme.FONT_SIZE_XS, UITheme.ACCENT_PRIMARY)
 			info_y_offset += 11
 		
@@ -662,16 +661,13 @@ func _draw_enemies_portrait(pos: Vector2):
 		var intent_text = tr("UI_COMMON_SELECT")
 		var intent_color = UITheme.TEXT_MUTED
 		if enemy.intent == "attack":
-			var is_zh = Global.current_language == "zh"
 			intent_text = (tr("UI_ROGUELIKECOMBAT_ATK_NUM")) % enemy.damage
 			intent_color = UITheme.ACCENT_DANGER
 		elif enemy.intent == "defend":
-			var is_zh = Global.current_language == "zh"
 			var shield_gain = enemy.get("shield_gain", 10)
 			intent_text = (tr("UI_ROGUELIKECOMBAT_DEF_PLUSNUM")) % shield_gain
 			intent_color = UITheme.ACCENT_PRIMARY
 		elif enemy.intent == "merge":
-			var is_zh = Global.current_language == "zh"
 			intent_text = tr("UI_COMBAT_INTENT_MERGE")
 			intent_color = Color(0.8, 0.6, 1.0)
 		draw_string(UI_FONT, card_pos + Vector2(6, info_y_offset), intent_text, 
@@ -682,7 +678,6 @@ func _draw_enemies_portrait(pos: Vector2):
 		var cooldown_text = tr("UI_COMMON_SELECT")
 		var cooldown_color = UITheme.TEXT_MUTED
 		if enemy.acted_this_turn:
-			var is_zh = Global.current_language == "zh"
 			cooldown_text = tr("UI_COMBAT_COOLDOWN_DONE")
 			cooldown_color = UITheme.ACCENT_SUCCESS
 		else:
@@ -747,6 +742,13 @@ func _input(event: InputEvent):
 				if controller.equipment_system.try_activate_rift_meter(controller.grid_manager):
 					renderer.queue_redraw()
 					queue_redraw()
+			return
+		elif event.keycode == KEY_K:
+			# 管理员调试：K键秒杀所有敌人（正常胜利结算）
+			if Global.has_method("get_current_account_profile"):
+				var profile = Global.get_current_account_profile()
+				if bool(profile.get("is_admin", false)):
+					_debug_admin_instakill()
 			return
 
 	# 选敌输入（时停中）
@@ -1222,14 +1224,18 @@ func _check_victory():
 			controller.game_over = true
 		_victory()
 
+func _debug_admin_instakill() -> void:
+	# 管理员调试：秒杀所有敌人（秒杀后复用正常胜利结算流程）
+	for enemy in enemies:
+		enemy["health"] = 0
+	_check_victory()
+
 func _victory():
 	# 胜利
 	victory_pending = true
 	# 移除战斗画面的制胜一击文本，直接显示结算UI
 	victory_kill_message = ""
 	victory_kill_question_mark = false
-	# 制胜一击消除信息
-	var is_zh: bool = Global.current_language == "zh"
 	victory_kill_timer = 1.5
 	print(tr("LOG_COMBAT_VICTORY"))
 	_schedule_victory_reward()
@@ -1248,7 +1254,6 @@ func _mystery_rescue_finish():
 	victory_pending = true
 	if controller:
 		controller.game_over = true
-	var is_zh: bool = Global.current_language == "zh"
 	victory_kill_question_mark = true
 	victory_kill_timer = 1.2
 	_schedule_victory_reward()
@@ -1294,101 +1299,45 @@ func _show_victory_reward():
 	victory_kill_message = ""
 	victory_kill_timer = 0.0
 	queue_redraw()
-	
+
 	if victory_panel:
 		victory_panel.queue_free()
 		victory_panel = null
-	
-	var panel = Panel.new()
-	panel.name = "VictoryRewardPanel"
-	panel.size = Vector2(360, 260)
+
+	var panel_scene = load(Config.PATHS_SCENE_COMBAT_VICTORY_PANEL)
+	if not panel_scene:
+		return
+	var panel = panel_scene.instantiate()
 	panel.mouse_filter = Control.MOUSE_FILTER_STOP
 	add_child(panel)
-	panel.position = get_viewport_rect().size / 2 - panel.size / 2
-	
-	# 应用主题样式
-	var panel_style = UITheme.create_panel_style(UITheme.BG_MEDIUM, UITheme.ACCENT_SUCCESS, 
-		UITheme.CORNER_LG, UITheme.BORDER_NORMAL)
-	panel.add_theme_stylebox_override("panel", panel_style)
+	panel.position = get_viewport_rect().size * 0.5 - panel.size * 0.5
 
-	var vbox = VBoxContainer.new()
-	vbox.anchor_right = 1.0
-	vbox.anchor_bottom = 1.0
-	vbox.offset_left = UITheme.SPACING_MD
-	vbox.offset_top = UITheme.SPACING_MD
-	vbox.offset_right = -UITheme.SPACING_MD
-	vbox.offset_bottom = -UITheme.SPACING_MD
-	vbox.add_theme_constant_override("separation", UITheme.SPACING_MD)
-	panel.add_child(vbox)
+	var title_label: Label = panel.get_node("VBoxContainer/TitleHBox/TitleLabel")
+	var q_label: Label = panel.get_node("VBoxContainer/TitleHBox/QuestionLabel")
+	var summary: Label = panel.get_node("VBoxContainer/SummaryLabel")
+	var reward: Label = panel.get_node("VBoxContainer/RewardLabel")
+	var btn: Button = panel.get_node("VBoxContainer/ContinueBtn")
 
-	var title = Label.new()
-	# 如果是神秘救场后的胜利，添加问号（问号紧贴标题右侧，类比主标题的 alpha 标签）
 	if victory_kill_question_mark:
-		# 用 HBoxContainer 将标题和问号排在同一行
-		var title_hbox = HBoxContainer.new()
-		title_hbox.alignment = BoxContainer.ALIGNMENT_CENTER
-		title_hbox.add_theme_constant_override("separation", 0)
-		vbox.add_child(title_hbox)
-		# 标题文本
-		var title_base = tr("UI_TITLE_VICTORY")
-		title.text = title_base
-		title.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
-		title.add_theme_font_override("font", UI_FONT)
-		title.add_theme_font_size_override("font_size", UITheme.FONT_SIZE_XL)
-		title.add_theme_color_override("font_color", UITheme.ACCENT_SUCCESS)
-		title_hbox.add_child(title)
-		# 问号紧贴标题右侧（大号、红色、微旋转）
-		var q_label = Label.new()
+		title_label.text = tr("UI_TITLE_VICTORY_FAKE")
+		title_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+		q_label.visible = true
 		q_label.text = tr("UI_ROGUELIKECOMBAT_UNKNOWN")
-		q_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_LEFT
-		q_label.add_theme_font_override("font", UI_FONT)
-		q_label.add_theme_font_size_override("font_size", int(UITheme.FONT_SIZE_XL * 1.6))
-		q_label.add_theme_color_override("font_color", Color(1.0, 0.15, 0.15))
-		q_label.rotation_degrees = 12.0
-		q_label.pivot_offset = Vector2(6, 14)
-		title_hbox.add_child(q_label)
 	else:
-		title.text = tr("UI_TITLE_VICTORY")
-		title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		title.add_theme_font_override("font", UI_FONT)
-		title.add_theme_font_size_override("font_size", UITheme.FONT_SIZE_XL)
-		title.add_theme_color_override("font_color", UITheme.ACCENT_SUCCESS)
-		vbox.add_child(title)
-	
-	var sep = HSeparator.new()
-	sep.add_theme_constant_override("separation", UITheme.SPACING_SM)
-	sep.add_theme_color_override("separator", UITheme.BORDER_MEDIUM)
-	vbox.add_child(sep)
+		title_label.text = tr("UI_TITLE_VICTORY")
+		title_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+		q_label.visible = false
 
-	var summary = Label.new()
 	var is_zh_summary = Global.current_language == "zh"
 	if is_zh_summary:
 		summary.text = tr("UI_COMBAT_VICTORY_SUMMARY") % [total_lines_cleared, total_score, battle_gold_earned]
 	else:
 		summary.text = tr("UI_ROGUELIKECOMBAT_LINES_CLEARED_NUM_NBATTLE_SCORE_NUM_NGOLD_EARNED_PLUSNUM") % [total_lines_cleared, total_score, battle_gold_earned]
-	summary.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	summary.add_theme_font_override("font", UI_FONT)
-	summary.add_theme_font_size_override("font_size", UITheme.FONT_SIZE_MD)
-	summary.add_theme_color_override("font_color", UITheme.TEXT_PRIMARY)
-	vbox.add_child(summary)
 
-	var reward = Label.new()
 	reward.text = tr("UI_COMBAT_REWARD_CONTINUE")
-	reward.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	reward.add_theme_font_override("font", UI_FONT)
-	reward.add_theme_font_size_override("font_size", UITheme.FONT_SIZE_SM)
-	reward.add_theme_color_override("font_color", UITheme.ACCENT_SECONDARY)
-	vbox.add_child(reward)
-	
-	var spacer = Control.new()
-	spacer.custom_minimum_size = Vector2(0, UITheme.SPACING_SM)
-	vbox.add_child(spacer)
-
-	var btn = Button.new()
 	btn.text = tr("UI_COMMON_CONTINUE")
-	btn.pressed.connect(_on_victory_continue)
 	UITheme.apply_button_theme(btn)
-	vbox.add_child(btn)
+	btn.pressed.connect(_on_victory_continue)
 
 	victory_panel = panel
 	queue_redraw()

@@ -160,18 +160,18 @@ func _get_cached_lyric_dir() -> String:
 	return dir_path
 
 func update_ui_texts():
-	title_label.text = tr("UI_TITLE_SELECT_SONG")
-	refresh_button.text = tr("UI_COMMON_REFRESH_LIST")
-	import_button.text = tr("UI_COMMON_IMPORT_LOCAL")
-	back_button.text = tr("UI_COMMON_BACK")
+	title_label.text = tr("UI_SONGSELECTION_TITLE")
+	refresh_button.text = tr("UI_SONGSELECTION_REFRESH")
+	import_button.text = tr("UI_SONGSELECTION_IMPORT_LOCAL")
+	back_button.text = tr("UI_SONGSELECTION_BACK")
 	start_button.text = tr("UI_SONGSELECTION_START")
-	search_lyric_button.text = tr("UI_COMMON_SEARCH_LYRIC")
+	search_lyric_button.text = tr("UI_SONGSELECTION_SEARCH_LYRIC")
 	delete_button.text = tr("UI_SONGSELECTION_DELETE_SONG")
-	confirm_delete_title_label.text = tr("UI_COMMON_CONFIRM_DELETE")
+	confirm_delete_title_label.text = tr("UI_SONGSELECTION_CONFIRM_DELETE_TITLE")
 	confirm_delete_message_label.text = tr("UI_SONGSELECTION_CONFIRM_DELETE_MESSAGE")
 	confirm_delete_warning_label.text = tr("UI_SONGSELECTION_CONFIRM_DELETE_WARNING")
-	cancel_delete_btn.text = tr("UI_SONGSELECTION_CANCEL")
-	confirm_btn.text = tr("UI_COMMON_CONFIRM_DELETE")
+	cancel_delete_btn.text = tr("UI_COMMON_CANCEL")
+	confirm_btn.text = tr("UI_SONGSELECTION_CONFIRM_DELETE_BTN")
 	detail_lyricist.text = tr("UI_SONGSELECTION_LABEL_LYRICIST") + ": "
 	
 	if import_file_btn:
@@ -249,7 +249,7 @@ func _on_song_selected(index: int):
 	if song["lyric_file"] == "":
 		search_lyric_button.visible = true
 		search_lyric_button.disabled = false
-		search_lyric_button.text = tr("UI_COMMON_SEARCH_LYRIC")
+		search_lyric_button.text = tr("UI_SONGSELECTION_SEARCH_LYRIC")
 	else:
 		search_lyric_button.visible = false
 
@@ -793,7 +793,7 @@ func _on_search_lyric_button_pressed():
 	if not lyric_service.is_available():
 		search_lyric_button.text = tr("UI_SONGSELECTION_TOOL_NOT_CONFIGURED")
 		await get_tree().create_timer(2.0).timeout
-		search_lyric_button.text = tr("UI_COMMON_SEARCH_LYRIC")
+		search_lyric_button.text = tr("UI_SONGSELECTION_SEARCH_LYRIC")
 		return
 		
 	var song = songs[selected_song_index]
@@ -827,7 +827,7 @@ func _on_search_lyric_button_pressed():
 			search_lyric_button.text = tr("UI_SONGSELECTION_LYRIC_NOT_FOUND")
 			await get_tree().create_timer(2.0).timeout
 			search_lyric_button.disabled = false
-			search_lyric_button.text = tr("UI_COMMON_SEARCH_LYRIC")
+			search_lyric_button.text = tr("UI_SONGSELECTION_SEARCH_LYRIC")
 			return
 
 		# 保存歌词文件 - 使用原始文件基础名保持一致性
@@ -871,12 +871,12 @@ func _on_search_lyric_button_pressed():
 			search_lyric_button.text = tr("UI_SONG_SELECTION_SAVE_FAILED")
 			await get_tree().create_timer(2.0).timeout
 			search_lyric_button.disabled = false
-			search_lyric_button.text = tr("UI_COMMON_SEARCH_LYRIC")
+			search_lyric_button.text = tr("UI_SONGSELECTION_SEARCH_LYRIC")
 	else:
 		search_lyric_button.text = tr("UI_SONGSELECTION_LYRIC_NOT_FOUND")
 		await get_tree().create_timer(2.0).timeout
 		search_lyric_button.disabled = false
-		search_lyric_button.text = tr("UI_COMMON_SEARCH_LYRIC")
+		search_lyric_button.text = tr("UI_SONGSELECTION_SEARCH_LYRIC")
 
 # ============ 导入本地歌曲功能 ============
 

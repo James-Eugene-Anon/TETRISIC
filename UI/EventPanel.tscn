@@ -1,0 +1,212 @@
+[gd_scene format=3 uid="uid://event_panel_roguelike"]
+
+[ext_resource type="FontFile" uid="uid://ddo7ybrfl5d2s" path="res://fonts/FUSION-PIXEL-12PX-MONOSPACED-ZH_HANS.OTF" id="1_font"]
+[ext_resource type="Theme" uid="uid://ckvcxk0jalpu8" path="res://UI/game_theme.tres" id="2_theme"]
+
+[sub_resource type="StyleBoxFlat" id="panel_style"]
+bg_color = Color(0.08, 0.06, 0.14, 0.97)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(0.90, 0.65, 0.20, 1)
+
+[sub_resource type="StyleBoxFlat" id="sep_style"]
+bg_color = Color(0.85, 0.58, 0.15, 0.70)
+
+[sub_resource type="StyleBoxFlat" id="badge_style"]
+bg_color = Color(0.10, 0.08, 0.18, 0.95)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.90, 0.65, 0.20, 1)
+
+[sub_resource type="StyleBoxFlat" id="portrait_style"]
+bg_color = Color(0.05, 0.04, 0.10, 0.85)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.45, 0.30, 0.65, 0.60)
+content_margin_left = 8.0
+content_margin_top = 8.0
+content_margin_right = 8.0
+content_margin_bottom = 8.0
+
+[sub_resource type="StyleBoxFlat" id="desc_bg"]
+bg_color = Color(0.05, 0.04, 0.10, 0.60)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.38, 0.26, 0.52, 0.50)
+content_margin_left = 10.0
+content_margin_top = 8.0
+content_margin_right = 10.0
+content_margin_bottom = 8.0
+
+[node name="EventPanel" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+visible = false
+theme = ExtResource("2_theme")
+
+[node name="Background" type="ColorRect" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.72)
+mouse_filter = 1
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -290.0
+offset_top = -240.0
+offset_right = 290.0
+offset_bottom = 240.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("panel_style")
+
+[node name="Margin" type="MarginContainer" parent="Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/margin_left = 20
+theme_override_constants/margin_top = 16
+theme_override_constants/margin_right = 20
+theme_override_constants/margin_bottom = 16
+
+[node name="MainVBox" type="VBoxContainer" parent="Panel/Margin"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_constants/separation = 12
+
+[node name="TitleRow" type="HBoxContainer" parent="Panel/Margin/MainVBox"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="TypeBadge" type="Panel" parent="Panel/Margin/MainVBox/TitleRow"]
+custom_minimum_size = Vector2(36, 36)
+layout_mode = 2
+theme_override_styles/panel = SubResource("badge_style")
+
+[node name="BadgeLabel" type="Label" parent="Panel/Margin/MainVBox/TitleRow/TypeBadge"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_colors/font_color = Color(0.95, 0.75, 0.25, 1)
+theme_override_fonts/font = ExtResource("1_font")
+theme_override_font_sizes/font_size = 18
+text = "?"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TitleLabel" type="Label" parent="Panel/Margin/MainVBox/TitleRow"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_colors/font_color = Color(0.95, 0.75, 0.25, 1)
+theme_override_fonts/font = ExtResource("1_font")
+theme_override_font_sizes/font_size = 22
+text = ""
+vertical_alignment = 1
+
+[node name="TitleSep" type="HSeparator" parent="Panel/Margin/MainVBox"]
+layout_mode = 2
+theme_override_styles/separator = SubResource("sep_style")
+theme_override_constants/separation = 2
+
+[node name="ContentHBox" type="HBoxContainer" parent="Panel/Margin/MainVBox"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 14
+
+[node name="PortraitPanel" type="Panel" parent="Panel/Margin/MainVBox/ContentHBox"]
+custom_minimum_size = Vector2(148, 0)
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("portrait_style")
+
+[node name="PortraitVBox" type="VBoxContainer" parent="Panel/Margin/MainVBox/ContentHBox/PortraitPanel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+alignment = 1
+theme_override_constants/separation = 8
+
+[node name="PortraitPlaceholder" type="Label" parent="Panel/Margin/MainVBox/ContentHBox/PortraitPanel/PortraitVBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.45, 0.35, 0.60, 0.70)
+theme_override_fonts/font = ExtResource("1_font")
+theme_override_font_sizes/font_size = 36
+text = "[?]"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="TypeLabel" type="Label" parent="Panel/Margin/MainVBox/ContentHBox/PortraitPanel/PortraitVBox"]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.50, 0.50, 0.55, 0.80)
+theme_override_fonts/font = ExtResource("1_font")
+theme_override_font_sizes/font_size = 11
+text = "UI_EVENTPANEL_TYPE_EVENT"
+horizontal_alignment = 1
+
+[node name="ContentVSep" type="VSeparator" parent="Panel/Margin/MainVBox/ContentHBox"]
+layout_mode = 2
+
+[node name="DescLabel" type="Label" parent="Panel/Margin/MainVBox/ContentHBox"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_styles/normal = SubResource("desc_bg")
+theme_override_colors/font_color = Color(0.88, 0.85, 0.80, 1)
+theme_override_fonts/font = ExtResource("1_font")
+theme_override_font_sizes/font_size = 15
+text = ""
+autowrap_mode = 3
+vertical_alignment = 0
+
+[node name="ButtonSep" type="HSeparator" parent="Panel/Margin/MainVBox"]
+layout_mode = 2
+theme_override_styles/separator = SubResource("sep_style")
+theme_override_constants/separation = 2
+
+[node name="ButtonsRow" type="VBoxContainer" parent="Panel/Margin/MainVBox"]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="SampleBtn1" type="Button" parent="Panel/Margin/MainVBox/ButtonsRow"]
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+text = "UI_EVENTPANEL_SAMPLE_OPTION"
+
+[node name="SampleBtn2" type="Button" parent="Panel/Margin/MainVBox/ButtonsRow"]
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+text = "UI_EVENTPANEL_LEAVE"

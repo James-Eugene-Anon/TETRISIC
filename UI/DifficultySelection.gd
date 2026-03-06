@@ -66,7 +66,7 @@ func _on_difficulty_selected(index: int):
 	
 	detail_name.text = tr(keys[index])
 	detail_name.add_theme_color_override("font_color", colors[index])
-	detail_desc.text = tr(desc_keys[index])
+	detail_desc.text = tr(desc_keys[index]).replace("%%", "%") # 翻译文本可能在运行时含有被转义的 '%%'，显示时还原为单个 '%'。
 	
 	# 获取最高分
 	var high_score_data = Global.get_classic_score(index)

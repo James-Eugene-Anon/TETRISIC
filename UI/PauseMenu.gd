@@ -16,6 +16,7 @@ signal goto_options
 signal goto_menu
 
 func _ready():
+	process_mode = Node.PROCESS_MODE_ALWAYS
 	update_ui_texts()
 	resume_button.pressed.connect(_on_resume_button_pressed)
 	restart_button.pressed.connect(_on_restart_button_pressed)

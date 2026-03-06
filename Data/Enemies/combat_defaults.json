@@ -1,48 +1,48 @@
 {
   "slime_wave": {
-    "merge_turns": 5,
-    "enemies": [
-      {
-        "name": "绿色史莱姆",
-        "health": 35,
-        "damage": 8,
-        "cooldown_base": 4.5,
-        "cooldown_variance": 0.3,
-        "gold_base": 1
-      }
-    ]
+	"merge_turns": 5,
+	"enemies": [
+	  {
+		"name": "绿色史莱姆",
+		"health": 35,
+		"damage": 8,
+		"cooldown_base": 4.5,
+		"cooldown_variance": 0.3,
+		"gold_base": 1
+	  }
+	]
   },
   "cooldown_default_base": 5.5,
   "cooldown_default_variance": 0.3,
   "cooldown_rules": [
-    {"keyword": "史莱姆", "base": 4.5, "variance": 0.3},
-    {"keyword": "骷髅", "base": 5.5, "variance": 0.4},
-    {"keyword": "吸血", "base": 6.5, "variance": 0.5},
-    {"keyword": "魔王", "base": 6.5, "variance": 0.5}
+	{"keyword": "史莱姆", "base": 4.5, "variance": 0.3},
+	{"keyword": "骷髅", "base": 5.5, "variance": 0.4},
+	{"keyword": "吸血", "base": 6.5, "variance": 0.5},
+	{"keyword": "魔王", "base": 6.5, "variance": 0.5}
   ],
   "gold_default_base": 3,
   "gold_base_by_name": {
-    "绿色史莱姆": 1,
-    "红色史莱姆": 2,
-    "青色史莱姆": 8,
-    "小蝙蝠": 3,
-    "大蝙蝠": 12,
-    "骷髅人": 6,
-    "骷髅士兵": 8,
-    "骷髅队长": 30,
-    "吸血鬼": 20,
-    "史莱姆王": 15,
-    "黑衣魔王": 40,
-    "兽人": 18,
-    "石头人": 28,
-    "初级法师": 5,
-    "高级法师": 22,
-    "双手剑士": 55
+	"绿色史莱姆": 1,
+	"红色史莱姆": 2,
+	"青色史莱姆": 8,
+	"小蝙蝠": 3,
+	"大蝙蝠": 12,
+	"骷髅人": 6,
+	"骷髅士兵": 8,
+	"骷髅队长": 30,
+	"吸血鬼": 20,
+	"史莱姆王": 15,
+	"黑衣魔王": 40,
+	"兽人": 18,
+	"石头人": 28,
+	"初级法师": 5,
+	"高级法师": 22,
+	"双手剑士": 55
   },
   "gold_keyword_fallback": [
-    {"keyword": "史莱姆", "base_gold": 1},
-    {"keyword": "骷髅", "base_gold": 6},
-    {"keyword": "魔王", "base_gold": 40},
-    {"keyword": "蝙蝠", "base_gold": 3}
+	{"keyword": "史莱姆", "base_gold": 1},
+	{"keyword": "骷髅", "base_gold": 6},
+	{"keyword": "魔王", "base_gold": 40},
+	{"keyword": "蝙蝠", "base_gold": 3}
   ]
 }

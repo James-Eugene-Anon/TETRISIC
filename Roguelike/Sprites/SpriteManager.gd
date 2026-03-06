@@ -34,6 +34,7 @@ const ENEMY_INDEX_32 = {
 	"骷髅士兵": 9,     # skeletonWarrior
 	"骷髅队长": 10,    # skeletonCaptain
 	"冥队长": 11,      # ghostSoldier
+	"鬼战士": 11,      # ghostSkeleton (enemy_ghost_skeleton alias)
 	"兽人": 12,        # zombie
 	"兽人武士": 13,    # zombieKnight
 	"石头人": 14,      # rock
@@ -47,6 +48,7 @@ const ENEMY_INDEX_32 = {
 	"高级卫兵": 22,    # redGateKeeper
 	"双手剑士": 23,    # swordsman
 	"冥战士": 24,      # soldier
+	"战士": 24,        # soldier (enemy_soldier alias)
 	"金骑士": 25,      # yellowKnight
 	"红骑士": 26,      # redKnight
 	"黑骑士": 27,      # darkKnight

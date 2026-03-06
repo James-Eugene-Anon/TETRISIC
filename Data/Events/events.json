@@ -1,71 +1,71 @@
 {
   "events": [
-    {
-      "id": "rogue_node_start",
-      "kind": "map_node",
-      "order": 1,
-      "node_key": "node_start",
-      "title": "起点",
-      "title_en": "Start"
-    },
-    {
-      "id": "rogue_node_combat_1",
-      "kind": "map_node",
-      "order": 2,
-      "node_key": "node_slime",
-      "title": "史莱姆王",
-      "title_en": "Slime Lord",
-      "wave_id": "wave_1_slime_lord"
-    },
-    {
-      "id": "rogue_node_relic",
-      "kind": "map_node",
-      "order": 3,
-      "node_key": "node_relic",
-      "title": "装备",
-      "title_en": "Relic"
-    },
-    {
-      "id": "rogue_node_shop",
-      "kind": "map_node",
-      "order": 4,
-      "node_key": "node_shop",
-      "title": "商店",
-      "title_en": "Shop"
-    },
-    {
-      "id": "rogue_node_combat_2",
-      "kind": "map_node",
-      "order": 5,
-      "node_key": "node_skeleton",
-      "title": "骷髅士兵",
-      "title_en": "Skeleton Duo",
-      "wave_id": "wave_2_skeleton_duo"
-    },
-    {
-      "id": "rogue_node_rest",
-      "kind": "map_node",
-      "order": 6,
-      "node_key": "node_rest",
-      "title": "篝火",
-      "title_en": "Campfire"
-    },
-    {
-      "id": "rogue_node_boss",
-      "kind": "map_node",
-      "order": 7,
-      "node_key": "node_vampire",
-      "title": "大蝙蝠群",
-      "title_en": "Big Bat Swarm",
-      "wave_id": "wave_3_big_bat_swarm"
-    },
-    {
-      "id": "rogue_node_end",
-      "kind": "map_node",
-      "order": 8,
-      "node_key": "node_victory",
-      "title": "胜利",
-      "title_en": "Victory"
-    }
+	{
+	  "id": "rogue_node_start",
+	  "kind": "map_node",
+	  "order": 1,
+	  "node_key": "node_start",
+	  "title": "起点",
+	  "title_en": "Start"
+	},
+	{
+	  "id": "rogue_node_combat_1",
+	  "kind": "map_node",
+	  "order": 2,
+	  "node_key": "node_slime",
+	  "title": "史莱姆王",
+	  "title_en": "Slime Lord",
+	  "wave_id": "wave_1_slime_lord"
+	},
+	{
+	  "id": "rogue_node_chest",
+	  "kind": "map_node",
+	  "order": 3,
+	  "node_key": "node_chest",
+	  "title": "宝箱",
+	  "title_en": "Chest"
+	},
+	{
+	  "id": "rogue_node_shop",
+	  "kind": "map_node",
+	  "order": 4,
+	  "node_key": "node_shop",
+	  "title": "商店",
+	  "title_en": "Shop"
+	},
+	{
+	  "id": "rogue_node_combat_2",
+	  "kind": "map_node",
+	  "order": 5,
+	  "node_key": "node_skeleton",
+	  "title": "骷髅士兵",
+	  "title_en": "Skeleton Duo",
+	  "wave_id": "wave_2_skeleton_duo"
+	},
+	{
+	  "id": "rogue_node_rest",
+	  "kind": "map_node",
+	  "order": 6,
+	  "node_key": "node_rest",
+	  "title": "篝火",
+	  "title_en": "Campfire"
+	},
+	{
+	  "id": "rogue_node_boss",
+	  "kind": "map_node",
+	  "order": 7,
+	  "node_key": "node_vampire",
+	  "title": "大蝙蝠群",
+	  "title_en": "Big Bat Swarm",
+	  "wave_id": "wave_3_big_bat_swarm"
+	},
+	{
+	  "id": "rogue_node_end",
+	  "kind": "map_node",
+	  "order": 8,
+	  "node_key": "node_victory",
+	  "title": "胜利",
+	  "title_en": "Victory"
+	}
   ]
 }

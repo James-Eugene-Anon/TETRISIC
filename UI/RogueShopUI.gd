@@ -32,7 +32,8 @@ const TEXT_KEYS = {
 	"equip_header": "UI_ROGUESHOP_EQUIP_HEADER",
 	"potion": "UI_ROGUESHOP_POTION",
 	"potion_unavailable": "UI_ROGUESHOP_POTION_UNAVAILABLE",
-	"equip_empty": "UI_ROGUESHOP_EQUIP_EMPTY"
+	"equip_empty": "UI_ROGUESHOP_EQUIP_EMPTY",
+	"gold_price_fmt": "UI_ROGUESHOPUI_GOLD_PRICE_FMT"
 }
 
 # 像素风配色
@@ -191,7 +192,7 @@ func _draw_stat_card(rect: Rect2, info: Dictionary, accent: Color, icon: String,
 	
 	# 价格行
 	var price = info.get("price", 0)
-	var price_text = _t("free") if is_free else "%d G" % price
+	var price_text = _t("free") if is_free else _t("gold_price_fmt") % price
 	var price_col = COL_FREE if is_free else (COL_GOLD if can_afford else COL_SOLD)
 	draw_string(UI_FONT, rect.position + Vector2(30, 40), price_text,
 		HORIZONTAL_ALIGNMENT_LEFT, -1, 12, price_col)
@@ -246,7 +247,7 @@ func _draw_equip_card(rect: Rect2, info: Dictionary, index: int):
 			rect.position + Vector2(rect.size.x - 8, rect.size.y / 2), COL_SOLD, 1)
 	else:
 		var price = info.get("price", 0)
-		var price_text = _t("free") if is_free else "%d G" % price
+		var price_text = _t("free") if is_free else _t("gold_price_fmt") % price
 		var price_col = COL_FREE if is_free else (COL_GOLD if can_afford else COL_SOLD)
 		draw_string(UI_FONT, rect.position + Vector2(12, 40), price_text,
 			HORIZONTAL_ALIGNMENT_LEFT, -1, 12, price_col)

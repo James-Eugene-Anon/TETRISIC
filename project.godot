@@ -131,6 +131,7 @@ dialogic_default_action={
 [internationalization]
 
 translations=PackedStringArray("res://translations/translation.csv")
+locale/language_filter=["en", "zh"]
 
 [rendering]
 

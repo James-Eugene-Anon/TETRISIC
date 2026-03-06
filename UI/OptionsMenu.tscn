@@ -1,60 +1,19 @@
 [gd_scene format=3 uid="uid://c8x5w0h3q7r2k"]
 
-[ext_resource type="Script" uid="uid://q3bht4i775ef" path="res://UI/OptionsMenu.gd" id="1_m5l4k"]
-[ext_resource type="Theme" uid="uid://ckvcxk0jalpu8" path="res://UI/game_theme.tres" id="3_theme"]
+[ext_resource type="Script" uid="uid://q3bht4i775ef" path="res://UI/OptionsMenu.gd" id="1_script"]
+[ext_resource type="Theme" uid="uid://ckvcxk0jalpu8" path="res://UI/game_theme.tres" id="2_theme"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tab_panel"]
-bg_color = Color(0.12, 0.1, 0.18, 1)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(0.5, 0.5, 0.6, 0.8)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tab_unselected"]
-content_margin_left = 10.0
-content_margin_top = 6.0
-content_margin_right = 10.0
-content_margin_bottom = 6.0
-bg_color = Color(0.08, 0.06, 0.12, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_color = Color(0.5, 0.5, 0.6, 0.8)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tab_selected"]
-content_margin_left = 10.0
-content_margin_top = 6.0
-content_margin_right = 10.0
-content_margin_bottom = 6.0
-bg_color = Color(0.12, 0.1, 0.18, 1)
-border_width_left = 3
-border_width_top = 3
-border_width_right = 3
-border_color = Color(0.5, 0.7, 0.9, 1)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tab_disabled"]
-content_margin_left = 10.0
-content_margin_top = 6.0
-content_margin_right = 10.0
-content_margin_bottom = 6.0
-bg_color = Color(0.04, 0.03, 0.06, 1)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_color = Color(0.5, 0.5, 0.6, 0.8)
-
-[node name="OptionsMenu" type="Control" unique_id=170428051]
+[node name="OptionsMenu" type="Control"]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme = ExtResource("3_theme")
-script = ExtResource("1_m5l4k")
+theme = ExtResource("2_theme")
+script = ExtResource("1_script")
 
-[node name="Background" type="ColorRect" parent="." unique_id=1503278919]
+[node name="Background" type="ColorRect" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -63,14 +22,14 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.1, 0.1, 0.2, 1)
 
-[node name="TitleLabel" type="Label" parent="." unique_id=1627617549]
+[node name="TitleLabel" type="Label" parent="."]
 layout_mode = 1
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -100.0
+offset_left = -120.0
 offset_top = 20.0
-offset_right = 100.0
+offset_right = 120.0
 offset_bottom = 70.0
 grow_horizontal = 2
 theme_override_colors/font_color = Color(0.9, 0.7, 0.3, 1)
@@ -79,7 +38,7 @@ text = "UI_TITLE_OPTIONS"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="TabContainer" type="TabContainer" parent="." unique_id=1393766852]
+[node name="TabContainer" type="TabContainer" parent="."]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -90,196 +49,188 @@ offset_right = -80.0
 offset_bottom = -80.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_font_sizes/font_size = 14
-theme_override_styles/panel = SubResource("StyleBoxFlat_tab_panel")
-theme_override_styles/tab_unselected = SubResource("StyleBoxFlat_tab_unselected")
-theme_override_styles/tab_hovered = SubResource("StyleBoxFlat_tab_unselected")
-theme_override_styles/tab_selected = SubResource("StyleBoxFlat_tab_selected")
-theme_override_styles/tab_disabled = SubResource("StyleBoxFlat_tab_disabled")
 current_tab = 0
 
-[node name="设置" type="ScrollContainer" parent="TabContainer" unique_id=1064267188]
+[node name="设置" type="ScrollContainer" parent="TabContainer"]
 layout_mode = 2
-follow_focus = true
 horizontal_scroll_mode = 0
 metadata/_tab_index = 0
 
-[node name="SettingsVBox" type="VBoxContainer" parent="TabContainer/设置" unique_id=1440578172]
+[node name="SettingsVBox" type="VBoxContainer" parent="TabContainer/设置"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Spacer1" type="Control" parent="TabContainer/设置/SettingsVBox" unique_id=839898133]
+[node name="Spacer1" type="Control" parent="TabContainer/设置/SettingsVBox"]
 custom_minimum_size = Vector2(0, 20)
 layout_mode = 2
 
-[node name="LanguageButton" type="Button" parent="TabContainer/设置/SettingsVBox" unique_id=977863127]
-custom_minimum_size = Vector2(180, 40)
+[node name="LanguageButton" type="OptionButton" parent="TabContainer/设置/SettingsVBox"]
+custom_minimum_size = Vector2(220, 40)
 layout_mode = 2
 size_flags_horizontal = 4
-text = "UI_OPTIONSMENU_LANGUAGE_CHINESE"
 
-[node name="WindowModeOption" type="OptionButton" parent="TabContainer/设置/SettingsVBox" unique_id=58582053]
-custom_minimum_size = Vector2(180, 40)
+[node name="WindowModeOption" type="CheckButton" parent="TabContainer/设置/SettingsVBox"]
+custom_minimum_size = Vector2(220, 40)
 layout_mode = 2
 size_flags_horizontal = 4
-theme_override_font_sizes/font_size = 18
-alignment = 1
+text = "UI_OPTIONS_FULLSCREEN"
 
-[node name="ResolutionOption" type="OptionButton" parent="TabContainer/设置/SettingsVBox" unique_id=1850029095]
-custom_minimum_size = Vector2(180, 40)
+[node name="ResolutionOption" type="OptionButton" parent="TabContainer/设置/SettingsVBox"]
+custom_minimum_size = Vector2(220, 40)
 layout_mode = 2
 size_flags_horizontal = 4
-theme_override_font_sizes/font_size = 18
-alignment = 1
 
-[node name="Spacer2" type="Control" parent="TabContainer/设置/SettingsVBox" unique_id=462458704]
+[node name="Spacer2" type="Control" parent="TabContainer/设置/SettingsVBox"]
 custom_minimum_size = Vector2(0, 20)
 layout_mode = 2
 
-[node name="MusicVolumeLabel" type="Label" parent="TabContainer/设置/SettingsVBox" unique_id=1628937105]
+[node name="MusicVolumeLabel" type="Label" parent="TabContainer/设置/SettingsVBox"]
 layout_mode = 2
 size_flags_horizontal = 4
-text = "UI_OPTIONSMENU_MUSIC_VOLUME_80"
+text = "UI_OPTIONS_MUSIC_VOLUME"
 horizontal_alignment = 1
 
-[node name="MusicVolumeSlider" type="HSlider" parent="TabContainer/设置/SettingsVBox" unique_id=1250212947]
-custom_minimum_size = Vector2(300, 24)
+[node name="MusicVolumeSlider" type="HSlider" parent="TabContainer/设置/SettingsVBox"]
+custom_minimum_size = Vector2(320, 24)
 layout_mode = 2
 size_flags_horizontal = 4
+max_value = 100.0
 value = 80.0
 
-[node name="Spacer3" type="Control" parent="TabContainer/设置/SettingsVBox" unique_id=737131636]
+[node name="Spacer3" type="Control" parent="TabContainer/设置/SettingsVBox"]
 custom_minimum_size = Vector2(0, 10)
 layout_mode = 2
 
-[node name="SFXVolumeLabel" type="Label" parent="TabContainer/设置/SettingsVBox" unique_id=30305521]
+[node name="SFXVolumeLabel" type="Label" parent="TabContainer/设置/SettingsVBox"]
 layout_mode = 2
 size_flags_horizontal = 4
-text = "UI_OPTIONSMENU_SFX_VOLUME_80"
+text = "UI_OPTIONS_SFX_VOLUME"
 horizontal_alignment = 1
 
-[node name="SFXVolumeSlider" type="HSlider" parent="TabContainer/设置/SettingsVBox" unique_id=96800693]
-custom_minimum_size = Vector2(300, 24)
+[node name="SFXVolumeSlider" type="HSlider" parent="TabContainer/设置/SettingsVBox"]
+custom_minimum_size = Vector2(320, 24)
 layout_mode = 2
 size_flags_horizontal = 4
+max_value = 100.0
 value = 80.0
 
-[node name="Spacer4" type="Control" parent="TabContainer/设置/SettingsVBox" unique_id=861181310]
+[node name="Spacer4" type="Control" parent="TabContainer/设置/SettingsVBox"]
 custom_minimum_size = Vector2(0, 20)
 layout_mode = 2
 
-[node name="OnlineModeButton" type="Button" parent="TabContainer/设置/SettingsVBox" unique_id=671558759]
-custom_minimum_size = Vector2(180, 40)
+[node name="OnlineModeButton" type="Button" parent="TabContainer/设置/SettingsVBox"]
+custom_minimum_size = Vector2(220, 40)
 layout_mode = 2
 size_flags_horizontal = 4
-text = "UI_OPTIONSMENU_NETWORK_OFFLINE"
+text = "UI_OPTIONS_ONLINE_MODE"
 
-[node name="LyricRetryHBox" type="HBoxContainer" parent="TabContainer/设置/SettingsVBox" unique_id=1193362881]
+[node name="LyricRetryHBox" type="HBoxContainer" parent="TabContainer/设置/SettingsVBox"]
 layout_mode = 2
 size_flags_horizontal = 4
 
-[node name="LyricRetryLabel" type="Label" parent="TabContainer/设置/SettingsVBox/LyricRetryHBox" unique_id=805325514]
+[node name="LyricRetryLabel" type="Label" parent="TabContainer/设置/SettingsVBox/LyricRetryHBox"]
 layout_mode = 2
 size_flags_horizontal = 3
-text = "UI_OPTIONSMENU_LYRIC_CANDIDATE_CHECKS"
+text = "UI_OPTIONS_LYRIC_RETRY"
 
-[node name="LyricRetrySpinBox" type="SpinBox" parent="TabContainer/设置/SettingsVBox/LyricRetryHBox" unique_id=1769093515]
+[node name="LyricRetrySpinBox" type="SpinBox" parent="TabContainer/设置/SettingsVBox/LyricRetryHBox"]
 layout_mode = 2
+min_value = 0.0
 max_value = 10.0
+step = 1.0
 value = 3.0
 
-[node name="Spacer5" type="Control" parent="TabContainer/设置/SettingsVBox" unique_id=638705092]
+[node name="Spacer5" type="Control" parent="TabContainer/设置/SettingsVBox"]
 custom_minimum_size = Vector2(0, 10)
 layout_mode = 2
 
-[node name="BGMButton" type="Button" parent="TabContainer/设置/SettingsVBox" unique_id=704967748]
-custom_minimum_size = Vector2(180, 40)
+[node name="BGMButton" type="Button" parent="TabContainer/设置/SettingsVBox"]
+custom_minimum_size = Vector2(220, 40)
 layout_mode = 2
 size_flags_horizontal = 4
-text = "UI_OPTIONSMENU_PLAY_BGM_ON"
+text = "UI_OPTIONS_BGM"
 
-[node name="BGMFocusButton" type="Button" parent="TabContainer/设置/SettingsVBox" unique_id=1328973989]
-custom_minimum_size = Vector2(180, 40)
+[node name="BGMFocusButton" type="Button" parent="TabContainer/设置/SettingsVBox"]
+custom_minimum_size = Vector2(220, 40)
 layout_mode = 2
 size_flags_horizontal = 4
-text = "UI_OPTIONSMENU_BG_IN_BACK_NO"
+text = "UI_OPTIONS_BGM_FOCUS"
 
-[node name="关于" type="ScrollContainer" parent="TabContainer" unique_id=1818581904]
-visible = false
+[node name="关于" type="ScrollContainer" parent="TabContainer"]
 layout_mode = 2
 horizontal_scroll_mode = 0
 metadata/_tab_index = 1
 
-[node name="AboutVBox" type="VBoxContainer" parent="TabContainer/关于" unique_id=557482364]
+[node name="AboutVBox" type="VBoxContainer" parent="TabContainer/关于"]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Spacer1" type="Control" parent="TabContainer/关于/AboutVBox" unique_id=566932037]
+[node name="SpacerA" type="Control" parent="TabContainer/关于/AboutVBox"]
 custom_minimum_size = Vector2(0, 20)
 layout_mode = 2
 
-[node name="VersionLabel" type="Label" parent="TabContainer/关于/AboutVBox" unique_id=219785250]
+[node name="VersionLabel" type="Label" parent="TabContainer/关于/AboutVBox"]
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_colors/font_color = Color(0.4, 0.7, 0.9, 1)
 theme_override_font_sizes/font_size = 18
-text = "UI_OPTIONSMENU_VERSION_ALPHA_0_1_0"
+text = "UI_GAME_VERSION"
 horizontal_alignment = 1
 
-[node name="AuthorLabel" type="Label" parent="TabContainer/关于/AboutVBox" unique_id=763605871]
+[node name="AuthorLabel" type="Label" parent="TabContainer/关于/AboutVBox"]
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_colors/font_color = Color(0.75, 0.75, 0.8, 1)
-text = "UI_OPTIONSMENU_AUTHOR_JAMES_EUGENE_ANON"
+text = ""
 horizontal_alignment = 1
 
-[node name="Separator3" type="HSeparator" parent="TabContainer/关于/AboutVBox" unique_id=555385175]
+[node name="Separator1" type="HSeparator" parent="TabContainer/关于/AboutVBox"]
 layout_mode = 2
 
-[node name="DisclaimerTitle" type="Label" parent="TabContainer/关于/AboutVBox" unique_id=1574111714]
+[node name="DisclaimerTitle" type="Label" parent="TabContainer/关于/AboutVBox"]
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_colors/font_color = Color(0.9, 0.7, 0.3, 1)
-text = "UI_OPTIONSMENU_DISCLAIMER"
+text = "UI_OPTIONS_DISCLAIMER_TITLE"
 horizontal_alignment = 1
 
-[node name="DisclaimerLabel" type="Label" parent="TabContainer/关于/AboutVBox" unique_id=1241167604]
+[node name="DisclaimerLabel" type="Label" parent="TabContainer/关于/AboutVBox"]
 custom_minimum_size = Vector2(500, 0)
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_colors/font_color = Color(0.55, 0.55, 0.6, 1)
 theme_override_font_sizes/font_size = 12
+autowrap_mode = 3
 text = "UI_OPTIONS_DISCLAIMER_BODY"
 horizontal_alignment = 1
-autowrap_mode = 3
 
-[node name="Separator4" type="HSeparator" parent="TabContainer/关于/AboutVBox" unique_id=252377563]
+[node name="Separator2" type="HSeparator" parent="TabContainer/关于/AboutVBox"]
 layout_mode = 2
 
-[node name="ThanksTitle" type="Label" parent="TabContainer/关于/AboutVBox" unique_id=1352541847]
+[node name="ThanksTitle" type="Label" parent="TabContainer/关于/AboutVBox"]
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_colors/font_color = Color(0.9, 0.7, 0.3, 1)
-text = "UI_OPTIONSMENU_SPECIAL_THANKS"
+text = "UI_OPTIONS_THANKS_TITLE"
 horizontal_alignment = 1
 
-[node name="ThanksLabel" type="Label" parent="TabContainer/关于/AboutVBox" unique_id=1020718990]
+[node name="ThanksLabel" type="Label" parent="TabContainer/关于/AboutVBox"]
 custom_minimum_size = Vector2(500, 0)
 layout_mode = 2
 size_flags_horizontal = 4
 theme_override_colors/font_color = Color(0.75, 0.75, 0.8, 1)
 theme_override_font_sizes/font_size = 12
+autowrap_mode = 3
 text = "UI_OPTIONS_THANKS_BODY"
 horizontal_alignment = 1
-autowrap_mode = 3
 
-[node name="Spacer5" type="Control" parent="TabContainer/关于/AboutVBox" unique_id=1429409471]
+[node name="SpacerB" type="Control" parent="TabContainer/关于/AboutVBox"]
 custom_minimum_size = Vector2(0, 20)
 layout_mode = 2
 
-[node name="BackButton" type="Button" parent="." unique_id=680173208]
+[node name="BackButton" type="Button" parent="."]
 custom_minimum_size = Vector2(180, 40)
 layout_mode = 1
 anchors_preset = 7
@@ -287,9 +238,9 @@ anchor_left = 0.5
 anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
-offset_left = -80.0
+offset_left = -90.0
 offset_top = -60.0
-offset_right = 80.0
+offset_right = 90.0
 offset_bottom = -20.0
 grow_horizontal = 2
 grow_vertical = 0

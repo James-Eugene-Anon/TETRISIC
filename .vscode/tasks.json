@@ -1,0 +1,51 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "audit-git-head",
+			"type": "shell",
+			"command": "git",
+			"args": [
+				"rev-parse",
+				"HEAD"
+			]
+		},
+		{
+			"label": "audit-git-status",
+			"type": "shell",
+			"command": "git",
+			"args": [
+				"status",
+				"--short"
+			]
+		},
+		{
+			"label": "audit-head-oneline",
+			"type": "shell",
+			"command": "git",
+			"args": [
+				"log",
+				"-1",
+				"--oneline"
+			]
+		},
+		{
+			"label": "show-a117-mainmenu-tscn-head",
+			"type": "shell",
+			"command": "git",
+			"args": [
+				"show",
+				"a11720a23049e8ef63a6281e6df99153f667d67f:UI/MainMenu.tscn"
+			]
+		},
+		{
+			"label": "show-a117-options-tscn-head",
+			"type": "shell",
+			"command": "git",
+			"args": [
+				"show",
+				"a11720a23049e8ef63a6281e6df99153f667d67f:UI/OptionsMenu.tscn"
+			]
+		}
+	]
+}

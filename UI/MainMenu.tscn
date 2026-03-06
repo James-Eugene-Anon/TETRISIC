@@ -5,7 +5,22 @@
 [ext_resource type="Script" uid="uid://4bh6r44ikc8n" path="res://UI/RainbowTitle.gd" id="3_rainbow"]
 [ext_resource type="Theme" uid="uid://ckvcxk0jalpu8" path="res://UI/game_theme.tres" id="4_theme"]
 
-[node name="MainMenu" type="Control" unique_id=593161050]
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_save_panel"]
+content_margin_left = 18.0
+content_margin_top = 14.0
+content_margin_right = 18.0
+content_margin_bottom = 14.0
+bg_color = Color(0.12, 0.1, 0.18, 0.97)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.4, 0.7, 0.9, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_sep"]
+bg_color = Color(0.35, 0.55, 0.75, 0.55)
+
+[node name="MainMenu" type="Control" unique_id=1437101666]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -15,7 +30,7 @@ grow_vertical = 2
 theme = ExtResource("4_theme")
 script = ExtResource("1_h3j8k")
 
-[node name="Background" type="ColorRect" parent="." unique_id=1169407020]
+[node name="Background" type="ColorRect" parent="." unique_id=1811340227]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -24,7 +39,7 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.1, 0.1, 0.2, 1)
 
-[node name="RainbowTitle" type="Control" parent="." unique_id=193794027]
+[node name="RainbowTitle" type="Control" parent="." unique_id=2139489462]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -32,15 +47,15 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -200.0
-offset_top = -220.0
+offset_top = -250.0
 offset_right = 210.0
-offset_bottom = -140.0
+offset_bottom = -170.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("3_rainbow")
 font_size = 60
 
-[node name="TitleLabel" type="Label" parent="." unique_id=393480976]
+[node name="TitleLabel" type="Label" parent="." unique_id=278753350]
 visible = false
 layout_mode = 1
 anchors_preset = 8
@@ -49,18 +64,38 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -100.0
-offset_top = -200.0
+offset_top = -250.0
 offset_right = 100.0
-offset_bottom = -150.0
+offset_bottom = -200.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_fonts/font = ExtResource("2_font")
 theme_override_font_sizes/font_size = 36
-text = "UI_MAINMENU_TETRIS"
+text = "UI_MAIN_TITLE"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="VBox" type="VBoxContainer" parent="." unique_id=1547038966]
+[node name="TopLeftHBox" type="HBoxContainer" parent="." unique_id=1108490418]
+layout_mode = 0
+offset_left = 12.0
+offset_top = 12.0
+offset_right = 340.0
+offset_bottom = 38.0
+theme_override_constants/separation = 8
+
+[node name="SaveBtn" type="Button" parent="TopLeftHBox" unique_id=1777476513]
+custom_minimum_size = Vector2(80, 26)
+layout_mode = 2
+theme_override_font_sizes/font_size = 12
+text = "UI_SAVE_BTN"
+
+[node name="CurrentAccountLabel" type="Label" parent="TopLeftHBox" unique_id=360462569]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_font_sizes/font_size = 12
+text = "- -"
+vertical_alignment = 1
+
+[node name="VBox" type="VBoxContainer" parent="." unique_id=20680081]
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -68,43 +103,44 @@ anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
 offset_left = -100.0
-offset_top = -80.0
+offset_top = -120.0
 offset_right = 100.0
 offset_bottom = 120.0
 grow_horizontal = 2
 grow_vertical = 2
+theme_override_constants/separation = 8
 
-[node name="StartButton" type="Button" parent="VBox" unique_id=2044309062]
+[node name="StartButton" type="Button" parent="VBox" unique_id=326302885]
 custom_minimum_size = Vector2(180, 40)
 layout_mode = 2
-text = "UI_MAINMENU_CLASSIC_MODE"
+text = "UI_MAIN_START"
 
-[node name="LyricModeButton" type="Button" parent="VBox" unique_id=969986713]
+[node name="LyricModeButton" type="Button" parent="VBox" unique_id=1422780292]
 custom_minimum_size = Vector2(180, 40)
 layout_mode = 2
-text = "UI_MAINMENU_SONG_MODE"
+text = "UI_MAIN_LYRIC_MODE"
 
-[node name="RoguelikeDemoButton" type="Button" parent="VBox" unique_id=1041762273]
+[node name="RoguelikeDemoButton" type="Button" parent="VBox" unique_id=1400941241]
 custom_minimum_size = Vector2(180, 40)
 layout_mode = 2
-text = "UI_MAINMENU_ROGUELIKE_DEMO"
+text = "UI_MAIN_ROGUELIKE_DEMO"
 
-[node name="OptionsButton" type="Button" parent="VBox" unique_id=1583238810]
+[node name="OptionsButton" type="Button" parent="VBox" unique_id=874269202]
 custom_minimum_size = Vector2(180, 40)
 layout_mode = 2
-text = "UI_TITLE_OPTIONS"
+text = "UI_MAIN_OPTIONS"
 
-[node name="EquipmentButton" type="Button" parent="VBox" unique_id=577230125]
+[node name="EquipmentButton" type="Button" parent="VBox" unique_id=877678159]
 custom_minimum_size = Vector2(180, 40)
 layout_mode = 2
-text = "UI_MAINMENU_EQUIPMENT"
+text = "UI_MAIN_EQUIPMENT"
 
-[node name="QuitButton" type="Button" parent="VBox" unique_id=1179458709]
+[node name="QuitButton" type="Button" parent="VBox" unique_id=603427743]
 custom_minimum_size = Vector2(180, 40)
 layout_mode = 2
-text = "UI_MAINMENU_QUIT_GAME"
+text = "UI_MAIN_QUIT"
 
-[node name="Instructions" type="Label" parent="." unique_id=1219909538]
+[node name="Instructions" type="Label" parent="." unique_id=1003671614]
 layout_mode = 1
 anchors_preset = 7
 anchor_left = 0.5
@@ -112,33 +148,29 @@ anchor_top = 1.0
 anchor_right = 0.5
 anchor_bottom = 1.0
 offset_left = -200.0
-offset_top = -80.0
+offset_top = -60.0
 offset_right = 200.0
 offset_bottom = -20.0
 grow_horizontal = 2
 grow_vertical = 0
 theme_override_colors/font_color = Color(0.55, 0.55, 0.6, 1)
 theme_override_font_sizes/font_size = 12
-text = "UI_MAINMENU_CONTROLS_MOVE_ROTATE_SOFT_DROP_ENTER_HARD_DROP"
+text = "UI_MAIN_INSTRUCTIONS"
 horizontal_alignment = 1
 vertical_alignment = 1
 
-[node name="VersionLabel" type="Label" parent="." unique_id=803425728]
-layout_mode = 1
-anchors_preset = 2
-anchor_top = 1.0
-anchor_bottom = 1.0
-offset_left = 20.0
-offset_top = -30.0
-offset_right = 180.0
-offset_bottom = -10.0
-grow_vertical = 0
+[node name="VersionLabel" type="Label" parent="." unique_id=1803621145]
+layout_mode = 0
+offset_left = 14.0
+offset_top = 570.0
+offset_right = 200.0
+offset_bottom = 594.0
 theme_override_colors/font_color = Color(0.55, 0.55, 0.6, 1)
 theme_override_font_sizes/font_size = 10
-text = "UI_MAINMENU_VERSION_ALPHA_0_1_0"
+text = "v0.1.1"
 vertical_alignment = 1
 
-[node name="AlphaDevLabel" type="Label" parent="." unique_id=1713042982]
+[node name="AlphaDevLabel" type="Label" parent="." unique_id=149509227]
 z_index = 10
 layout_mode = 1
 anchors_preset = 8
@@ -146,14 +178,101 @@ anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5
 anchor_bottom = 0.5
-offset_left = 60.0
-offset_top = -170.0
-offset_right = 260.0
-offset_bottom = -150.0
+offset_left = 74.00003
+offset_top = -198.0
+offset_right = 274.0
+offset_bottom = -178.0
 grow_horizontal = 2
 grow_vertical = 2
 rotation = -0.2618
 pivot_offset = Vector2(60, 10)
 theme_override_colors/font_color = Color(1, 0.95, 0.2, 0.95)
-theme_override_font_sizes/font_size = 16
-text = "UI_MAINMENU_ALPHA_DEV_BUILD"
+theme_override_font_sizes/font_size = 18
+text = "UI_MAIN_MENU_ALPHA_BUILD"
+
+[node name="SaveOverlay" type="Control" parent="." unique_id=798729017]
+visible = false
+z_index = 15
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="SaveBg" type="ColorRect" parent="SaveOverlay" unique_id=1175507938]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 1
+color = Color(0, 0, 0, 0.75)
+
+[node name="SavePanel" type="PanelContainer" parent="SaveOverlay" unique_id=335058517]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -280.0
+offset_top = -240.0
+offset_right = 280.0
+offset_bottom = 240.0
+grow_horizontal = 2
+grow_vertical = 2
+theme = ExtResource("4_theme")
+theme_override_styles/panel = SubResource("StyleBoxFlat_save_panel")
+
+[node name="SavePanelVBox" type="VBoxContainer" parent="SaveOverlay/SavePanel" unique_id=729290963]
+layout_mode = 2
+theme_override_constants/separation = 8
+
+[node name="SaveTitleLabel" type="Label" parent="SaveOverlay/SavePanel/SavePanelVBox" unique_id=159537404]
+layout_mode = 2
+theme_override_colors/font_color = Color(0.9, 0.7, 0.3, 1)
+theme_override_fonts/font = ExtResource("2_font")
+theme_override_font_sizes/font_size = 18
+text = "UI_SAVE_BTN"
+horizontal_alignment = 1
+
+[node name="TitleDivider" type="HSeparator" parent="SaveOverlay/SavePanel/SavePanelVBox" unique_id=461939066]
+layout_mode = 2
+theme_override_constants/separation = 2
+theme_override_styles/separator = SubResource("StyleBoxFlat_sep")
+
+[node name="SlotContainer" type="VBoxContainer" parent="SaveOverlay/SavePanel/SavePanelVBox" unique_id=1434274792]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_constants/separation = 6
+
+[node name="CloseDivider" type="HSeparator" parent="SaveOverlay/SavePanel/SavePanelVBox" unique_id=498216568]
+layout_mode = 2
+theme_override_constants/separation = 2
+theme_override_styles/separator = SubResource("StyleBoxFlat_sep")
+
+[node name="CloseBtn" type="Button" parent="SaveOverlay/SavePanel/SavePanelVBox" unique_id=1590551450]
+custom_minimum_size = Vector2(0, 36)
+layout_mode = 2
+text = "UI_COMMON_CLOSE"
+
+[node name="SlotRenameDialog" type="ConfirmationDialog" parent="." unique_id=1372535592]
+initial_position = 1
+
+[node name="SlotRenameLineEdit" type="LineEdit" parent="SlotRenameDialog" unique_id=309325571]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -140.0
+offset_top = -12.0
+offset_right = 140.0
+offset_bottom = 12.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="SlotDeleteConfirmDialog" type="ConfirmationDialog" parent="." unique_id=763041800]
+initial_position = 1

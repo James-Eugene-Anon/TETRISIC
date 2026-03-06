@@ -10,6 +10,7 @@ var music_volume = 0.8  # 音乐音量 (0.0 - 1.0)
 var sfx_volume = 0.8    # 音效音量 (0.0 - 1.0)
 var bgm_enabled = true  # 是否播放背景音乐（经典/Rogue模式）
 var play_music_when_unfocused = false  # 窗口未置顶时是否播放音乐
+var _session_start_time: float = -1.0  # 当前会话开始时间（unix 时间戳）
 var song_scores = {}    # 歌曲最高分记录 {"song_name": {"score": int, "lines": int}}
 var classic_scores = {} # 经典模式最高分 {"easy": {...}, "normal": {...}, "hard": {...}}
 const BASE_RES = Vector2i(800, 600) # 基准分辨率
@@ -36,9 +37,7 @@ var online_mode = true  # 是否启用联网功能（离线/在线）
 var music_lyric_app_path = ""  # MusicLyricApp 可执行文件路径
 var lyric_search_retry_count = 3  # 歌词候选额外检查次数 X（0~10）
 
-const SAVE_FILE_PATH = "user://song_scores.save"
-const CLASSIC_SAVE_PATH = "user://classic_scores.save"
-const SETTINGS_FILE = "user://settings.cfg"
+# 旧版全局文件路径已由 SaveManager 负责迁移，运行期统一通过账号存储
 const SETTINGS_KEYS = {
 	"language": "language",
 	"resolution_index": "resolution_index",
@@ -73,33 +72,24 @@ var resolutions = [
 	Vector2i(800, 600)
 ]
 
-# 窗口模式
-var is_fullscreen = false
-
-# 游戏信息
+# 游戏信息（title/disclaimer/thanks 已迁移至翻译CSV，此处仅保留代码引用的 version 和 author）
 var game_info = {
 	"zh": {
-		"title": "俄罗斯方块",
-		"version": "版本 Alpha 0.1.0",
-		"author": "作者: James-Eugene-Anon",
-		"disclaimer": "本游戏仅供娱乐和学习使用。\n\n歌曲模式中的音乐和歌词文件版权归各自原作者所有。",
-		"thanks": "感谢 Godot Engine 提供的优秀游戏引擎\n感谢所有开源社区的贡献者\n\n特别鸣谢：\n音乐和歌词的原作者们\n\n使用的开源项目：\n 163MusicLyrics\n dialogic\n Gut\n mota-js\n\n 使用的协议：\nApache License 2.0"
+		"version": "版本 Alpha 0.1.1",
+		"author": "作者: James-Eugene-Anon"
 	},
 	"en": {
-		"title": "Tetris",
-		"version": "Version Alpha 0.1.0",
-		"author": "Author: James-Eugene-Anon",
-		"disclaimer": "This game is for entertainment and learning only.\n\nMusic and lyrics in Song Mode are copyrighted by their owners.",
-		"thanks": "Thanks to Godot Engine for the excellent game engine\nThanks to all open source community contributors\n\nSpecial Thanks:\nOriginal creators of music and lyrics\n\n Used Open source projects:\n 163MusicLyrics\n dialogic\n Gut\n mota-js\n\n Used License:\nApache License 2.0"
+		"version": "Version Alpha 0.1.1",
+		"author": "Author: James-Eugene-Anon"
 	}
 }
 
-var window_mode_index: int = 0  # 0: 窗口化, 1: 全屏
+var is_fullscreen: bool = 0  # 0: 窗口化, 1: 全屏
 
 func get_resolution_name() -> String:
 	var current_size = get_window().size
 	# 全屏时在显示上固定为系统屏幕分辨率
-	if window_mode_index == 1:
+	if is_fullscreen:
 		current_size = DisplayServer.screen_get_size()
 	# 检查是否匹配预设分辨率
 	var match_index = -1
@@ -124,7 +114,7 @@ func set_resolution(index: int):
 	if index < 0 or index >= resolutions.size():
 		return
 		
-	if window_mode_index == 1:
+	if is_fullscreen:
 		current_resolution_index = _get_max_resolution_index()
 		_apply_fullscreen_scale(get_window())
 		_save_setting(SETTINGS_KEYS.resolution_index, current_resolution_index)
@@ -134,7 +124,7 @@ func set_resolution(index: int):
 	var new_size = resolutions[index]
 	
 	var window = get_window()
-	if window_mode_index == 0:
+	if !is_fullscreen:
 		window.size = new_size
 		_center_window()
 	else:
@@ -143,7 +133,7 @@ func set_resolution(index: int):
 	_save_setting(SETTINGS_KEYS.resolution_index, current_resolution_index)
 
 func set_window_mode(index: int):
-	window_mode_index = index
+	is_fullscreen = index
 	var window = get_window()
 	
 	match index:
@@ -161,11 +151,11 @@ func set_window_mode(index: int):
 			is_fullscreen = true
 			_apply_fullscreen_scale(window)
 			
-	_save_setting("window_mode_index", window_mode_index)
+	_save_setting("is_fullscreen", is_fullscreen)
 	_save_setting(SETTINGS_KEYS.is_fullscreen, is_fullscreen)
 
 func toggle_fullscreen():
-	if window_mode_index == 1:
+	if is_fullscreen:
 		set_window_mode(0)
 	else:
 		set_window_mode(1)
@@ -211,10 +201,15 @@ func _center_window():
 	var pos = (screen_size - window_size) / 2
 	get_window().position = pos
 
-func switch_language():
-	current_language = "en" if current_language == "zh" else "zh"
-	_apply_language()
+func switch_language(index: int):
+	# index: 0 = en, 1 = zh
+	match index:
+		0: current_language = "en"
+		1: current_language = "zh"
+		_: return
+
 	_save_setting(SETTINGS_KEYS.language, current_language)
+	_apply_language()
 
 func _apply_language() -> void:
 	# 确保 Godot 翻译系统使用与 current_language 一致的本地化键
@@ -294,7 +289,6 @@ func _load_runtime_translations() -> void:
 		var v = value.replace("\\n", "\n")
 
 		# 转义百分号以避免后续格式化报错
-		v = v.replace("%", "%%")
 		v = v.replace("%%d", "%d")
 		v = v.replace("%%s", "%s")
 		v = v.replace("%%.1f", "%.1f")
@@ -356,33 +350,18 @@ func get_game_info() -> Dictionary:
 	return game_info[current_language]
 
 func load_song_scores():
-	# 优先从 JSON 文件加载（保证离线持久化），再同步到 GameDB
-	if FileAccess.file_exists(SAVE_FILE_PATH):
-		var file = FileAccess.open(SAVE_FILE_PATH, FileAccess.READ)
-		if file:
-			var json_string = file.get_as_text()
-			file.close()
-			var json = JSON.new()
-			var parse_result = json.parse(json_string)
-			if parse_result == OK:
-				song_scores = json.data
-				print("从文件加载了 ", song_scores.size(), " 首歌曲最高分")
-			else:
-				print("解析最高分文件失败")
-				song_scores = {}
+	if SaveManager and SaveManager.has_method("load_account_song_scores"):
+		song_scores = SaveManager.load_account_song_scores()
+		print("从账号加载了 ", song_scores.size(), " 首歌曲最高分")
 	else:
 		song_scores = {}
-		print("没有找到最高分文件，创建新记录")
 
 func save_song_scores():
-	# 始终直接写入 JSON 文件（保证持久化，不依赖 GameDB）
-	var file = FileAccess.open(SAVE_FILE_PATH, FileAccess.WRITE)
-	if file:
-		file.store_string(JSON.stringify(song_scores))
-		file.close()
-		print("保存了 ", song_scores.size(), " 首歌曲的最高分")
-	else:
-		print("保存最高分文件失败")
+	if SaveManager and SaveManager.has_method("save_account_song_scores"):
+		if SaveManager.save_account_song_scores(song_scores):
+			print("保存了 ", song_scores.size(), " 首歌曲的最高分")
+		else:
+			print("保存最高分文件失败")
 	# 同步到 GameDB（兼容性保留，非关键路径）
 	if GameDB:
 		GameDB.set_table("song_scores", song_scores)
@@ -403,102 +382,107 @@ func get_song_score(song_name: String) -> Dictionary:
 	return {"score": 0, "lines": 0}
 
 func _ready():
+	if SaveManager and SaveManager.has_method("ensure_accounts_ready"):
+		SaveManager.ensure_accounts_ready()
 	_load_persistent_settings()
 	_apply_language()
 	load_song_scores()
 	load_classic_scores()
+	_apply_window_settings_after_load()
+	_session_start_time = Time.get_unix_time_from_system()
 	# 允许用户调整窗口大小（含最大化），不再强制锁定
 	# 确保音频总线已正确加载并应用初始音量（延迟一帧，等待引擎加载bus_layout）
 	call_deferred("_init_audio_buses")
 
 func _save_setting(key: String, value) -> void:
-	var cfg = ConfigFile.new()
-	cfg.load(SETTINGS_FILE)  # 加载已有内容，防止覆盖其他键
-	cfg.set_value("settings", key, value)
-	cfg.save(SETTINGS_FILE)
+	var settings_data = _collect_settings_dict()
+	settings_data[key] = value
+	if SaveManager and SaveManager.has_method("save_account_settings"):
+		SaveManager.save_account_settings(settings_data)
 
 func _load_setting(key: String, default_value):
-	var cfg = ConfigFile.new()
-	if cfg.load(SETTINGS_FILE) != OK:
-		return default_value
-	return cfg.get_value("settings", key, default_value)
+	var defaults = {key: default_value}
+	if SaveManager and SaveManager.has_method("load_account_settings"):
+		var loaded = SaveManager.load_account_settings(defaults)
+		return loaded.get(key, default_value)
+	return default_value
+
+func _collect_settings_dict() -> Dictionary:
+	return {
+		SETTINGS_KEYS.language: current_language,
+		SETTINGS_KEYS.resolution_index: current_resolution_index,
+		SETTINGS_KEYS.is_fullscreen: is_fullscreen,
+		SETTINGS_KEYS.music_volume: music_volume,
+		SETTINGS_KEYS.sfx_volume: sfx_volume,
+		SETTINGS_KEYS.online_mode: online_mode,
+		SETTINGS_KEYS.lyric_search_retry_count: lyric_search_retry_count,
+		SETTINGS_KEYS.bgm_enabled: bgm_enabled,
+		SETTINGS_KEYS.play_music_when_unfocused: play_music_when_unfocused
+	}
 
 func _load_persistent_settings() -> void:
-	var cfg = ConfigFile.new()
-	if cfg.load(SETTINGS_FILE) != OK:
-		return  # 无配置文件，保持默认值
-	current_language = str(cfg.get_value("settings", SETTINGS_KEYS.language, current_language))
-	current_resolution_index = clamp(
-		int(cfg.get_value("settings", SETTINGS_KEYS.resolution_index, current_resolution_index)),
-		0, resolutions.size() - 1)
-	is_fullscreen = bool(cfg.get_value("settings", SETTINGS_KEYS.is_fullscreen, is_fullscreen))
-	music_volume = float(cfg.get_value("settings", SETTINGS_KEYS.music_volume, music_volume))
-	sfx_volume = float(cfg.get_value("settings", SETTINGS_KEYS.sfx_volume, sfx_volume))
-	online_mode = bool(cfg.get_value("settings", SETTINGS_KEYS.online_mode, online_mode))
-	lyric_search_retry_count = clamp(
-		int(cfg.get_value("settings", SETTINGS_KEYS.lyric_search_retry_count, lyric_search_retry_count)),
-		0,
-		10
-	)
-	bgm_enabled = bool(cfg.get_value("settings", SETTINGS_KEYS.bgm_enabled, bgm_enabled))
-	play_music_when_unfocused = bool(cfg.get_value("settings", SETTINGS_KEYS.play_music_when_unfocused, play_music_when_unfocused))
+	var defaults = _collect_settings_dict()
+	var loaded: Dictionary = defaults
+	if SaveManager and SaveManager.has_method("load_account_settings"):
+		loaded = SaveManager.load_account_settings(defaults)
+	current_language = str(loaded.get(SETTINGS_KEYS.language, current_language))
+	current_resolution_index = clamp(int(loaded.get(SETTINGS_KEYS.resolution_index, current_resolution_index)), 0, resolutions.size() - 1)
+	is_fullscreen = bool(loaded.get(SETTINGS_KEYS.is_fullscreen, is_fullscreen))
+	music_volume = float(loaded.get(SETTINGS_KEYS.music_volume, music_volume))
+	sfx_volume = float(loaded.get(SETTINGS_KEYS.sfx_volume, sfx_volume))
+	online_mode = bool(loaded.get(SETTINGS_KEYS.online_mode, online_mode))
+	lyric_search_retry_count = clamp(int(loaded.get(SETTINGS_KEYS.lyric_search_retry_count, lyric_search_retry_count)), 0, 10)
+	bgm_enabled = bool(loaded.get(SETTINGS_KEYS.bgm_enabled, bgm_enabled))
+	play_music_when_unfocused = bool(loaded.get(SETTINGS_KEYS.play_music_when_unfocused, play_music_when_unfocused))
+
+func _apply_window_settings_after_load() -> void:
+	var window = get_window()
+	if not window:
+		return
+	if is_fullscreen:
+		window.mode = Window.MODE_FULLSCREEN
+		window.borderless = true
+		_apply_fullscreen_scale(window)
+	else:
+		window.mode = Window.MODE_WINDOWED
+		window.borderless = false
+		current_resolution_index = clamp(current_resolution_index, 0, resolutions.size() - 1)
+		window.size = resolutions[current_resolution_index]
+		_center_window()
+		_apply_windowed_scale(window)
 
 func _init_audio_buses():
-	var bus_count = AudioServer.bus_count
-	print("[Global] 音频总线数量: ", bus_count)
-	for i in range(bus_count):
-		print("[Global]   总线 %d: %s (%.1f dB)" % [i, AudioServer.get_bus_name(i), AudioServer.get_bus_volume_db(i)])
-	
-	# 如果Music总线不存在，手动加载总线布局或创建
+	# 如果Music总线不存在（可能因为初始化时序），加载或重建总线布局
 	var music_idx = AudioServer.get_bus_index("Music")
 	if music_idx < 0:
-		print("[Global] Music总线未找到，尝试加载总线布局...")
 		var bus_layout = load("res://Systems/Audio/default_bus_layout.tres")
 		if bus_layout:
 			AudioServer.set_bus_layout(bus_layout)
-			print("[Global] 总线布局已重新加载，总线数量: ", AudioServer.bus_count)
 		else:
-			# 手动创建Music和SFX总线
+			# 兜底：手动创建 Music/SFX 总线
 			AudioServer.add_bus()
 			AudioServer.set_bus_name(AudioServer.bus_count - 1, "Music")
 			AudioServer.set_bus_send(AudioServer.bus_count - 1, "Master")
 			AudioServer.add_bus()
 			AudioServer.set_bus_name(AudioServer.bus_count - 1, "SFX")
 			AudioServer.set_bus_send(AudioServer.bus_count - 1, "Master")
-			print("[Global] 手动创建了Music和SFX总线")
-	
 	# 应用初始音量
 	set_music_volume(music_volume)
 	set_sfx_volume(sfx_volume)
-	print("[Global] 初始音量已应用 - 音乐: %.0f%% 音效: %.0f%%" % [music_volume * 100, sfx_volume * 100])
 
 func load_classic_scores():
-	# 优先从 JSON 文件加载（保证离线持久化），再同步到 GameDB
-	if FileAccess.file_exists(CLASSIC_SAVE_PATH):
-		var file = FileAccess.open(CLASSIC_SAVE_PATH, FileAccess.READ)
-		if file:
-			var json_string = file.get_as_text()
-			file.close()
-			var json = JSON.new()
-			var parse_result = json.parse(json_string)
-			if parse_result == OK:
-				classic_scores = json.data
-				print("从文件加载了经典模式最高分")
-			else:
-				classic_scores = {}
+	if SaveManager and SaveManager.has_method("load_account_classic_scores"):
+		classic_scores = SaveManager.load_account_classic_scores()
+		print("从账号加载了经典模式最高分")
 	else:
 		classic_scores = {}
-		print("没有找到经典模式最高分文件")
 
 func save_classic_scores():
-	# 始终直接写入 JSON 文件（保证持久化，不依赖 GameDB）
-	var file = FileAccess.open(CLASSIC_SAVE_PATH, FileAccess.WRITE)
-	if file:
-		file.store_string(JSON.stringify(classic_scores))
-		file.close()
-		print("保存了经典模式最高分")
-	else:
-		print("保存经典模式最高分失败")
+	if SaveManager and SaveManager.has_method("save_account_classic_scores"):
+		if SaveManager.save_account_classic_scores(classic_scores):
+			print("保存了经典模式最高分")
+		else:
+			print("保存经典模式最高分失败")
 	# 同步到 GameDB（兼容性保留，非关键路径）
 	if GameDB:
 		GameDB.set_table("classic_scores", classic_scores)
@@ -519,3 +503,58 @@ func get_classic_score(difficulty: int) -> Dictionary:
 	if classic_scores.has(key):
 		return classic_scores[key]
 	return {"score": 0, "lines": 0}
+
+func get_account_profiles() -> Array[Dictionary]:
+	if SaveManager and SaveManager.has_method("get_accounts"):
+		return SaveManager.get_accounts()
+	return []
+
+func get_current_account_profile() -> Dictionary:
+	if SaveManager and SaveManager.has_method("get_current_account"):
+		return SaveManager.get_current_account()
+	return {}
+
+func create_account_profile(name: String) -> Dictionary:
+	if SaveManager and SaveManager.has_method("create_account"):
+		return SaveManager.create_account(name)
+	return {"success": false, "error": "save_manager_missing"}
+
+func rename_account_profile(account_id: String, new_name: String) -> Dictionary:
+	if SaveManager and SaveManager.has_method("rename_account"):
+		return SaveManager.rename_account(account_id, new_name)
+	return {"success": false, "error": "save_manager_missing"}
+
+func delete_account_profile(account_id: String) -> Dictionary:
+	if SaveManager and SaveManager.has_method("delete_account"):
+		return SaveManager.delete_account(account_id)
+	return {"success": false, "error": "save_manager_missing"}
+
+func switch_account_profile(account_id: String) -> bool:
+	if not (SaveManager and SaveManager.has_method("set_current_account")):
+		return false
+	_flush_play_time()
+	if not SaveManager.set_current_account(account_id):
+		return false
+	_session_start_time = Time.get_unix_time_from_system()
+	_load_persistent_settings()
+	_apply_language()
+	_apply_window_settings_after_load()
+	load_song_scores()
+	load_classic_scores()
+	call_deferred("_init_audio_buses")
+	return true
+
+func _flush_play_time() -> void:
+	# 将本次会话的游玩时长写入当前账号存档
+	if _session_start_time < 0.0:
+		return
+	var now = Time.get_unix_time_from_system()
+	var elapsed = int(now - _session_start_time)
+	if elapsed > 0 and SaveManager and SaveManager.has_method("add_current_account_play_seconds"):
+		SaveManager.add_current_account_play_seconds(elapsed)
+	_session_start_time = now  # 重置，避免重复计入
+
+func _notification(what: int) -> void:
+	if what == NOTIFICATION_WM_CLOSE_REQUEST:
+		_flush_play_time()
+		get_tree().quit()
